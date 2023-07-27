@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class TrollerController : MonoBehaviour
 {
-
+    [SerializeField] Texture2D cursor;
 }
