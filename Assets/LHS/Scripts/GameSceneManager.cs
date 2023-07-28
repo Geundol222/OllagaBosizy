@@ -10,15 +10,6 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
     [SerializeField] TMP_Text infoText;
     [SerializeField] float countDownTimer;
 
-    [SerializeField] GameObject groundObj;
-
-    private List<GameObject> groundList;
-
-    private void Awake()
-    {
-        groundList = new List<GameObject>();
-    }
-
     private void Start()
     {
         if (PhotonNetwork.InRoom)
@@ -115,11 +106,7 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
 
     private void DebugGameStart()
     {
-        // TODO : Debug GameStart
-        for (int i = 0; i < groundObj.transform.childCount; i++)
-        {
-            groundList.Add(groundObj.transform.GetChild(i).gameObject);
-        }
+        // TODO : Debug GameStart        
     }
 
     private int PlayerLoadCount()
