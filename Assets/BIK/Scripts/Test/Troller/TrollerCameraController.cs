@@ -20,7 +20,7 @@ public class TrollerCameraController : MonoBehaviourPunCallbacks
 
     private void OnDisable()
     {
-        Cursor.lockState -= CursorLockMode.None;
+        Cursor.lockState = CursorLockMode.None;
     }
 
     private void LateUpdate()
@@ -61,7 +61,6 @@ public class TrollerCameraController : MonoBehaviourPunCallbacks
         // 방향키 입력을 확인하여 pressArrows의 값을 유동적으로 관리
         // OnPointer쪽에서 방향키 입력 중인 경우엔 cameraMoveDir 을 0으로 만들지 못하게 처리
         Vector2 keyboardPos = value.Get<Vector2>();
-        Debug.Log($"x {keyboardPos.x} y {keyboardPos.y}");
         if (keyboardPos.x != 0 || keyboardPos.y != 0) // 방향키 입력 감지
         {
             pressArrows = true;
@@ -81,7 +80,6 @@ public class TrollerCameraController : MonoBehaviourPunCallbacks
             return;
 
         Vector2 mousePos = value.Get<Vector2>();
-        Debug.Log($"x {mousePos.x}  y {mousePos.y} ");
 
         if( -10 < mousePos.x && mousePos.x <= 0 + padding)
         {
