@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Collections.Generic;
@@ -57,6 +58,10 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         SetActivePanel(Panel.Room);
+    }
+    public void OnLoginCanvas()
+    {
+        SetActivePanel(Panel.Login);
     }
 
     public override void OnLeftRoom()

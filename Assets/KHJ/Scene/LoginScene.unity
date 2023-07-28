@@ -445,6 +445,7 @@ GameObject:
   - component: {fileID: 39674346}
   - component: {fileID: 39674345}
   - component: {fileID: 39674344}
+  - component: {fileID: 39674348}
   m_Layer: 5
   m_Name: RoomCanvas
   m_TagString: Untagged
@@ -533,6 +534,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &39674348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 39674343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 120930458a590834b96ea1881403d2d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerContent: {fileID: 0}
+  playerEntryPrefab: {fileID: 0}
+  startButton: {fileID: 0}
 --- !u!1 &79214733
 GameObject:
   m_ObjectHideFlags: 0
@@ -562,10 +578,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea74ed24fda49684fa0de7473a1af5c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loginCanvas: {fileID: 0}
-  menuCanvas: {fileID: 0}
-  roomCanvas: {fileID: 0}
-  lobbyCanvas: {fileID: 0}
+  loginCanvas: {fileID: 1530674914}
+  menuCanvas: {fileID: 1901411163}
+  roomCanvas: {fileID: 39674348}
+  lobbyCanvas: {fileID: 509286184}
+  signUpCanvas: {fileID: 1146532117}
 --- !u!4 &79214735
 Transform:
   m_ObjectHideFlags: 0
@@ -850,7 +867,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &193486535
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2450,6 +2467,7 @@ GameObject:
   - component: {fileID: 509286182}
   - component: {fileID: 509286181}
   - component: {fileID: 509286180}
+  - component: {fileID: 509286184}
   m_Layer: 5
   m_Name: LobbyCanvas
   m_TagString: Untagged
@@ -2538,6 +2556,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &509286184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 509286179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25d51012258216d4993dfed9782397e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roomContent: {fileID: 0}
+  roomEntryPrefab: {fileID: 0}
 --- !u!1 &528968069
 GameObject:
   m_ObjectHideFlags: 0
@@ -4177,7 +4209,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1146532113
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5379,7 +5411,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1489710537}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 79214734}
+        m_TargetAssemblyTypeName: LobbyManager, Assembly-CSharp
+        m_MethodName: OnSignUpCanvas
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1489710537
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5621,7 +5665,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1561460131}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1530674914}
+        m_TargetAssemblyTypeName: LoginCanvas, Assembly-CSharp
+        m_MethodName: Login
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1561460131
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6376,6 +6432,7 @@ GameObject:
   - component: {fileID: 1901411161}
   - component: {fileID: 1901411160}
   - component: {fileID: 1901411159}
+  - component: {fileID: 1901411163}
   m_Layer: 5
   m_Name: MenuCanvas
   m_TagString: Untagged
@@ -6464,6 +6521,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1901411163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1901411158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1e8c45636dd557419d17a3b1e27ac4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  createRoomPanel: {fileID: 0}
+  roomNameInputField: {fileID: 0}
+  maxPlayerInputField: {fileID: 0}
 --- !u!1 &1945331266
 GameObject:
   m_ObjectHideFlags: 0

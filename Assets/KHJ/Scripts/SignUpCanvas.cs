@@ -19,13 +19,9 @@ public class SignUpCanvas : MonoBehaviour
     private bool isCheckID;
     private bool isCheckNickName;
 
-    private void Start()
-    {
-        LC.con = this.con;
-    }
-
     private void OnEnable()
     {
+        con = LC.con;
         isCheckID = false;
         isCheckNickName = false;
     }
@@ -38,6 +34,8 @@ public class SignUpCanvas : MonoBehaviour
 
             string sqlCommand = string.Format("SELECT ID FROM user_info WHERE ID='{0}';", id);
 
+            MySqlCommand cmd = new MySqlCommand(sqlCommand, con);
+            reader = cmd.ExecuteReader();
             if (reader.HasRows)
             {
                 Debug.Log("중복 아이디 있슴!");
@@ -47,6 +45,7 @@ public class SignUpCanvas : MonoBehaviour
                 Debug.Log("아이디 만들 수 있슴!");
                 isCheckID = true;
             }
+            reader.Close();
         }
         catch (Exception e)
         {
@@ -62,6 +61,8 @@ public class SignUpCanvas : MonoBehaviour
 
             string sqlCommand = string.Format("SELECT NICKNAME FROM user_info WHERE NICKNAME='{0}';", name);
 
+            MySqlCommand cmd = new MySqlCommand(sqlCommand, con);
+            reader = cmd.ExecuteReader();
             if (reader.HasRows)
             {
                 Debug.Log("중복 유저이름 있슴!");
@@ -71,6 +72,7 @@ public class SignUpCanvas : MonoBehaviour
                 Debug.Log("유저이름 만들 수 있슴!");
                 isCheckNickName = true;
             }
+            reader.Close();
         }
         catch (Exception e)
         {
@@ -121,6 +123,5 @@ public class SignUpCanvas : MonoBehaviour
         MySqlCommand cmd = new MySqlCommand(sqlCommand, con);
         reader = cmd.ExecuteReader();
         answer.SetActive(false);
-        gameObject.SetActive(false);
     }
 }
