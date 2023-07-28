@@ -1,33 +1,50 @@
 using Photon.Pun;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class Platform : MonoBehaviourPun
 {
-    public bool IsSteped {  get; private set; }
+    [SerializeField] bool isFirst;
+    [SerializeField] bool isClickable;
+
+    public bool IsClickable { get { return isClickable; } }
     private int playerCount;
+
+    private void Awake()
+    {
+        if (isFirst)
+            isClickable = false;
+        else
+            isClickable = true;
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        photonView.RPC("PlayerEnteredPlatform", RpcTarget.AllViaServer);
+        if (PhotonNetwork.IsConnectedAndReady)
+            photonView.RPC("PlayerEnteredPlatform", RpcTarget.AllBufferedViaServer);
     }
 
     [PunRPC]
     private void PlayerEnteredPlatform()
     {
         playerCount++;
-        IsSteped = true;
+        if (playerCount > 0)
+            isClickable = false;
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        photonView.RPC("PlayerExitPlatform", RpcTarget.AllViaServer);
+        if (PhotonNetwork.IsConnectedAndReady)
+            photonView.RPC("PlayerExitPlatform", RpcTarget.AllBufferedViaServer);
     }
 
     [PunRPC]
     private void PlayerExitPlatform()
     {
         playerCount--;
-        IsSteped = false;
+        if (playerCount <= 0)
+        {
+            playerCount = 0;
+            isClickable = true;
+        }
     }
 }
