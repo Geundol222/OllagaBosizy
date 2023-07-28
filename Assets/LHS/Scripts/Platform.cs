@@ -4,13 +4,16 @@ using UnityEngine.Events;
 
 public class Platform : MonoBehaviourPun
 {
+    [SerializeField] private Color pointerOverColor;
     [SerializeField] bool isFirst;
     [SerializeField] bool isClickable;
 
     public UnityEvent<bool> OnChangeState;
 
     public bool IsClickable { get { return isClickable; } }
+    private Renderer[] renderer;
     private int playerCount;
+    private Color pointerOutColor = Color.white;
 
     private void Awake()
     {
@@ -23,7 +26,10 @@ public class Platform : MonoBehaviourPun
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (PhotonNetwork.IsConnectedAndReady)
+        {
             photonView.RPC("PlayerEnteredPlatform", RpcTarget.AllBufferedViaServer);
+            SwitchRenderColorExit();
+        }
     }
 
     [PunRPC]
@@ -51,8 +57,21 @@ public class Platform : MonoBehaviourPun
         }
     }
 
-    public void OnPlatformStateChange()
+    public void SwitchRenderColorEnter()
     {
-        OnChangeState?.Invoke(IsClickable);
+        foreach (Renderer renderer in renderer)
+        {
+            if (renderer != null)
+                renderer.material.color = pointerOverColor;
+        }
+    }
+
+    public void SwitchRenderColorExit()
+    {
+        foreach (Renderer renderer in renderer)
+        {
+            if (renderer != null)
+                renderer.material.color = pointerOutColor;
+        }
     }
 }
