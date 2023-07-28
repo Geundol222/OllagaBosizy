@@ -6,14 +6,13 @@ using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
-    public enum Panel { Login, Menu, Lobby, Room }
-
-    [SerializeField] StateCanvas stateCanvas;
+    public enum Panel { Login, Menu, Lobby, Room, SignUp, Found }
 
     [SerializeField] LoginCanvas loginCanvas;
     [SerializeField] MenuCanvas menuCanvas;
     [SerializeField] RoomCanvas roomCanvas;
     [SerializeField] LobbyCanvas lobbyCanvas;
+    [SerializeField] SignUpCanvas signUpCanvas;
 
     public void Start()
     {
@@ -41,21 +40,18 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         SetActivePanel(Panel.Menu);
         Debug.Log($"Create room failed with error({returnCode}) : {message}");
-        stateCanvas.AddMessage($"Create room failed with error({returnCode}) : {message}");
     }
 
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
         SetActivePanel(Panel.Menu);
         Debug.Log($"Join room failed with error({returnCode}) : {message}");
-        stateCanvas.AddMessage($"Join room failed with error({returnCode}) : {message}");
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
         SetActivePanel(Panel.Menu);
         Debug.Log($"Join random room failed with error({returnCode}) : {message}");
-        stateCanvas.AddMessage($"Join random room failed with error({returnCode}) : {message}");
     }
 
     public override void OnJoinedRoom()
@@ -66,6 +62,11 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public override void OnLeftRoom()
     {
         SetActivePanel(Panel.Menu);
+    }
+
+    public void OnSignUpCanvas()
+    {
+        SetActivePanel(Panel.SignUp);
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -109,5 +110,6 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         if (menuCanvas != null) menuCanvas.gameObject.SetActive(panel == Panel.Menu);
         if (roomCanvas != null) roomCanvas.gameObject.SetActive(panel == Panel.Room);
         if (lobbyCanvas != null) lobbyCanvas.gameObject.SetActive(panel == Panel.Lobby);
+        if (signUpCanvas != null) signUpCanvas.gameObject.SetActive(panel == Panel.SignUp);
     }
 }

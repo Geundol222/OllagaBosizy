@@ -9,8 +9,8 @@ public class LoginCanvas : MonoBehaviour
     [SerializeField] TMP_InputField idInputField;
     [SerializeField] TMP_InputField PasswordInputField;
 
-    private MySqlConnection con;
-    private MySqlDataReader reader;
+    public MySqlConnection con;
+    public MySqlDataReader reader;
 
     private void Start()
     {
