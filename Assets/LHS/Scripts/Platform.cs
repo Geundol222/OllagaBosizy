@@ -2,22 +2,32 @@ using Photon.Pun;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class ChainFunction : UnityEvent<int> { }
-
 public class Platform : MonoBehaviourPun
 {
-    public static ChainFunction OnStart = new ChainFunction();
+    public bool IsSteped {  get; private set; }
+    private int playerCount;
 
-    private int objID;
-
-    private void Awake()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        objID = gameObject.GetComponent<PhotonView>().ViewID;
+        photonView.RPC("PlayerEnteredPlatform", RpcTarget.AllViaServer);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    [PunRPC]
+    private void PlayerEnteredPlatform()
     {
-        if (PhotonNetwork.IsConnected)
-            OnStart?.Invoke(objID);
+        playerCount++;
+        IsSteped = true;
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        photonView.RPC("PlayerExitPlatform", RpcTarget.AllViaServer);
+    }
+
+    [PunRPC]
+    private void PlayerExitPlatform()
+    {
+        playerCount--;
+        IsSteped = false;
     }
 }
