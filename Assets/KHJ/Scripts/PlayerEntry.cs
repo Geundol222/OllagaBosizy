@@ -22,7 +22,7 @@ public class PlayerEntry : MonoBehaviour
     }
 
     public void ChangeCustomProperty(PhotonHashtable property)
-    {
+    {/*
         if (property.TryGetValue(CustomProperty.READY, out object value))
         {
             bool ready = (bool)value;
@@ -31,7 +31,7 @@ public class PlayerEntry : MonoBehaviour
         else
         {
             playerReady.text = "";
-        }
+        }*/
     }
 
     public void Ready()

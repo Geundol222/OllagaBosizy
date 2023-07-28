@@ -590,7 +590,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea74ed24fda49684fa0de7473a1af5c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loginCanvas: {fileID: 1530674914}
+  loginCanvas: {fileID: 0}
   menuCanvas: {fileID: 1901411163}
   roomCanvas: {fileID: 39674348}
   lobbyCanvas: {fileID: 509286184}
@@ -4323,7 +4323,7 @@ MonoBehaviour:
   PasswordAgainInputField: {fileID: 417186936}
   NickNameInputField: {fileID: 16985542}
   answerInputField: {fileID: 461906097}
-  LC: {fileID: 1530674914}
+  LC: {fileID: 0}
   answer: {fileID: 193486534}
 --- !u!1 &1160337066
 GameObject:
@@ -5589,7 +5589,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1530674909}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f8d3c07361dd2840bb7ceb453021994, type: 3}
+  m_Script: {fileID: 11500000, guid: 05bf5fe321c76a94bb21ddc6cd70446a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   idInputField: {fileID: 204308991}
@@ -5678,7 +5678,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1530674914}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: LoginCanvas, Assembly-CSharp
         m_MethodName: Login
         m_Mode: 1
@@ -6851,8 +6851,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f8d3c07361dd2840bb7ceb453021994, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  idInputField: {fileID: 204308991}
-  PasswordInputField: {fileID: 176447573}
 --- !u!4 &2021040798
 Transform:
   m_ObjectHideFlags: 0
