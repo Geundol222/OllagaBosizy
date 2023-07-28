@@ -1,10 +1,13 @@
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Platform : MonoBehaviourPun
 {
     [SerializeField] bool isFirst;
     [SerializeField] bool isClickable;
+
+    public UnityEvent<bool> OnChangeState;
 
     public bool IsClickable { get { return isClickable; } }
     private int playerCount;
@@ -46,5 +49,10 @@ public class Platform : MonoBehaviourPun
             playerCount = 0;
             isClickable = true;
         }
+    }
+
+    public void OnPlatformStateChange()
+    {
+        OnChangeState?.Invoke(IsClickable);
     }
 }
