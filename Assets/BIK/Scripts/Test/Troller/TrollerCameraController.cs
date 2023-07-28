@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.InputSystem;
+using System.Text;
 
 public class TrollerCameraController : MonoBehaviourPunCallbacks
 { 
