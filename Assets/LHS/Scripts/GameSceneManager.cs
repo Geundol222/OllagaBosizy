@@ -3,6 +3,7 @@ using Photon.Realtime;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
 public class GameSceneManager : MonoBehaviourPunCallbacks
 {
@@ -57,7 +58,7 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
             // TODO : 방장이 바꼈을 때
     }
 
-    public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, PhotonHashtable changedProps)
     {
         if (changedProps.ContainsKey("Load"))
         {
@@ -74,7 +75,7 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
         }
     }
 
-    public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
+    public override void OnRoomPropertiesUpdate(PhotonHashtable propertiesThatChanged)
     {
         if (propertiesThatChanged.ContainsKey("LoadTime"))
         {
