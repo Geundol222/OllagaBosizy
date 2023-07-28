@@ -14,6 +14,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     [SerializeField] RoomCanvas roomCanvas;
     [SerializeField] LobbyCanvas lobbyCanvas;
     [SerializeField] SignUpCanvas signUpCanvas;
+    [SerializeField] FoundCanvas foundCanvas;
 
     public void Start()
     {
@@ -62,6 +63,11 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public void OnLoginCanvas()
     {
         SetActivePanel(Panel.Login);
+    }
+
+    public void OnFoundCanvas()
+    {
+        SetActivePanel(Panel.Found);
     }
 
     public override void OnLeftRoom()
@@ -116,5 +122,6 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         if (roomCanvas != null) roomCanvas.gameObject.SetActive(panel == Panel.Room);
         if (lobbyCanvas != null) lobbyCanvas.gameObject.SetActive(panel == Panel.Lobby);
         if (signUpCanvas != null) signUpCanvas.gameObject.SetActive(panel == Panel.SignUp);
+        if (foundCanvas != null) foundCanvas.gameObject.SetActive(panel == Panel.Found);
     }
 }
