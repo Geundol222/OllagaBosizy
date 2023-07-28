@@ -11,7 +11,7 @@ public class Platform : MonoBehaviourPun
     public UnityEvent<bool> OnChangeState;
 
     public bool IsClickable { get { return isClickable; } }
-    private Renderer[] renderer;
+    private Renderer[] renderers;
     private int playerCount;
     private Color pointerOutColor = Color.white;
 
@@ -26,10 +26,7 @@ public class Platform : MonoBehaviourPun
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (PhotonNetwork.IsConnectedAndReady)
-        {
             photonView.RPC("PlayerEnteredPlatform", RpcTarget.AllBufferedViaServer);
-            SwitchRenderColorExit();
-        }
     }
 
     [PunRPC]
@@ -59,7 +56,7 @@ public class Platform : MonoBehaviourPun
 
     public void SwitchRenderColorEnter()
     {
-        foreach (Renderer renderer in renderer)
+        foreach (Renderer renderer in renderers)
         {
             if (renderer != null)
                 renderer.material.color = pointerOverColor;
@@ -68,7 +65,7 @@ public class Platform : MonoBehaviourPun
 
     public void SwitchRenderColorExit()
     {
-        foreach (Renderer renderer in renderer)
+        foreach (Renderer renderer in renderers)
         {
             if (renderer != null)
                 renderer.material.color = pointerOutColor;
