@@ -28,11 +28,32 @@ public class TrollerCameraController : MonoBehaviourPunCallbacks
         CameraMove();
     }
 
+    private void FixedUpdate()
+    {
+        CheckCameraInCamZone();
+    }
+
+    /// <summary>
+    /// 시네머신 카메라가 CamZone 영역 내에 있는지 확인해주는 함수
+    /// 영역 밖으로 못나가게 영역 밖의 위치에서는 이동 값을 0으로
+    /// </summary>
+    private void CheckCameraInCamZone()
+    {
+        if (transform.position.x <= -16.5 || transform.position.x >= 16)
+        {
+            cameraMoveDir.x = 0;
+        }
+
+        if (transform.position.y <= -0.5 || transform.position.y >= 33)
+        {
+            cameraMoveDir.y = 0;
+        }
+    }
+
     private void CameraMove()
     {
         transform.Translate(Vector3.right * cameraMoveDir.x * cameraMoveSpeed * Time.deltaTime, Space.World);
-        transform.Translate(Vector3.up * cameraMoveDir.y * cameraMoveSpeed * Time.deltaTime, Space.World);
-    
+        transform.Translate(Vector3.up * cameraMoveDir.y * cameraMoveSpeed * Time.deltaTime, Space.World);    
     }
 
     private void OnMove(InputValue value) // 방향키 입력 감지
@@ -49,34 +70,7 @@ public class TrollerCameraController : MonoBehaviourPunCallbacks
             pressArrows = false;
         }
 
-        if(keyboardPos.x < 0 && transform.position.x > -16)
-        {
-            //좌측으로 카메라 position 이동
-            Debug.Log($"카메라 이동 현재 x 값 : {transform.position.x}");
-            cameraMoveDir.x = -1;
-        } else if (keyboardPos.x > 0 && transform.position.x < 16)
-        {
-            //우측으로 카메라 position 이동
-            cameraMoveDir.x = 1;
-        } else
-        {
-            cameraMoveDir.x = 0;
-        }
-
-        if(keyboardPos.y < 0 && transform.position.y > -0.5)
-        {
-            // y가 -1
-            //하단으로 카메라 이동
-            cameraMoveDir.y = -1;
-        } else if(keyboardPos.y > 0 && transform.position.y < 33)
-        {
-            // y가 1
-            //상단으로 카메라 이동
-            cameraMoveDir.y = 1;
-        } else
-        {
-            cameraMoveDir.y = 0;
-        }
+        cameraMoveDir = keyboardPos;
 
     }
 
@@ -89,10 +83,10 @@ public class TrollerCameraController : MonoBehaviourPunCallbacks
         Vector2 mousePos = value.Get<Vector2>();
         Debug.Log($"x {mousePos.x}  y {mousePos.y} ");
 
-        if( -10 < mousePos.x && mousePos.x <= 0 +padding && transform.position.x > -16)
+        if( -10 < mousePos.x && mousePos.x <= 0 + padding)
         {
             cameraMoveDir.x = -1;
-        } else if(mousePos.x >= Screen.width - padding && mousePos.x <= Screen.width + 10 && transform.position.x < 16)
+        } else if(mousePos.x >= Screen.width - padding && mousePos.x <= Screen.width + 10)
         {
             cameraMoveDir.x = 1;
         }
@@ -101,10 +95,10 @@ public class TrollerCameraController : MonoBehaviourPunCallbacks
             cameraMoveDir.x = 0;
         }
 
-        if( -10 < mousePos.y && mousePos.y <= 0 + padding && transform.position.y > -0.5 ) // 마우스의 y 위치 값이 패딩 값보다 같거나 작다.
+        if( -10 < mousePos.y && mousePos.y <= 0 + padding) // 마우스의 y 위치 값이 패딩 값보다 같거나 작다.
         {
             cameraMoveDir.y = -1;
-        } else if(mousePos.y >= Screen.height - padding && mousePos.y <= Screen.height + 10 && transform.position.y < 33) // 마우스의 y 위치 값이 최상단의 패딩 값에 해당하는 구간이다.
+        } else if(mousePos.y >= Screen.height - padding && mousePos.y <= Screen.height + 10) // 마우스의 y 위치 값이 최상단의 패딩 값에 해당하는 구간이다.
         {
             cameraMoveDir.y = 1;
         } else
