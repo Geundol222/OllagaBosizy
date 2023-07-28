@@ -71,3 +71,15 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 /Assets/Imports
+/Assets/GUI Mobile Hyper-Casual
+/Assets/KUBIKOS - 3D Cube Village And Farm
+/Assets/Photon
+/Assets/TextMesh Pro
+/Assets/Resources
+/Assets/GUI Mobile Hyper-Casual.meta
+/Assets/KUBIKOS - 3D Cube Village And Farm.meta
+/Assets/Photon.meta
+/Assets/Resources.meta
+/Assets/TextMesh Pro.meta
+/Packages/packages-lock.json
+/ProjectSettings/ProjectSettings.asset
