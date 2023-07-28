@@ -17,10 +17,10 @@ public class PlatformMouseHandler : MonoBehaviour,IPointerClickHandler,IPointerE
         platform = GetComponent<Platform>();
     }
 
-    public void SetRenderer(bool state)
+    public void SetRenderer()
     {
         // 만약 바뀐 State가 false면 렌더러 컬러를 없애줌(
-        if (state)
+        if (platform.IsClickable)
         {
             SwitchRenderColor(pointerOverColor);
         }
