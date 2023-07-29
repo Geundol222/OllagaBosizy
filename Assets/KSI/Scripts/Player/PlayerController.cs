@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
 
 	private new Rigidbody2D rigidbody;
 	private Animator animator;
-	private Vector2 inputDirection = Vector2.zero;
+	private Vector2 inputDirection;
 	private bool isGround;
 
 	private void Awake()
@@ -106,6 +106,7 @@ public class PlayerController : MonoBehaviour
 		OnScored?.Invoke();
 	}
 
+	// TODO : Platform에 만들어지면 삭제 예정 
 	//발판 트리거에 들어오면 점수를 얻음
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
