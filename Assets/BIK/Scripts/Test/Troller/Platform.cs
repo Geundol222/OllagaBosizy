@@ -8,8 +8,6 @@ public class Platform : MonoBehaviourPun
     [SerializeField] bool isFirst;
     [SerializeField] bool isClickable;
 
-    public UnityEvent<bool> OnChangeState;
-
     public bool IsClickable { get { return isClickable; } }
     private Renderer[] renderers;
     private int playerCount;
