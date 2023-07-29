@@ -1,18 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class WindowUI : MonoBehaviour
+public class WindowUI : BaseUI, IDragHandler, IPointerDownHandler
 {
-    // Start is called before the first frame update
-    void Start()
+    protected override void Awake()
     {
-        
+        base.Awake();
+
+        buttons["CloseButton"].onClick.AddListener(() => { GameManager.UI.CloseWindowUI<WindowUI>(this); });
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnDrag(PointerEventData eventData)
     {
-        
+        transform.position += (Vector3)eventData.delta;
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        GameManager.UI.SelectWindowUI(this);
     }
 }
