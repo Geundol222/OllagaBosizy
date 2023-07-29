@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -21,11 +22,16 @@ public class PlayerController : MonoBehaviour
 	[Header("GFX")]
 	[SerializeField] Transform gfx;
 
+	[Header("DataManager")]
+	[SerializeField] private DataManager dataManager;
+
+	public UnityEvent OnScored;
+	public UnityEvent OnJumped;
+
 	private new Rigidbody2D rigidbody;
 	private Animator animator;
 	private Vector2 inputDirection = Vector2.zero;
 	private bool isGround;
-	
 
 	private void Awake()
 	{
@@ -61,13 +67,14 @@ public class PlayerController : MonoBehaviour
 	public void Jump()
 	{
 		rigidbody.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
+
+		OnJumped?.Invoke();
 	}
 
 	private void OnMove(InputValue value)
 	{
 		inputDirection = value.Get<Vector2>();
 		animator.SetFloat("MoveSpeed", Mathf.Abs(inputDirection.x));
-
 	}
 
 	private void OnJump(InputValue value)
@@ -90,5 +97,12 @@ public class PlayerController : MonoBehaviour
 			isGround = false;
 			animator.SetBool("IsGround", false);
 		}
+	}
+
+	// 발판 트리거에 들어오면 점수를 얻음
+	private void OnTriggerEnter2D(Collider2D collision)
+	{
+		dataManager.CurrentScore++;
+		OnScored?.Invoke();
 	}
 }
