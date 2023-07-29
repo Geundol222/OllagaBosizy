@@ -4,6 +4,7 @@ using UnityEngine.Events;
 
 public class Platform : MonoBehaviourPun
 {
+    [SerializeField] private TrollerPlayerController trollerPlayerController;
     [SerializeField] private Color pointerOverColor;
     [SerializeField] bool isFirst;
     [SerializeField] bool isClickable;
@@ -12,6 +13,9 @@ public class Platform : MonoBehaviourPun
     private Renderer[] renderers;
     private int playerCount;
     private Color pointerOutColor = Color.white;
+
+    private SetTrapUI setTrapUI;
+    private SetTrapUI prev_SetTrapUI;
 
     private void Awake()
     {
@@ -25,9 +29,36 @@ public class Platform : MonoBehaviourPun
 
     public void ShowSetTrapButton()
     {
-        SetTrapUI setTrapUI = GameManager.UI.ShowInGameUI<SetTrapUI>("UI/SetTrapButton");
+        if (!photonView.IsMine)
+            return;
+
+
+        if (PhotonNetwork.IsConnectedAndReady)
+        {
+            photonView.RPC("PlayerEnteredPlatform", RpcTarget.AllBufferedViaServer);
+        }
+
+        setTrapUI = GameManager.UI.ShowInGameUI<SetTrapUI>("UI/SetTrapButton");
+        setTrapUI.SetParentPlatform(this);
         setTrapUI.SetTarget(transform);
         setTrapUI.SetOffset(new Vector3(200, 0));
+    }
+
+    public void HideSetTrapButton()
+    {
+        if (!photonView.IsMine)
+            return;
+
+        if (setTrapUI == null)
+            return;
+
+        if (PhotonNetwork.IsConnectedAndReady)
+        {
+            photonView.RPC("PlayerExitPlatform", RpcTarget.AllBufferedViaServer);
+        }
+
+            GameManager.UI.CloseInGameUI(setTrapUI);
+        
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -72,8 +103,8 @@ public class Platform : MonoBehaviourPun
 
     public void SwitchRenderColorEnter()
     {
-        if (!photonView.IsMine)
-            return;
+        if (!photonView.IsMine || isClickable == false)
+            return;        
 
         foreach (Renderer renderer in renderers)
         {
