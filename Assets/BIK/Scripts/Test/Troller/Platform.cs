@@ -23,6 +23,13 @@ public class Platform : MonoBehaviourPun
         renderers = GetComponentsInChildren<Renderer>();
     }
 
+    public void ShowSetTrapButton()
+    {
+        SetTrapUI setTrapUI = GameManager.UI.ShowInGameUI<SetTrapUI>("UI/SetTrapButton");
+        setTrapUI.SetTarget(transform);
+        setTrapUI.SetOffset(new Vector3(200, 0));
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (!photonView.IsMine)
