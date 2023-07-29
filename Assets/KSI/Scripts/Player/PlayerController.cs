@@ -36,7 +36,7 @@ public class PlayerController : MonoBehaviour
 	private void Awake()
 	{
 		rigidbody = GetComponent<Rigidbody2D>();
-		animator = GetComponent<Animator>();
+		animator = GetComponent<Animator>();	
 	}
 
 	private void Update()
@@ -99,10 +99,24 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
-	// 발판 트리거에 들어오면 점수를 얻음
+	public void GetScore()
+	{
+		// 발판 트리거에 들어오면 100점을 얻음
+		dataManager.CurrentScore += 100;
+		OnScored?.Invoke();
+	}
+
+	//발판 트리거에 들어오면 점수를 얻음
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
-		dataManager.CurrentScore++;
-		OnScored?.Invoke();
+		// 태그가 Platform인 발판 트리거에서만 충돌 체크함
+		if (collision.CompareTag("Platform"))
+		{
+			// 발판 트리거에 들어오면 100점을 얻음
+			dataManager.CurrentScore += 100;
+			OnScored?.Invoke();
+			// 점수 1번만 얻게함
+			GameObject.Destroy(collision.gameObject);
+		}
 	}
 }
