@@ -22,7 +22,8 @@ public class PlatformMouseHandler : MonoBehaviour,IPointerClickHandler,IPointerE
     {
         if (platform.IsClickable)
         {
-            Debug.Log($"Clicked {gameObject.name} !!");
+            SetTrapUI setTrapUI = GameManager.UI.ShowInGameUI<SetTrapUI>("UI/SetTrapButton");
+
         }                
     }
       
