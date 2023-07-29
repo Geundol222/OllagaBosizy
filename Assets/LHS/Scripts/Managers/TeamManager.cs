@@ -1,10 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using Photon.Pun.UtilityScripts;
+using Photon.Realtime;
 
-public enum { Climber, Troller }
+public enum TeamState { Climber, Troller }
 
-public class TeamManager : MonoBehaviour
+public class TeamManager : PhotonTeamsManager
 {
-    
+    public PhotonTeam GetTeam(Player player)
+    {
+        return player.GetPhotonTeam();
+    }
+
+    public void SetTeam(Player player)
+    {
+        player.team
+    }
 }

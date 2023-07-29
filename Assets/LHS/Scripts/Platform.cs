@@ -21,12 +21,20 @@ public class Platform : MonoBehaviourPun
             isClickable = false;
         else
             isClickable = true;
+
+        renderers = GetComponentsInChildren<Renderer>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (!photonView.IsMine)
+            return;
+
         if (PhotonNetwork.IsConnectedAndReady)
+        {
             photonView.RPC("PlayerEnteredPlatform", RpcTarget.AllBufferedViaServer);
+            photonView.RPC("SwitchRenderColorEnter", RpcTarget.AllBufferedViaServer);
+        }
     }
 
     [PunRPC]
@@ -39,6 +47,9 @@ public class Platform : MonoBehaviourPun
 
     private void OnTriggerExit2D(Collider2D collision)
     {
+        if (!photonView.IsMine)
+            return;
+
         if (PhotonNetwork.IsConnectedAndReady)
             photonView.RPC("PlayerExitPlatform", RpcTarget.AllBufferedViaServer);
     }
@@ -56,6 +67,9 @@ public class Platform : MonoBehaviourPun
 
     public void SwitchRenderColorEnter()
     {
+        if (!photonView.IsMine)
+            return;
+
         foreach (Renderer renderer in renderers)
         {
             if (renderer != null)
@@ -65,6 +79,9 @@ public class Platform : MonoBehaviourPun
 
     public void SwitchRenderColorExit()
     {
+        if (!photonView.IsMine)
+            return;
+
         foreach (Renderer renderer in renderers)
         {
             if (renderer != null)
