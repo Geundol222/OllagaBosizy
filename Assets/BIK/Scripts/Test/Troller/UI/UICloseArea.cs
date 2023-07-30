@@ -6,8 +6,26 @@ using UnityEngine.EventSystems;
 
 public class UICloseArea : MonoBehaviourPun, IPointerClickHandler
 {
+    Platform platform;
+
+
+    public void Init(Platform platform)
+    {
+        this.platform = platform;
+    }
+
+    public void ClearPlatform()
+    {
+        platform = null;
+    }
+
     public void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log("팝업 종료 영역 클릭");
+        if(platform == null)
+            return;
+        
+        platform.ClearBothPlatform();
+        platform.HideSetTrapButton();
     }
+
 }

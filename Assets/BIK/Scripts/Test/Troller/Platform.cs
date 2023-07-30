@@ -8,14 +8,14 @@ public class Platform : MonoBehaviourPun
     [SerializeField] private Color pointerOverColor;
     [SerializeField] bool isFirst;
     [SerializeField] bool isClickable;
-
     public bool IsClickable { get { return isClickable; } }
     private Renderer[] renderers;
     private int playerCount;
     private Color pointerOutColor = Color.white;
 
     private SetTrapUI setTrapUI;
-    private SetTrapUI prev_SetTrapUI;
+
+    private UICloseArea closeArea;
 
     private void Awake()
     {
@@ -24,13 +24,67 @@ public class Platform : MonoBehaviourPun
         else
             isClickable = true;
 
+        trollerPlayerController = GameObject.Find("TrollerController").GetComponent<TrollerPlayerController>(); // 추후 DataManager로 구현되어야함
+        closeArea = GameObject.Find("UICloseArea").GetComponent<UICloseArea>();
         renderers = GetComponentsInChildren<Renderer>();
+    }
+
+    public void InitToUICloseArea()
+    {
+        closeArea.Init(this);
+    }
+
+    public void ClearCloseAreaPlatform()
+    {
+        closeArea.ClearPlatform();
+    }
+
+    public void ClearBothPlatform()
+    {
+        trollerPlayerController.ClearBothPlatform();
+    }
+
+    public void ClearCurrentPlatform()
+    {
+        trollerPlayerController.ClearCurrentPlatform();
+    }
+
+    public void SetCurrentPlatform()
+    {
+        trollerPlayerController.SetCurrentPlatform(this);
+    }
+
+    public void SetPrevPlatform()
+    {
+        trollerPlayerController.SetPrevPlatform(this);
     }
 
     public void ShowSetTrapButton()
     {
         if (!photonView.IsMine)
             return;
+
+        //1. 클릭된 플랫폼을 트롤러 컨트롤러의 현재 플랫폼으로 설정
+        SetCurrentPlatform(); 
+
+        //1-2. 혹시 이전 플랫폼이 NULL이면 현재 플랫폼을 이전 플랫폼으로 설정
+        if(trollerPlayerController._prevPlatform == null)
+        {
+            SetPrevPlatform();
+        }
+
+        //2. 현재 플랫폼과 이전 플랫폼이 다르다면 이전 플랫폼을 닫아줌.
+        if(trollerPlayerController._currentPlatform != trollerPlayerController._prevPlatform)
+        {
+            trollerPlayerController._prevPlatform.HideSetTrapButton();
+        }
+
+        //3. 현재 플랫폼을 NULL로 바꿔주고
+        ClearCurrentPlatform();
+        //4. 이 플랫폼은 이제 이전 플랫폼으로 ..
+        SetPrevPlatform();
+
+        InitToUICloseArea(); // 종료영역에게 클릭시 종료 되어야할 Platform 참조하게 
 
 
         if (PhotonNetwork.IsConnectedAndReady)
@@ -57,8 +111,8 @@ public class Platform : MonoBehaviourPun
             photonView.RPC("PlayerExitPlatform", RpcTarget.AllBufferedViaServer);
         }
 
-            GameManager.UI.CloseInGameUI(setTrapUI);
-        
+        ClearCloseAreaPlatform();
+        GameManager.UI.CloseInGameUI(setTrapUI);        
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
