@@ -155,6 +155,7 @@ public class Platform : MonoBehaviourPun
         }
     }
 
+    [PunRPC]
     public void SwitchRenderColorEnter()
     {
         if (!photonView.IsMine || isClickable == false)
@@ -167,6 +168,7 @@ public class Platform : MonoBehaviourPun
         }
     }
 
+    [PunRPC]
     public void SwitchRenderColorExit()
     {
         if (!photonView.IsMine)
