@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -8,25 +9,31 @@ public class ScoreCountView : MonoBehaviour
 {
 	[SerializeField] private DataManager dataManager;
 
-	private TMP_Text text;
+	private TMP_Text scoreText;
 
 	private void Awake()
 	{
-		text = GetComponent<TMP_Text>();
+		scoreText = GetComponent<TMP_Text>();
+	}
+
+	private void Start()
+	{
+		// 게임 시작 시 0점으로 초기화됨
+		DisplayScore(0);	
 	}
 
 	private void OnEnable()
 	{
-		dataManager.OnCurrentScoreChanged += ChangeScore;
+		dataManager.OnCurrentScoreChanged += DisplayScore;
 	}
 
 	private void OnDisable()
 	{
-		dataManager.OnCurrentScoreChanged -= ChangeScore;
+		dataManager.OnCurrentScoreChanged -= DisplayScore;
 	}
 
-	private void ChangeScore(int score)
+	public void DisplayScore(int score)
     {
-		text.text = score.ToString();
+		scoreText.text = "SCORE : "  + score.ToString();
 	}   
 }

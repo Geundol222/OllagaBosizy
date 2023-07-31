@@ -7,7 +7,7 @@ using UnityEngine.Events;
 public class DataManager : MonoBehaviour
 {
 	// 최고 점수
-    [SerializeField] private int bestScore;
+	[SerializeField] private int bestScore;
 	public int BestScore
 	{
 		get { return bestScore; }
@@ -27,7 +27,7 @@ public class DataManager : MonoBehaviour
 		get { return currentScore; }
 		set
 		{
-			OnCurrentScoreChanged?.Invoke(value);	
+ 			OnCurrentScoreChanged?.Invoke(value);	
 			currentScore = value;
 
 			if (currentScore > BestScore)
@@ -36,4 +36,3 @@ public class DataManager : MonoBehaviour
 	}
 	public event UnityAction<int> OnCurrentScoreChanged;
 }
-
