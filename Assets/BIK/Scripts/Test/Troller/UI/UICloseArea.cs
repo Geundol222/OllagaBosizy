@@ -19,6 +19,7 @@ public class UICloseArea : MonoBehaviourPun, IPointerClickHandler
         platform = null;
     }
 
+
     public void OnPointerClick(PointerEventData eventData)
     {
         if (platform == null)

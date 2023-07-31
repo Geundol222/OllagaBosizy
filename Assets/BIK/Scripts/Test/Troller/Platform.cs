@@ -1,4 +1,5 @@
 using Photon.Pun;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -14,9 +15,11 @@ public class Platform : MonoBehaviourPun
     private Color pointerOutColor = Color.white;
 
     private SetTrapUI setTrapUI;
-    public SetTrapUI _setTrapUI {  get { return setTrapUI;  } }
+    public SetTrapUI _setTrapUI { get { return setTrapUI; } }
 
     private UICloseArea closeArea;
+
+    private Coroutine showSetTrapButtonCoroutine;
 
     private void Awake()
     {
@@ -67,19 +70,19 @@ public class Platform : MonoBehaviourPun
             return;
 
         //1. 클릭된 플랫폼을 트롤러 컨트롤러의 현재 플랫폼으로 설정
-        SetCurrentPlatform(); 
+        SetCurrentPlatform();
 
         //1-2. 혹시 이전 플랫폼이 NULL이면 현재 플랫폼을 이전 플랫폼으로 설정
-        if(trollerPlayerController._prevPlatform == null)
+        if (trollerPlayerController._prevPlatform == null)
         {
             SetPrevPlatform();
         }
 
         //2. 현재 플랫폼과 이전 플랫폼이 다르다면 이전 플랫폼을 닫아줌.
-        if(trollerPlayerController._currentPlatform != trollerPlayerController._prevPlatform)
+        if (trollerPlayerController._currentPlatform != trollerPlayerController._prevPlatform)
         {
             trollerPlayerController._prevPlatform._setTrapUI.ExecuteSetTrapButtonClosing();
-            //trollerPlayerController._prevPlatform.ClearCloseAreaPlatform();
+            trollerPlayerController._prevPlatform.ClearCloseAreaPlatform();
         }
 
         //3. 현재 플랫폼을 NULL로 바꿔주고
@@ -87,8 +90,8 @@ public class Platform : MonoBehaviourPun
         //4. 이 플랫폼은 이제 이전 플랫폼으로 ..
         SetPrevPlatform();
 
-        InitToUICloseArea(); // 종료영역에게 클릭시 종료 되어야할 Platform 참조하게 
-
+        //SetTrapUI가 생성되어 Platform을 참조하면 스크립트 내부에서 CloseArea의 Platform을 초기화 해주는 구조로 바꿈 - 230801 02:19 AM 
+        //InitToUICloseArea(); 
 
         if (PhotonNetwork.IsConnectedAndReady)
         {
@@ -100,6 +103,7 @@ public class Platform : MonoBehaviourPun
         setTrapUI.SetTarget(transform);
         setTrapUI.SetOffset(new Vector3(200, 0));
     }
+
 
     public void HideSetTrapButton()
     {
@@ -114,7 +118,7 @@ public class Platform : MonoBehaviourPun
             photonView.RPC("PlayerExitPlatform", RpcTarget.AllBufferedViaServer);
         }
 
-        // SetTrapUI에서의 코루틴 사용으로 뭔가 어긋나는 중 일단 UICloseArea 스크립트의 Plarform을 굳이 Null 주지 않고 새로운 Platform으로 Update 해주는 방식으로 진행하겠음.
+        //SetTrapUI 스크립트 내부에서 HideSetTrapButton 시 CloseArea의 Platform을 초기화 해주는 구조로 바꿈 - 230801 02:19 AM  
         //ClearCloseAreaPlatform();
         GameManager.UI.CloseInGameUI(setTrapUI);        
     }
