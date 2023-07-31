@@ -7,12 +7,14 @@ public class GameManager : MonoBehaviour
     private static ResourceManager resource;
     private static UIManager ui;
     private static SoundManager sound;
+    private static DataManager data;
 
     public static GameManager Instance { get { return instance; } }
     public static PoolManager Pool { get { return pool; } }
     public static ResourceManager Resource { get { return resource; } }
     public static UIManager UI { get { return ui; } }
     public static SoundManager Sound { get { return sound; } }
+    public static DataManager Data { get { return data; } }
 
     private void Awake()
     {
@@ -54,5 +56,10 @@ public class GameManager : MonoBehaviour
         soundObj.name = "SoundManager";
         soundObj.transform.parent = transform;
         sound = soundObj.AddComponent<SoundManager>();
+
+        GameObject dataObj = new GameObject();
+        dataObj.name = "DataManager";
+        dataObj.transform.parent = transform;
+        data = dataObj.AddComponent<DataManager>();
     }
 }
