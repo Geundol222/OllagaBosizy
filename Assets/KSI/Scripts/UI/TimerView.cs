@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class TimerController : MonoBehaviour
+public class TimerView : MonoBehaviour
 {
 	[SerializeField] private float limitTime = 300f; // 제한 시간 5분
 	private float remainLimitTime; // 남은 제한 시간
