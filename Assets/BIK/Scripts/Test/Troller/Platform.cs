@@ -33,6 +33,7 @@ public class Platform : MonoBehaviourPun
         renderers = GetComponentsInChildren<Renderer>();
     }
 
+    /*
     public void InitToUICloseArea()
     {
         Debug.Log("InitToUICloseArea");
@@ -43,6 +44,7 @@ public class Platform : MonoBehaviourPun
     {
         closeArea.ClearPlatform();
     }
+    */
 
     public void ClearBothPlatform()
     {
@@ -82,7 +84,8 @@ public class Platform : MonoBehaviourPun
         if (trollerPlayerController._currentPlatform != trollerPlayerController._prevPlatform)
         {
             trollerPlayerController._prevPlatform._setTrapUI.ExecuteSetTrapButtonClosing();
-            trollerPlayerController._prevPlatform.ClearCloseAreaPlatform();
+            //SetTrapUI가 생성되어 Platform을 참조하면 스크립트 내부에서 CloseArea의 Platform을 초기화 해주는 구조로 바꿈 - 230801 02:19 AM 
+            //trollerPlayerController._prevPlatform.ClearCloseAreaPlatform();
         }
 
         //3. 현재 플랫폼을 NULL로 바꿔주고
@@ -120,7 +123,7 @@ public class Platform : MonoBehaviourPun
 
         //SetTrapUI 스크립트 내부에서 HideSetTrapButton 시 CloseArea의 Platform을 초기화 해주는 구조로 바꿈 - 230801 02:19 AM  
         //ClearCloseAreaPlatform();
-        GameManager.UI.CloseInGameUI(setTrapUI);        
+        GameManager.UI.CloseInGameUI(setTrapUI);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
