@@ -1,13 +1,14 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
-using UnityEditor.Rendering.LookDev;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
+using UnityEngine.UI;
 
 public class ScoreCountView : MonoBehaviour
 {
-	[SerializeField] private DataManager dataManager;
+	[SerializeField] private Transform player; // 플래이어 위치
+	[SerializeField] private Transform startPoint; // 시작 지점
+	[SerializeField] private Transform endPoint; // 마지막 지점
 
 	private TMP_Text scoreText;
 
@@ -16,24 +17,19 @@ public class ScoreCountView : MonoBehaviour
 		scoreText = GetComponent<TMP_Text>();
 	}
 
-	private void Start()
+	void Update()
 	{
-		// 게임 시작 시 0점으로 초기화됨
-		DisplayScore(0);	
-	}
+		// 시작 지점과 끝 지점 사이의 y 거리 계산
+		float totalYDistance = Mathf.Abs(endPoint.position.y - startPoint.position.y);
 
-	private void OnEnable()
-	{
-		dataManager.OnCurrentScoreChanged += DisplayScore;
-	}
+		// 시작 지점과 플레이어 사이의 y 거리 계산
+		float playerYDistance = Mathf.Abs(player.position.y - startPoint.position.y);
 
-	private void OnDisable()
-	{
-		dataManager.OnCurrentScoreChanged -= DisplayScore;
-	}
+		// 시작 지점부터 플레이어까지의 y 거리 백분율 계산
+		float percentage = Mathf.Clamp((playerYDistance / totalYDistance) * 100f, 0f, 100f);
 
-	public void DisplayScore(int score)
-    {
-		scoreText.text = "SCORE : "  + score.ToString();
-	}   
+		// 퍼센티지 값을 텍스트로 표시 (정수로 변환하여 표시)
+		int score = Mathf.RoundToInt(percentage);
+		scoreText.text = "SCORE : " + score.ToString() + "%";
+	}
 }

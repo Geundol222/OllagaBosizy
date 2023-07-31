@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FallDetection : MonoBehaviour
@@ -8,7 +6,7 @@ public class FallDetection : MonoBehaviour
     private Animator animator;
 
     private int fallPoint; // 떨어진 지점
-    private int fallDegree = 5; // 떨어진 정도
+    [SerializeField] private int fallDegree = 10; // 떨어진 정도
 
 	private void Start()
 	{
@@ -30,12 +28,12 @@ public class FallDetection : MonoBehaviour
 		if (heightDifference >= fallDegree) 
 		{
 			Debug.Log("플레이어가 떨어졌습니다!");
-
-			// animator.SetBool("isFalling", true);
+			animator.SetBool("IsFalling", true);
 		}
 		else
 		{
-			animator.SetBool("isFalling", false);
+			Debug.Log("플레이어가 일어섰습니다.!");
+			animator.SetBool("IsFalling", false);
 		}
 	}
 }
