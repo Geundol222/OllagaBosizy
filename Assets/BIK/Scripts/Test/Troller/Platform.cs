@@ -14,6 +14,7 @@ public class Platform : MonoBehaviourPun
     private Color pointerOutColor = Color.white;
 
     private SetTrapUI setTrapUI;
+    public SetTrapUI _setTrapUI {  get { return setTrapUI;  } }
 
     private UICloseArea closeArea;
 
@@ -31,6 +32,7 @@ public class Platform : MonoBehaviourPun
 
     public void InitToUICloseArea()
     {
+        Debug.Log("InitToUICloseArea");
         closeArea.Init(this);
     }
 
@@ -76,7 +78,8 @@ public class Platform : MonoBehaviourPun
         //2. 현재 플랫폼과 이전 플랫폼이 다르다면 이전 플랫폼을 닫아줌.
         if(trollerPlayerController._currentPlatform != trollerPlayerController._prevPlatform)
         {
-            trollerPlayerController._prevPlatform.HideSetTrapButton();
+            trollerPlayerController._prevPlatform._setTrapUI.ExecuteSetTrapButtonClosing();
+            //trollerPlayerController._prevPlatform.ClearCloseAreaPlatform();
         }
 
         //3. 현재 플랫폼을 NULL로 바꿔주고
@@ -111,7 +114,8 @@ public class Platform : MonoBehaviourPun
             photonView.RPC("PlayerExitPlatform", RpcTarget.AllBufferedViaServer);
         }
 
-        ClearCloseAreaPlatform();
+        // SetTrapUI에서의 코루틴 사용으로 뭔가 어긋나는 중 일단 UICloseArea 스크립트의 Plarform을 굳이 Null 주지 않고 새로운 Platform으로 Update 해주는 방식으로 진행하겠음.
+        //ClearCloseAreaPlatform();
         GameManager.UI.CloseInGameUI(setTrapUI);        
     }
 

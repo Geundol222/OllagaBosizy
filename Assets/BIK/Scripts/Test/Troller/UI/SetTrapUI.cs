@@ -23,11 +23,13 @@ public class SetTrapUI : InGameUI, IPointerClickHandler
         Debug.Log("함정설치");
     }
 
-    public void OnClickCloseArea()
+    public void ExecuteSetTrapButtonClosing()
     {
         if (platform == null)
+        {
+            Debug.Log("SetTrapUI Platform is NULL");
             return;
-
+        }
         buttonCloseCoroutine = StartCoroutine(HideSetTrapButton());
     }
 
