@@ -7,10 +7,8 @@ public class PlatformMouseHandler : MonoBehaviour,IPointerClickHandler,IPointerE
 {
 
     private Platform platform;                                      // isClickable 함수 사용을 위한 Platform 참조
-                                
     private void Awake()
     {
-        // 자식 개체의 Renderer 컴포넌트 담기
         platform = GetComponent<Platform>();
     }
       
@@ -20,10 +18,10 @@ public class PlatformMouseHandler : MonoBehaviour,IPointerClickHandler,IPointerE
     /// <param name="eventData"></param>
     public void OnPointerClick(PointerEventData eventData)
     {
+
         if (platform.IsClickable)
         {
-            SetTrapUI setTrapUI = GameManager.UI.ShowInGameUI<SetTrapUI>("UI/SetTrapButton");
-
+            platform.ShowSetTrapButton();
         }                
     }
       
