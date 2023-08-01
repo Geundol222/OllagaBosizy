@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class TrollerPlayerController : MonoBehaviourPun
 {
+    [SerializeField] int debuffQueueLength;
+    public Queue<IDebuff> debuffQueue;
+
     private Platform currentPlatform;
     public Platform _currentPlatform { get { return currentPlatform; } }
     private Platform prevPlatform;
@@ -18,6 +21,17 @@ public class TrollerPlayerController : MonoBehaviourPun
     /// 근데 이전 발판 현재 발판은 DataManager에서 관리해줘야 할 것 같은데 ..
     /// </summary>
     // Start is called before the first frame update
+
+    private void Awake()
+    {   
+        Debuff debuff = new Debuff(Random.Range(0,(int)Debuff_State.Length - 1));
+        Debug.Log(debuff.state.ToString());
+        debuffQueueLength = 4;
+        for(int i = 0; i < debuffQueueLength; i++)
+        {
+            debuffQueue.Enqueue(debuff.clone());
+        }
+    }
 
     public void ClearBothPlatform()
     {

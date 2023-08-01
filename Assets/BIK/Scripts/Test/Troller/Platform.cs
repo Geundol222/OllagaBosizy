@@ -11,7 +11,7 @@ public class Platform : MonoBehaviourPun
     [SerializeField] bool isClickable;
     public bool IsClickable { get { return isClickable; } }
     private Renderer[] renderers;
-    private int playerCount;
+    private int playerCount; 
     private Color pointerOutColor = Color.white;
 
     private SetTrapUI setTrapUI;
@@ -170,7 +170,7 @@ public class Platform : MonoBehaviourPun
     public void SwitchRenderColorEnter()
     {
         if (!photonView.IsMine || isClickable == false)
-            return;        
+            return;
 
         foreach (Renderer renderer in renderers)
         {
@@ -191,4 +191,20 @@ public class Platform : MonoBehaviourPun
                 renderer.material.color = pointerOutColor;
         }
     }
+
+    public void OnClickSetTrap()
+    {
+        if (PhotonNetwork.IsConnectedAndReady)
+        {
+            photonView.RPC("SetTrap",RpcTarget.AllBufferedViaServer);
+        }
+    }
+
+    [PunRPC]
+    public void SetTrap()
+    {
+        Debuff debuff = (Debuff) trollerPlayerController.debuffQueue.Dequeue();
+        Debug.Log(debuff.state);
+    }
+      
 }

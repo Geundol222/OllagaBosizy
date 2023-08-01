@@ -27,6 +27,7 @@ public class SetTrapUI : InGameUI, IPointerClickHandler
     {
         Debug.Log("함정설치");
         // 디버프 부여 함수호출
+        platform.SetTrap();
         platform.ClearBothPlatform();
         ExecuteSetTrapButtonClosing();
     }
