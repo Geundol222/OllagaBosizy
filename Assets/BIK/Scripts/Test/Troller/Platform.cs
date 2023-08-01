@@ -1,5 +1,6 @@
 using Photon.Pun;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -9,20 +10,21 @@ public class Platform : MonoBehaviourPun
     [SerializeField] private Color pointerOverColor;
     [SerializeField] bool isFirst;
     [SerializeField] bool isClickable;
+    [SerializeField] private TMP_Text currentStateText;
     public bool IsClickable { get { return isClickable; } }
     private Renderer[] renderers;
     private int playerCount; 
     private Color pointerOutColor = Color.white;
-
     private SetTrapUI setTrapUI;
     public SetTrapUI _setTrapUI { get { return setTrapUI; } }
-
     private UICloseArea closeArea;
 
-    private Coroutine showSetTrapButtonCoroutine;
+    private Debuff platformCurrentDebuff;
+    private Debuff_State currentDebuffState;
 
     private void Awake()
     {
+        currentDebuffState = Debuff_State.None;
         if (isFirst)
             isClickable = false;
         else
@@ -33,18 +35,23 @@ public class Platform : MonoBehaviourPun
         renderers = GetComponentsInChildren<Renderer>();
     }
 
-    /*
-    public void InitToUICloseArea()
+    public void UpdateCurrentStateText()
     {
-        Debug.Log("InitToUICloseArea");
-        closeArea.Init(this);
+        Debuff[] debuffArray = new Debuff[trollerPlayerController.debuffQueue.Count];
+        trollerPlayerController.debuffQueue.CopyTo(debuffArray, 0);
+        currentStateText.text = currentDebuffState.ToString();
+        Debug.Log("-----------------------------------------");
+        for(int i = 0; i < debuffArray.Length; i++)
+        {
+            Debug.Log(debuffArray[i].state.ToString());
+        }
+        Debug.Log("-----------------------------------------");
     }
 
-    public void ClearCloseAreaPlatform()
+    public void DebuffQueueEnqueue()
     {
-        closeArea.ClearPlatform();
+        trollerPlayerController.DebuffQueueEnqueue();
     }
-    */
 
     public void ClearBothPlatform()
     {
@@ -126,6 +133,23 @@ public class Platform : MonoBehaviourPun
         GameManager.UI.CloseInGameUI(setTrapUI);
     }
 
+    /// <summary>
+    /// 플레이어가 발판에 닿았다. 
+    /// </summary>
+    /// <param name="collision"></param>
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (PhotonNetwork.IsConnectedAndReady)
+        {
+            // 디버프가 없으면 return
+            if (platformCurrentDebuff == null)
+                return;
+
+           
+
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (!photonView.IsMine)
@@ -199,12 +223,22 @@ public class Platform : MonoBehaviourPun
             photonView.RPC("SetTrap",RpcTarget.AllBufferedViaServer);
         }
     }
-
+      
     [PunRPC]
     public void SetTrap()
     {
-        Debuff debuff = (Debuff) trollerPlayerController.debuffQueue.Dequeue();
-        Debug.Log(debuff.state);
-    }
-      
+        // 디버그 큐에서 하나 빼오고 Dequeue();
+        // 현재 플랫폼의 디버프를 지정
+        platformCurrentDebuff = (Debuff) trollerPlayerController.debuffQueue.Dequeue();
+        // 현재 플랫폼의 DebuffState 업데이트 
+        currentDebuffState = platformCurrentDebuff.state;
+        // 텍스트 업데이트 
+        UpdateCurrentStateText();
+        // 현재 플랫폼에 함정을 설치하는 함수 호출
+        platformCurrentDebuff.SetTrap(this);
+        // 디버프 슬롯에 랜덤 디버프 하나 추가해주기
+        DebuffQueueEnqueue();
+        Debug.Log(platformCurrentDebuff.state);
+    } 
+       
 }

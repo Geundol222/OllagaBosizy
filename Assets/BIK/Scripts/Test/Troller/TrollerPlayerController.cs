@@ -23,16 +23,32 @@ public class TrollerPlayerController : MonoBehaviourPun
     // Start is called before the first frame update
 
     private void Awake()
-    {   
-        Debuff debuff = new Debuff(Random.Range(0,(int)Debuff_State.Length - 1));
-        Debug.Log(debuff.state.ToString());
+    {
+        DebuffQueueInit();
+    }
+
+    public void DebuffQueueInit()
+    {
+        debuffQueue = new Queue<IDebuff>();
+
         debuffQueueLength = 4;
-        for(int i = 0; i < debuffQueueLength; i++)
+
+        for (int i = 0; i < debuffQueueLength; i++)
         {
-            debuffQueue.Enqueue(debuff.clone());
+            Debuff debuff = new Debuff(Random.Range(1, (int)Debuff_State.Length));
+            debuffQueue.Enqueue(debuff);
+            Debug.Log($"{debuff.state.ToString()}를 {i + 1} 번 째 넣었다");
         }
     }
 
+    public void DebuffQueueEnqueue()
+    {
+        if (debuffQueue.Count >= debuffQueueLength)
+            return;
+        Debuff debuff = new Debuff(Random.Range(1, (int)Debuff_State.Length - 1));
+        debuffQueue.Enqueue(debuff);
+    }
+      
     public void ClearBothPlatform()
     {
         currentPlatform = null;
