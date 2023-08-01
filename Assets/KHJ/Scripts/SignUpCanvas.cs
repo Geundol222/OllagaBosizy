@@ -2,6 +2,7 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using TMPro;
 using UnityEngine;
 
@@ -123,6 +124,7 @@ public class SignUpCanvas : MonoBehaviour
         Debug.Log(sqlCommand);
         MySqlCommand cmd = new MySqlCommand(sqlCommand, con);
         reader = cmd.ExecuteReader();
+        reader.Close();
         answer.SetActive(false);
     }
 }

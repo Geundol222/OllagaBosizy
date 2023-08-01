@@ -21,7 +21,7 @@ public class LoginCanvas : MonoBehaviour
     {
         try
         {
-            string serverInfo = "Server=43.202.3.31; Database=userdata; Uid=root; PWD=1234; Port=3306; CharSet=utf8;";
+            string serverInfo = "Server=43.202.3.31; Database=userdata; Uid=root; PWD=1234; Port=3306; CharSet=utf8mb4_general_ci;";
             con = new MySqlConnection(serverInfo);
             con.Open();
 
@@ -40,7 +40,7 @@ public class LoginCanvas : MonoBehaviour
             string id = idInputField.text;
             string pass = PasswordInputField.text;
 
-            string sqlCommand = string.Format("SELECT ID, PWD FROM user_info WHERE ID='{0}';", id);
+            string sqlCommand = string.Format("SELECT ID, PWD, PWDANSWER FROM user_info WHERE ID='{0}';", id);
             MySqlCommand cmd = new MySqlCommand(sqlCommand, con);
             reader = cmd.ExecuteReader();
 
@@ -50,8 +50,9 @@ public class LoginCanvas : MonoBehaviour
                 {
                     string readID = reader["ID"].ToString();
                     string readPass = reader["PWD"].ToString();
+                    string readPassANS = reader["PWDANSWER"].ToString();
 
-                    Debug.Log($"ID : {readID}, Pass : {readPass}");
+                    Debug.Log($"ID : {readID}, Pass : {readPass}, PassANS : {readPassANS}");
 
                     if (pass == readPass)
                     {
