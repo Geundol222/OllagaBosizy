@@ -1463,6 +1463,7 @@ GameObject:
   - component: {fileID: 6607816043857073831}
   - component: {fileID: 6607816043857073832}
   - component: {fileID: 6607816043857073830}
+  - component: {fileID: 877585795}
   - component: {fileID: 6607816043473776451}
   m_Layer: 0
   m_Name: PlayerBoy
@@ -1516,7 +1517,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
+  m_LinearDrag: 2
   m_AngularDrag: 0.05
   m_GravityScale: 1
   m_Material: {fileID: 0}
@@ -1591,18 +1592,25 @@ MonoBehaviour:
   debug: 1
   maxSpeed: 5
   moveSpeed: 5
-  jumpPower: 8
+  jumpPower: 12
   platformLayer:
     serializedVersion: 2
     m_Bits: 64
   gfx: {fileID: 5091672940986976343}
   dataManager: {fileID: 0}
-  OnScored:
-    m_PersistentCalls:
-      m_Calls: []
-  OnJumped:
-    m_PersistentCalls:
-      m_Calls: []
+--- !u!114 &877585795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6607816043857073826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a37c5e32580c0fc43b52f971a6d02840, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fallHeights: []
 --- !u!61 &6607816043473776451
 BoxCollider2D:
   m_ObjectHideFlags: 0

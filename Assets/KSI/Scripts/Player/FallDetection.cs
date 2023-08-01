@@ -1,39 +1,35 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class FallDetection : MonoBehaviour
 {
-    private new Rigidbody2D rigidbody;
-    private Animator animator;
+    [SerializeField] private List<float> fallHeights; // 떨어질 지점들을 List로 관리
 
-    private int fallPoint; // 떨어진 지점
-    [SerializeField] private int fallDegree = 10; // 떨어진 정도
+	private Animator animator;
+	//private bool isFalling = false;
 
 	private void Start()
 	{
-		rigidbody = GetComponent<Rigidbody2D>();
 		animator = GetComponent<Animator>();
-		fallPoint = (int)rigidbody.position.y; 
+		//isFalling = false;
 	}
 
 	private void Update()
 	{
-		int currentPoint = (int)rigidbody.position.y;
-		int heightDifference = fallPoint - currentPoint;
+	// 현재 위치의 높이를 가져옴
+	float currentHeight = transform.position.y;
 
-		if (currentPoint > fallPoint)
+	// 떨어지는 애니메이션이 재생 중이 아니라면
+	
+		// 떨어지는 지점들을 순차적으로 체크하여 애니메이션 재생
+		foreach (float fallHeight in fallHeights)
 		{
-			fallPoint = currentPoint;
-		}
-
-		if (heightDifference >= fallDegree) 
-		{
-			Debug.Log("플레이어가 떨어졌습니다!");
-			animator.SetBool("IsFalling", true);
-		}
-		else
-		{
-			Debug.Log("플레이어가 일어섰습니다.!");
-			animator.SetBool("IsFalling", false);
+			if (currentHeight >= fallHeight)
+			{
+				animator.SetTrigger("IsFall"); // 애니메이션 트리거 "Fall"을 호출하여 떨어지는 애니메이션 재생
+				break;
+			}
 		}
 	}
+	
 }

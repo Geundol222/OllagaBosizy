@@ -19,11 +19,11 @@ public class PlayerController : MonoBehaviour
 	[Header("GFX")]
 	[SerializeField] Transform gfx;
 
-	[Header("DataManager")]
-	[SerializeField] private DataManager dataManager;
+	//[Header("DataManager")]
+	//[SerializeField] private DataManager dataManager;
 
-	public UnityEvent OnScored;
-	public UnityEvent OnJumped;
+	//public UnityEvent OnScored;
+	//public UnityEvent OnJumped;
 
 	private new Rigidbody2D rigidbody;
 	private Animator animator;
@@ -65,7 +65,7 @@ public class PlayerController : MonoBehaviour
 	{
 		rigidbody.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
 
-		OnJumped?.Invoke();
+		//OnJumped?.Invoke();
 	}
 
 	private void OnMove(InputValue value)

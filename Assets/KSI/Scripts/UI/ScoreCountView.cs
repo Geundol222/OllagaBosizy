@@ -1,8 +1,5 @@
-using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
-using UnityEngine.UI;
 
 public class ScoreCountView : MonoBehaviour
 {
@@ -28,8 +25,8 @@ public class ScoreCountView : MonoBehaviour
 		// 시작 지점부터 플레이어까지의 y 거리 백분율 계산
 		float percentage = Mathf.Clamp((playerYDistance / totalYDistance) * 100f, 0f, 100f);
 
-		// 퍼센티지 값을 텍스트로 표시 (정수로 변환하여 표시)
+		// 백분율 값을 정수로 변환하여 표시
 		int score = Mathf.RoundToInt(percentage);
-		scoreText.text = "SCORE : " + score.ToString() + "%";
+		scoreText.text = "SCORE : " + score.ToString() + " %";
 	}
 }
