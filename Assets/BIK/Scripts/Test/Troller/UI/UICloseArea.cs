@@ -8,9 +8,9 @@ public class UICloseArea : MonoBehaviourPun, IPointerClickHandler
 {
     Platform platform;
 
-
     public void Init(Platform platform)
     {
+        Debug.Log("1_ 첫번쨰_ platform 초기화");
         this.platform = platform;
     }
 
@@ -19,13 +19,15 @@ public class UICloseArea : MonoBehaviourPun, IPointerClickHandler
         platform = null;
     }
 
+
     public void OnPointerClick(PointerEventData eventData)
     {
-        if(platform == null)
+        if (platform == null)
+        {
             return;
-        
+        }
         platform.ClearBothPlatform();
-        platform.HideSetTrapButton();
+        platform._setTrapUI.ExecuteSetTrapButtonClosing();
     }
 
 }
