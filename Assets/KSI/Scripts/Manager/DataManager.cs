@@ -3,6 +3,9 @@ using UnityEngine.Events;
 
 public class DataManager : MonoBehaviour
 {
+	private Platform currentPlatform;
+	private Platform presentPlatform;
+
 	// 최고 점수
 	[SerializeField] private int bestScore;
 	public int BestScore
