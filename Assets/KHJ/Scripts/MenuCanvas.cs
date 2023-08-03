@@ -25,6 +25,7 @@ public class MenuCanvas : MonoBehaviour
     private void OnEnable()
     {
         createRoomPanel.SetActive(false);
+        PhotonNetwork.JoinLobby();
     }
 
     public void OpenCreateRoomMenu()
@@ -75,11 +76,6 @@ public class MenuCanvas : MonoBehaviour
         string name = $"Room {Random.Range(1000, 10000)}";
         RoomOptions options = new RoomOptions { MaxPlayers = 8 };
         PhotonNetwork.JoinRandomOrCreateRoom(roomName: name, roomOptions: options);
-    }
-
-    public void JoinLobby()
-    {
-        PhotonNetwork.JoinLobby();
     }
 
     public void Logout()

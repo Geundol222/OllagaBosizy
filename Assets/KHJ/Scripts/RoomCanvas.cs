@@ -3,6 +3,7 @@ using Photon.Realtime;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.EventSystems.EventTrigger;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
 public class RoomCanvas : MonoBehaviour
@@ -23,7 +24,16 @@ public class RoomCanvas : MonoBehaviour
     {
         foreach (Player player in PhotonNetwork.PlayerList)
         {
-            PlayerEntry entry = Instantiate(playerEntryPrefab, playerContent1);
+            PlayerEntry entry;
+            if (playerContent1.childCount < 2)
+            {
+                Debug.Log(playerContent1.childCount);
+                entry = Instantiate(playerEntryPrefab, playerContent1);
+            }
+            else
+            {
+                entry = Instantiate(playerEntryPrefab, playerContent2);
+            }
             entry.SetPlayer(player);
             playerDictionary.Add(player.ActorNumber, entry);
         }
@@ -51,6 +61,7 @@ public class RoomCanvas : MonoBehaviour
         PlayerEntry entry;
         if (playerContent1.childCount < 2)
         {
+            Debug.Log(playerContent1.childCount);
             entry = Instantiate(playerEntryPrefab, playerContent1);
         }
         else

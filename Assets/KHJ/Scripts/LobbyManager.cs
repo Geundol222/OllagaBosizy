@@ -99,6 +99,11 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         roomCanvas.MasterClientSwitched(newMasterClient);
     }
 
+    public override void OnJoinedLobby()
+    {
+        SetActivePanel(Panel.Menu);
+    }
+
     public override void OnLeftLobby()
     {
         SetActivePanel(Panel.Menu);
