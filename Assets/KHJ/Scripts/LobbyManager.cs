@@ -104,6 +104,11 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         SetActivePanel(Panel.Menu);
     }
 
+    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    {
+        menuCanvas.UpdateRoomList(roomList);
+    }
+
     private void SetActivePanel(Panel panel)
     {
         if (loginCanvas != null) loginCanvas.gameObject.SetActive(panel == Panel.Login);
