@@ -4125,6 +4125,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8258851114626028849, guid: bc298611918afac419d90c82add9641c,
+        type: 3}
+      propertyPath: platformTrigger
+      value: 
+      objectReference: {fileID: 4749077989974211640}
     - target: {fileID: 8258851114626028850, guid: bc298611918afac419d90c82add9641c,
         type: 3}
       propertyPath: m_RootOrder
@@ -4187,6 +4192,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bc298611918afac419d90c82add9641c, type: 3}
+--- !u!61 &4749077989974211640 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 8258851115014319316, guid: bc298611918afac419d90c82add9641c,
+    type: 3}
+  m_PrefabInstance: {fileID: 4749077989974211639}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5379960598363049100
 PrefabInstance:
   m_ObjectHideFlags: 0
