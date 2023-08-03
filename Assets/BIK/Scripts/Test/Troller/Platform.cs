@@ -3,6 +3,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UIElements;
 
 public class Platform : MonoBehaviourPun,IPunObservable
 {
@@ -38,10 +39,6 @@ public class Platform : MonoBehaviourPun,IPunObservable
     [PunRPC]
     public void UpdateCurrentStateText()
     {
-        /*
-        Debuff[] debuffArray = new Debuff[trollerPlayerController.debuffQueue.Count];
-        trollerPlayerController.debuffQueue.CopyTo(debuffArray, 0);
-        */
         currentStateText.text = currentDebuffState.ToString();
     }
 
@@ -70,10 +67,14 @@ public class Platform : MonoBehaviourPun,IPunObservable
         trollerPlayerController.SetPrevPlatform(this);
     }
 
+    /// <summary>
+    /// 함정 설치 버튼 보여주기
+    /// </summary>
     public void ShowSetTrapButton()
     {
         if (!photonView.IsMine)
             return;
+        isClickable = false;
 
         //1. 클릭된 플랫폼을 트롤러 컨트롤러의 현재 플랫폼으로 설정
         SetCurrentPlatform();
@@ -111,7 +112,9 @@ public class Platform : MonoBehaviourPun,IPunObservable
         setTrapUI.SetOffset(new Vector3(200, 0));
     }
 
-
+    /// <summary>
+    /// 함정 설치 버튼 숨기기
+    /// </summary>
     public void HideSetTrapButton()
     {
         if (!photonView.IsMine)
@@ -119,6 +122,8 @@ public class Platform : MonoBehaviourPun,IPunObservable
 
         if (setTrapUI == null)
             return;
+
+        isClickable = true;
 
         if (PhotonNetwork.IsConnectedAndReady)
         {
@@ -129,7 +134,7 @@ public class Platform : MonoBehaviourPun,IPunObservable
         //ClearCloseAreaPlatform();
         GameManager.UI.CloseInGameUI(setTrapUI);
     }
-
+      
     /// <summary>
     /// 플레이어가 발판에 닿았다. 
     /// </summary>
@@ -140,8 +145,7 @@ public class Platform : MonoBehaviourPun,IPunObservable
         {
             // 디버프가 없으면 return
             if (platformCurrentDebuff == null)
-                return;          
-
+                return;
         }
     }
 
@@ -247,6 +251,14 @@ public class Platform : MonoBehaviourPun,IPunObservable
         else
         {
             currentDebuffState = (Debuff_State) stream.ReceiveNext();
+        }
+    }
+
+    public void ClearDebuff()
+    {
+        if(playerCount != 0)
+        {
+            return;
         }
     }
 }

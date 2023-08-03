@@ -9,6 +9,7 @@ public class TrollerPlayerController : MonoBehaviourPun
     [SerializeField] int debuffQueueLength;
     [SerializeField] int debuffCount;
     [SerializeField] public TMP_Text[] TrapListTexts;
+    public Debuff Original_Debuff;
     public Queue<IDebuff> debuffQueue;
 
     private Platform currentPlatform;
@@ -16,42 +17,59 @@ public class TrollerPlayerController : MonoBehaviourPun
     private Platform prevPlatform;
     public Platform _prevPlatform { get { return prevPlatform; } }
 
+    private GameObject[] allPlatformList;
+    int platformList_index = 0;
     TrapListUI trapListUI;
-
-    /// <summary>
-    ///  230730 TODO  00:54 
-    /// 클릭한 발판의 SetTrapUI 그리고 이전에 클릭한 SetTrapUI를 비교 
-    /// 서로 다르다면 이전에 클릭한 SetTrapUI를 Close 해주고 클릭한 발판의 SetTrapUI를 출력
-    /// 
-    /// 근데 이전 발판 현재 발판은 DataManager에서 관리해줘야 할 것 같은데 ..
-    /// </summary>
-    // Start is called before the first frame update
 
     private void Awake()
     {
+        Original_Debuff = new Debuff((int)Debuff_State.None);
         DebuffQueueInit();
-        trapListUI = GameManager.UI.ShowInGameUI<TrapListUI>("UI/TrapList");
+    }
+
+    private void Start()
+    {
+        allPlatformList = GameObject.FindGameObjectsWithTag("Platform");
+        foreach (GameObject go in allPlatformList)
+        {
+            go.name = $"Platform_{platformList_index++}";
+        }
+    }
+
+    public void UpdateTrapList()
+    {
+        Debuff[] debuffArray = new Debuff[debuffQueue.Count];
+        debuffQueue.CopyTo(debuffArray, 0);
+        trapListUI.UpdateList(debuffArray);
     }
 
     public void DebuffQueueInit()
     {
         debuffQueue = new Queue<IDebuff>();
+        trapListUI = GameObject.Find("TrapList").GetComponent<TrapListUI>();
 
         debuffQueueLength = 4;
 
         for (int i = 0; i < debuffQueueLength; i++)
         {
-            Debuff debuff = new Debuff(Random.Range(1, (int)Debuff_State.Length));
+            Debuff debuff = (Debuff)Original_Debuff.clone();
+            debuff.SetState(Random.Range(1, (int)Debuff_State.Length));
             debuffQueue.Enqueue(debuff);
         }
+
+        UpdateTrapList();
     }
 
     public void DebuffQueueEnqueue()
     {
         if (debuffQueue.Count >= debuffQueueLength)
             return;
-        Debuff debuff = new Debuff(Random.Range(1, (int)Debuff_State.Length - 1));
+
+        Debuff debuff = (Debuff) Original_Debuff.clone();
+        debuff.SetState(Random.Range(1, (int)Debuff_State.Length));
         debuffQueue.Enqueue(debuff);
+
+        UpdateTrapList();
     }
       
     public void ClearBothPlatform()
