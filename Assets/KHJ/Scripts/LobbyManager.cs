@@ -13,7 +13,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     [SerializeField] MenuCanvas menuCanvas;
     [SerializeField] RoomCanvas roomCanvas;
     [SerializeField] SignUpCanvas signUpCanvas;
-    [SerializeField] FoundCanvas foundCanvas;
+    [SerializeField] GameObject foundCanvas;
 
     public void Start()
     {
@@ -110,6 +110,6 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         if (menuCanvas != null) menuCanvas.gameObject.SetActive(panel == Panel.Menu);
         if (roomCanvas != null) roomCanvas.gameObject.SetActive(panel == Panel.Room);
         if (signUpCanvas != null) signUpCanvas.gameObject.SetActive(panel == Panel.SignUp);
-        if (foundCanvas != null) foundCanvas.gameObject.SetActive(panel == Panel.Found);
+        if (foundCanvas != null) foundCanvas.SetActive(panel == Panel.Found);
     }
 }

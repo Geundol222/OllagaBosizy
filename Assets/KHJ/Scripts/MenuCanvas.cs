@@ -12,8 +12,8 @@ public class MenuCanvas : MonoBehaviour
     [SerializeField] GameObject createRoomPanel;
     [SerializeField] TMP_InputField roomNameInputField;
     [SerializeField] TMP_Text maxPlayerText;
-    [SerializeField] GameObject peopleScrollView;
-    [SerializeField] Animator peopleAnimator;
+    //[SerializeField] GameObject peopleScrollView;
+    //[SerializeField] Animator peopleAnimator;
 
     Dictionary<string, RoomInfo> roomDictionary;
 
@@ -27,9 +27,15 @@ public class MenuCanvas : MonoBehaviour
         createRoomPanel.SetActive(false);
     }
 
-    public void CreateRoomMenu()
+    public void OpenCreateRoomMenu()
     {
         createRoomPanel.SetActive(true);
+    }
+
+    public void CloseCreateRoomMenu()
+    {
+        roomNameInputField.text = "";
+        createRoomPanel.SetActive(false);
     }
 
     public void CreateRoomConfirm()
@@ -37,8 +43,9 @@ public class MenuCanvas : MonoBehaviour
         string roomName = roomNameInputField.text;
         if (roomName == "")
             roomName = $"Room {Random.Range(1000, 10000)}";
-        int maxPlayer = 0;
-        if (maxPlayerText.text == "1 vs 1")
+
+        int maxPlayer = 4;
+        /*if (maxPlayerText.text == "1 vs 1")
             maxPlayer = 2;
         else if (maxPlayerText.text == "2 vs 2")
             maxPlayer = 4;
@@ -50,7 +57,7 @@ public class MenuCanvas : MonoBehaviour
         {
             Debug.Log("인원을 선택해 주세요");
             return;
-        }
+        }*/
 
         maxPlayer = Mathf.Clamp(maxPlayer, 2, 8);
 
@@ -116,7 +123,7 @@ public class MenuCanvas : MonoBehaviour
         }
     }
 
-    public void ChooseOne()
+    /*public void ChooseOne()
     {
         maxPlayerText.text = "1 vs 1";
     }
@@ -155,5 +162,5 @@ public class MenuCanvas : MonoBehaviour
     public void CCCCC()
     {
         Debug.Log(maxPlayerText.text);
-    }
+    }*/
 }
