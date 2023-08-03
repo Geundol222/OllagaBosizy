@@ -16,7 +16,7 @@ public class ScoreCountView : MonoBehaviour
 
 	void Update()
 	{
-		// 시작 지점과 끝 지점 사이의 y 거리 계산
+		// 시작 지점과 마지막 지점 사이의 y 거리 계산
 		float totalYDistance = Mathf.Abs(endPoint.position.y - startPoint.position.y);
 
 		// 시작 지점과 플레이어 사이의 y 거리 계산
