@@ -7,7 +7,8 @@ using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
 public class RoomCanvas : MonoBehaviour
 {
-    [SerializeField] RectTransform playerContent;
+    [SerializeField] RectTransform playerContent1;
+    [SerializeField] RectTransform playerContent2;
     [SerializeField] PlayerEntry playerEntryPrefab;
     [SerializeField] Button startButton;
 
@@ -22,7 +23,7 @@ public class RoomCanvas : MonoBehaviour
     {
         foreach (Player player in PhotonNetwork.PlayerList)
         {
-            PlayerEntry entry = Instantiate(playerEntryPrefab, playerContent);
+            PlayerEntry entry = Instantiate(playerEntryPrefab, playerContent1);
             entry.SetPlayer(player);
             playerDictionary.Add(player.ActorNumber, entry);
         }
@@ -47,7 +48,15 @@ public class RoomCanvas : MonoBehaviour
 
     public void PlayerEnterRoom(Player newPlayer)
     {
-        PlayerEntry entry = Instantiate(playerEntryPrefab, playerContent);
+        PlayerEntry entry;
+        if (playerContent1.childCount < 2)
+        {
+            entry = Instantiate(playerEntryPrefab, playerContent1);
+        }
+        else
+        {
+            entry = Instantiate(playerEntryPrefab, playerContent2);
+        }
         entry.SetPlayer(newPlayer);
         playerDictionary.Add(newPlayer.ActorNumber, entry);
         AllPlayerReadyCheck();
@@ -82,6 +91,18 @@ public class RoomCanvas : MonoBehaviour
     public void LeaveRoom()
     {
         PhotonNetwork.LeaveRoom();
+    }
+
+    public void PlayerReady()
+    {
+        if (PhotonNetwork.LocalPlayer.GetReady())
+        {
+            PhotonNetwork.LocalPlayer.SetReady(false);
+        }
+        else
+        {
+            PhotonNetwork.LocalPlayer.SetReady(true);
+        }
     }
 
     private void AllPlayerReadyCheck()
