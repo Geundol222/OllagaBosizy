@@ -127,25 +127,33 @@ public class PlayerController : MonoBehaviourPun
 			if (curPlayerPosition.y > 0 && (prevPlayerPosition.y - curPlayerPosition.y) > 3)
 			{
                 animator.SetBool("IsFall", true);
-                prevPlayerPosition = curPlayerPosition;
             }
 			else if (curPlayerPosition.y <= 0 && (prevPlayerPosition.y + Mathf.Abs(curPlayerPosition.y)) > 3)
 			{
                 animator.SetBool("IsFall", true);
-                prevPlayerPosition = curPlayerPosition;
             }
             else
 			{
                 animator.SetBool("IsFall", false);
-                prevPlayerPosition = curPlayerPosition;
             }
 		}
 		else
 		{
             animator.SetBool("IsFall", false);
-            prevPlayerPosition = curPlayerPosition;
         }
+
+        prevPlayerPosition = curPlayerPosition;
     }
+
+	public void InputEnable()
+	{
+		inputAction.enabled = true;
+	}
+
+	public void InputDisable()
+	{
+		inputAction.enabled = false;
+	}
 
 	//public void GetScore()
 	//{
