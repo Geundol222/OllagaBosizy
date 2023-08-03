@@ -89,7 +89,7 @@ public class MenuCanvas : MonoBehaviour
 
     public void UpdateRoomList(List<RoomInfo> roomList)
     {
-        Debug.Log("しぁしぁ");
+        Debug.Log("しししししし");
         for (int i = 0; i < roomContent.childCount; i++)
         {
             Destroy(roomContent.GetChild(i).gameObject);
