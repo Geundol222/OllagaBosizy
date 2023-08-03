@@ -9,7 +9,6 @@ public class PlayerEntry : MonoBehaviour
 {
     [SerializeField] TMP_Text playerName;
     [SerializeField] TMP_Text playerReady;
-    [SerializeField] Button playerReadyButton;
 
     private Player player;
 
@@ -17,27 +16,19 @@ public class PlayerEntry : MonoBehaviour
     {
         this.player = player;
         playerName.text = player.NickName;
-        playerReady.text = player.GetReady() ? "Ready" : "";
-        playerReadyButton.gameObject.SetActive(player.IsLocal);
+        playerReady.text = player.GetReady() ? "준비 완료!" : "";
     }
 
     public void ChangeCustomProperty(PhotonHashtable property)
-    {/*
+    {
         if (property.TryGetValue(CustomProperty.READY, out object value))
         {
             bool ready = (bool)value;
-            playerReady.text = ready ? "Ready" : "";
+            playerReady.text = ready ? "준비 완료!" : "";
         }
         else
         {
             playerReady.text = "";
-        }*/
-    }
-
-    public void Ready()
-    {
-        bool ready = player.GetReady();
-        ready = !ready;
-        player.SetReady(ready);
+        }
     }
 }
