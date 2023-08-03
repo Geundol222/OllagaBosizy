@@ -10,12 +10,12 @@ public class ScoreCountView : MonoBehaviour
 	[SerializeField] private Transform endPoint; // 마지막 지점
 
 	[Header("ScoreUI")]
-	[SerializeField] private TMP_Text scoreText;
+	[SerializeField] private TextMeshProUGUI scoreText;
 	[SerializeField] private Slider scoreSlider;
 
 	private void Awake()
 	{
-		scoreText = GetComponent<TMP_Text>();
+		scoreText = GetComponentInChildren<TextMeshProUGUI>();
 	}
 
 	private void Start()
