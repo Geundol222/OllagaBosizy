@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Platform : MonoBehaviourPun
+public class Platform : MonoBehaviourPun,IPunObservable
 {
     [SerializeField] private TrollerPlayerController trollerPlayerController;
     [SerializeField] private Color pointerOverColor;
@@ -35,17 +35,14 @@ public class Platform : MonoBehaviourPun
         renderers = GetComponentsInChildren<Renderer>();
     }
 
+    [PunRPC]
     public void UpdateCurrentStateText()
     {
+        /*
         Debuff[] debuffArray = new Debuff[trollerPlayerController.debuffQueue.Count];
         trollerPlayerController.debuffQueue.CopyTo(debuffArray, 0);
+        */
         currentStateText.text = currentDebuffState.ToString();
-        Debug.Log("-----------------------------------------");
-        for(int i = 0; i < debuffArray.Length; i++)
-        {
-            Debug.Log(debuffArray[i].state.ToString());
-        }
-        Debug.Log("-----------------------------------------");
     }
 
     public void DebuffQueueEnqueue()
@@ -143,9 +140,7 @@ public class Platform : MonoBehaviourPun
         {
             // 디버프가 없으면 return
             if (platformCurrentDebuff == null)
-                return;
-
-           
+                return;          
 
         }
     }
@@ -238,7 +233,20 @@ public class Platform : MonoBehaviourPun
         platformCurrentDebuff.SetTrap(this);
         // 디버프 슬롯에 랜덤 디버프 하나 추가해주기
         DebuffQueueEnqueue();
+        // 함정리스트 갱신하기
+
         Debug.Log(platformCurrentDebuff.state);
     } 
-       
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext((int)currentDebuffState);
+        }
+        else
+        {
+            currentDebuffState = (Debuff_State) stream.ReceiveNext();
+        }
+    }
 }

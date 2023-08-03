@@ -1,17 +1,22 @@
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class TrollerPlayerController : MonoBehaviourPun
 {
     [SerializeField] int debuffQueueLength;
+    [SerializeField] int debuffCount;
+    [SerializeField] public TMP_Text[] TrapListTexts;
     public Queue<IDebuff> debuffQueue;
 
     private Platform currentPlatform;
     public Platform _currentPlatform { get { return currentPlatform; } }
     private Platform prevPlatform;
     public Platform _prevPlatform { get { return prevPlatform; } }
+
+    TrapListUI trapListUI;
 
     /// <summary>
     ///  230730 TODO  00:54 
@@ -25,6 +30,7 @@ public class TrollerPlayerController : MonoBehaviourPun
     private void Awake()
     {
         DebuffQueueInit();
+        trapListUI = GameManager.UI.ShowInGameUI<TrapListUI>("UI/TrapList");
     }
 
     public void DebuffQueueInit()
@@ -37,7 +43,6 @@ public class TrollerPlayerController : MonoBehaviourPun
         {
             Debuff debuff = new Debuff(Random.Range(1, (int)Debuff_State.Length));
             debuffQueue.Enqueue(debuff);
-            Debug.Log($"{debuff.state.ToString()}를 {i + 1} 번 째 넣었다");
         }
     }
 
