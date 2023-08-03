@@ -5,19 +5,19 @@ using UnityEngine;
 public class CameraShake : MonoBehaviour
 {
 	public static CameraShake Instance { get; private set; }
-	private CinemachineVirtualCamera camera;
+	private CinemachineVirtualCamera cam;
 
 	private float shakeTimer;
 
 	private void Awake()
 	{
 		Instance = this;
-		camera = GetComponent<CinemachineVirtualCamera>();
+		cam = GetComponent<CinemachineVirtualCamera>();
 	}
 
 	public void ShakeCamera(float intensity, float time)
 	{
-		CinemachineBasicMultiChannelPerlin bmcp = camera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+		CinemachineBasicMultiChannelPerlin bmcp = cam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
 		bmcp.m_AmplitudeGain = intensity;
 		bmcp.m_FrequencyGain = intensity;
 		shakeTimer = time;
@@ -30,7 +30,7 @@ public class CameraShake : MonoBehaviour
 			shakeTimer -= Time.deltaTime;
 			if (shakeTimer <= 0f)
 			{
-				CinemachineBasicMultiChannelPerlin bmcp = camera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+				CinemachineBasicMultiChannelPerlin bmcp = cam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
 
 				bmcp.m_AmplitudeGain = 0f;
 				bmcp.m_FrequencyGain = 0f;
