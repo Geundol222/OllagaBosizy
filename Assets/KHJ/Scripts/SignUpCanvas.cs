@@ -17,6 +17,7 @@ public class SignUpCanvas : MonoBehaviour
     [SerializeField] GameObject answer;
     [SerializeField] GameObject logCanvas;
     [SerializeField] TMP_Text log;
+    [SerializeField] Animator anim;
     private MySqlConnection con;
     private MySqlDataReader reader;
     private bool isCheckID;
@@ -27,6 +28,8 @@ public class SignUpCanvas : MonoBehaviour
         con = LC.con;
         isCheckID = false;
         isCheckNickName = false;
+        answer.SetActive(false);
+        anim.SetTrigger("IsOpen");
     }
 
     public void CheckID()
@@ -43,6 +46,7 @@ public class SignUpCanvas : MonoBehaviour
             {
                 logCanvas.SetActive(true);
                 log.text = "중복 아이디가 있습니다.";
+                isCheckID = false;
             }
             else
             {
@@ -72,6 +76,7 @@ public class SignUpCanvas : MonoBehaviour
             {
                 logCanvas.SetActive(true);
                 log.text = "중복 유저이름이 있습니다.";
+                isCheckNickName = false;
             }
             else
             {
@@ -145,16 +150,25 @@ public class SignUpCanvas : MonoBehaviour
 
     public void CloseCanvas()
     {
-        idInputField.text = "";
-        PasswordInputField.text = "";
-        PasswordAgainInputField.text = "";
-        NickNameInputField.text = "";
-        answerInputField.text = "";
+        StartCoroutine(CloseCanvasRoutine());
     }
 
     public void CloseLogCanvas()
     {
         log.text = "";
         logCanvas.SetActive(false);
+    }
+
+    IEnumerator CloseCanvasRoutine()
+    {
+        idInputField.text = "";
+        PasswordInputField.text = "";
+        PasswordAgainInputField.text = "";
+        NickNameInputField.text = "";
+        answerInputField.text = "";
+        anim.SetTrigger("IsClose");
+        yield return new WaitForSeconds(0.4f);
+        gameObject.SetActive(false);
+        yield return null;
     }
 }

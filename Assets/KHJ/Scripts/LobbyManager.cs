@@ -7,13 +7,11 @@ using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
-    public enum Panel { Login, Menu, Room, SignUp, Found }
+    public enum Panel { Login, Menu, Room }
 
     [SerializeField] LoginCanvas loginCanvas;
     [SerializeField] MenuCanvas menuCanvas;
     [SerializeField] RoomCanvas roomCanvas;
-    [SerializeField] SignUpCanvas signUpCanvas;
-    [SerializeField] FoundCanvas foundCanvas;
 
     public void Start()
     {
@@ -30,6 +28,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         PhotonNetwork.JoinLobby();
+        SetActivePanel(Panel.Menu);
     }
 
     public override void OnDisconnected(DisconnectCause cause)
@@ -64,20 +63,11 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         SetActivePanel(Panel.Login);
     }
 
-    public void OnFoundCanvas()
-    {
-        SetActivePanel(Panel.Found);
-    }
 
     public override void OnLeftRoom()
     {
         Debug.Log("State = LeftRoom");
         PhotonNetwork.JoinLobby();
-    }
-
-    public void OnSignUpCanvas()
-    {
-        SetActivePanel(Panel.SignUp);
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -121,7 +111,5 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         if (loginCanvas != null) loginCanvas.gameObject.SetActive(panel == Panel.Login);
         if (menuCanvas != null) menuCanvas.gameObject.SetActive(panel == Panel.Menu);
         if (roomCanvas != null) roomCanvas.gameObject.SetActive(panel == Panel.Room);
-        if (signUpCanvas != null) signUpCanvas.gameObject.SetActive(panel == Panel.SignUp);
-        if (foundCanvas != null) foundCanvas.gameObject.SetActive(panel == Panel.Found);
     }
 }
