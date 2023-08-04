@@ -27,7 +27,7 @@ public class DataManager : MonoBehaviour
 		get { return currentScore; }
 		set
 		{
- 			OnCurrentScoreChanged?.Invoke(value);	
+			OnCurrentScoreChanged?.Invoke(value);
 			currentScore = value;
 
 			if (currentScore > BestScore)
