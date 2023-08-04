@@ -1,15 +1,20 @@
+using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class TimerView : MonoBehaviour
+public class TimerView : MonoBehaviourPunCallbacks
 {
 	[SerializeField] private float limitTime = 300f; // 제한 시간 5분
 	private float remainLimitTime; // 남은 제한 시간
 
+	private int time = 0;
 	private TMP_Text timerText;
-	
+	public PhotonView pv;
+
+
 	private void Awake()
 	{
 		timerText = GetComponent<TMP_Text>();
@@ -21,9 +26,12 @@ public class TimerView : MonoBehaviour
 	}
 
 	private void DisplayTimer(float second)
-	{ 
-		remainLimitTime = second;
-		StartCoroutine(UpdateTimerRoutine());
+	{
+		if (PhotonNetwork.IsMasterClient)
+		{
+			remainLimitTime = second;
+			StartCoroutine(UpdateTimerRoutine());
+		}	
 	}
 
 	// 타이머 코루틴
@@ -38,12 +46,23 @@ public class TimerView : MonoBehaviour
 			remainLimitTime--;
 			yield return new WaitForSeconds(1f);
 		}
-		TimeOver();
+		TimeOut();
+
+		pv.RPC("ShowTimer", RpcTarget.All, time); // 1초마다 방 모두에게 전달
+
+		yield return new WaitForSeconds(1);
+		StartCoroutine(UpdateTimerRoutine());
 	}
 
-	private void TimeOver()
+	[PunRPC]
+	private void ShowTimer(int number)
 	{
-		Debug.Log("TimeOver");
-		// TODO : 타임오버 UI 추가???
+		timerText.text = number.ToString(); //타이머 갱신
+	}
+
+	private void TimeOut()
+	{
+		timerText.text = "TIME OUT";
+		timerText.color = Color.red;
 	}	
 }
