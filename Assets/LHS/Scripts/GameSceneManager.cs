@@ -1,6 +1,8 @@
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
@@ -9,6 +11,7 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] TMP_Text infoText;
     [SerializeField] float countDownTimer;
+    [SerializeField] List<GameObject> playerSpawnPoints;
 
     private void Start()
     {
@@ -27,7 +30,17 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         RoomOptions options = new RoomOptions() { IsVisible = false };
-        PhotonNetwork.JoinOrCreateRoom("DebugRoom", options, TypedLobby.Default);
+        PhotonNetwork.JoinOrCreateRoom("DebugRoom123", options, TypedLobby.Default);
+    }
+
+    public override void OnCreateRoomFailed(short returnCode, string message)
+    {
+        Debug.Log(message);
+    }
+
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        Debug.Log(message);
     }
 
     public override void OnJoinedRoom()
@@ -106,7 +119,8 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
 
     private void DebugGameStart()
     {
-        // TODO : Debug GameStart        
+        int playerIndex = PhotonNetwork.LocalPlayer.GetPlayerNumber();
+        PhotonNetwork.Instantiate("PlayerBoy", playerSpawnPoints[playerIndex].transform.position, playerSpawnPoints[playerIndex].transform.rotation);
     }
 
     private int PlayerLoadCount()
