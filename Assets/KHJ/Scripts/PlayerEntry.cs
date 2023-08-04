@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using TMPro;
 using UnityEngine;
@@ -19,10 +20,24 @@ public class PlayerEntry : MonoBehaviour
         playerReady.text = player.GetReady() ? "준비 완료!" : "";
     }
 
+    [System.Obsolete]
+    public void SetPlayerRedTeam()
+    {
+        PhotonNetwork.LocalPlayer.SetTeam(PunTeams.Team.red);
+    }
+
+    [System.Obsolete]
+    public void SetPlayerBlueTeam()
+    {
+        PhotonNetwork.LocalPlayer.SetTeam(PunTeams.Team.blue);
+    }
+
+    [System.Obsolete]
     public void ChangeCustomProperty(PhotonHashtable property)
     {
         if (property.TryGetValue(CustomProperty.READY, out object value))
         {
+            Debug.Log(PhotonNetwork.LocalPlayer.GetTeam());
             bool ready = (bool)value;
             playerReady.text = ready ? "준비 완료!" : "";
         }

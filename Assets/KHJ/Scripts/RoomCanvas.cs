@@ -20,6 +20,7 @@ public class RoomCanvas : MonoBehaviour
         playerDictionary = new Dictionary<int, PlayerEntry>();
     }
 
+    [System.Obsolete]
     private void OnEnable()
     {
         foreach (Player player in PhotonNetwork.PlayerList)
@@ -27,12 +28,13 @@ public class RoomCanvas : MonoBehaviour
             PlayerEntry entry;
             if (playerContent1.childCount < 2)
             {
-                Debug.Log(playerContent1.childCount);
                 entry = Instantiate(playerEntryPrefab, playerContent1);
+                playerEntryPrefab.SetPlayerRedTeam();
             }
             else
             {
                 entry = Instantiate(playerEntryPrefab, playerContent2);
+                playerEntryPrefab.SetPlayerBlueTeam();
             }
             entry.SetPlayer(player);
             playerDictionary.Add(player.ActorNumber, entry);
@@ -102,6 +104,7 @@ public class RoomCanvas : MonoBehaviour
     public void LeaveRoom()
     {
         PhotonNetwork.LeaveRoom();
+        Debug.Log("けいしかいしぉ");
     }
 
     public void PlayerReady()
