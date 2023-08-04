@@ -9,6 +9,9 @@ public class FoundCanvas : MonoBehaviour
 {
     [SerializeField] TMP_InputField answerInputField;
     [SerializeField] LoginCanvas LC;
+    [SerializeField] GameObject answerCanvas;
+    [SerializeField] TMP_Text answer;
+    [SerializeField] Animator anim;
 
     private MySqlConnection con;
     private MySqlDataReader reader;
@@ -16,6 +19,7 @@ public class FoundCanvas : MonoBehaviour
     private void OnEnable()
     {
         con = LC.con;
+        anim.SetTrigger("IsOpen");
     }
 
     public void FoundID()
@@ -24,21 +28,27 @@ public class FoundCanvas : MonoBehaviour
         {
             string id = answerInputField.text;
 
-            string sqlCommand = string.Format("SELECT PWDANSWER FROM user_info WHERE ID='{0}';", id);
-
+            string sqlCommand = string.Format("SELECT ID FROM user_info WHERE PWDANSWER='{0}';", id);
             MySqlCommand cmd = new MySqlCommand(sqlCommand, con);
             reader = cmd.ExecuteReader();
             if (reader.HasRows)
             {
-                string readID = reader["ID"].ToString();
-
-                Debug.Log($"ID : {readID}");
+                while (reader.Read())
+                {
+                    string readID = reader["ID"].ToString();
+                    answerCanvas.SetActive(true);
+                    answer.text = readID;
+                    if (!reader.IsClosed)
+                        reader.Close();
+                }
             }
             else
             {
-                Debug.Log("그런 답변은 없슴!");
+                answerCanvas.SetActive(true);
+                answer.text = "그런 답변은 없습니다.";
             }
-            reader.Close();
+            if (!reader.IsClosed)
+                reader.Close();
         }
         catch (Exception e)
         {
@@ -52,25 +62,52 @@ public class FoundCanvas : MonoBehaviour
         {
             string id = answerInputField.text;
 
-            string sqlCommand = string.Format("SELECT PWDANSWER FROM user_info WHERE ID='{0}';", id);
-
+            string sqlCommand = string.Format("SELECT PWD FROM user_info WHERE PWDANSWER='{0}';", id);
             MySqlCommand cmd = new MySqlCommand(sqlCommand, con);
             reader = cmd.ExecuteReader();
             if (reader.HasRows)
             {
-                string readPass = reader["PWD"].ToString();
-
-                Debug.Log($"Password : {readPass}");
+                while (reader.Read())
+                {
+                    string readPass = reader["PWD"].ToString();
+                    answerCanvas.SetActive(true);
+                    answer.text = readPass;
+                    if (!reader.IsClosed)
+                        reader.Close();
+                }
             }
             else
             {
-                Debug.Log("그런 답변은 없슴!");
+                answerCanvas.SetActive(true);
+                answer.text = "그런 답변은 없습니다.";
             }
-            reader.Close();
+            if (!reader.IsClosed)
+                reader.Close();
         }
         catch (Exception e)
         {
             Debug.Log(e.Message);
         }
+    }
+
+    public void OkButton()
+    {
+        answer.text = "";
+        answerCanvas.SetActive(false);
+    }
+
+    public void CloseCanvas()
+    {
+        StartCoroutine(CloseCanvasRoutine());
+    }
+
+
+    IEnumerator CloseCanvasRoutine()
+    {
+        answerInputField.text = "";
+        anim.SetTrigger("IsClose");
+        yield return new WaitForSeconds(0.4f);
+        gameObject.SetActive(false);
+        yield return null;
     }
 }

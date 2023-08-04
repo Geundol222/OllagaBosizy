@@ -7,13 +7,11 @@ using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
-    public enum Panel { Login, Menu, Room, SignUp, Found }
+    public enum Panel { Login, Menu, Room }
 
     [SerializeField] LoginCanvas loginCanvas;
     [SerializeField] MenuCanvas menuCanvas;
     [SerializeField] RoomCanvas roomCanvas;
-    [SerializeField] SignUpCanvas signUpCanvas;
-    [SerializeField] GameObject foundCanvas;
 
     public void Start()
     {
@@ -29,6 +27,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     public override void OnConnectedToMaster()
     {
+        PhotonNetwork.JoinLobby();
         SetActivePanel(Panel.Menu);
     }
 
@@ -64,19 +63,11 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         SetActivePanel(Panel.Login);
     }
 
-    public void OnFoundCanvas()
-    {
-        SetActivePanel(Panel.Found);
-    }
 
     public override void OnLeftRoom()
     {
-        SetActivePanel(Panel.Menu);
-    }
-
-    public void OnSignUpCanvas()
-    {
-        SetActivePanel(Panel.SignUp);
+        Debug.Log("State = LeftRoom");
+        PhotonNetwork.JoinLobby();
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -99,9 +90,15 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         roomCanvas.MasterClientSwitched(newMasterClient);
     }
 
+    public override void OnJoinedLobby()
+    {
+        Debug.Log("State = Lobby");
+        SetActivePanel(Panel.Menu);
+    }
+
     public override void OnLeftLobby()
     {
-        SetActivePanel(Panel.Menu);
+        SetActivePanel(Panel.Login);
     }
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
@@ -114,7 +111,5 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         if (loginCanvas != null) loginCanvas.gameObject.SetActive(panel == Panel.Login);
         if (menuCanvas != null) menuCanvas.gameObject.SetActive(panel == Panel.Menu);
         if (roomCanvas != null) roomCanvas.gameObject.SetActive(panel == Panel.Room);
-        if (signUpCanvas != null) signUpCanvas.gameObject.SetActive(panel == Panel.SignUp);
-        if (foundCanvas != null) foundCanvas.SetActive(panel == Panel.Found);
     }
 }
