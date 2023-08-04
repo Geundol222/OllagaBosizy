@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviourPun
 	//public UnityEvent OnJumped;
 
 	private CinemachineVirtualCamera playerCamera;
-    private PlayerInput inputAction;
+    private PlayerInput inputAction;	
 	private Vector3 prevPlayerPosition;
 	private Vector3 curPlayerPosition;
 	private new Rigidbody2D rigidbody;
@@ -37,9 +37,10 @@ public class PlayerController : MonoBehaviourPun
 	private Vector2 inputDirection;
 	private bool isGround;
 
-	private void Awake()
+    private void Awake()
 	{
 		prevPlayerPosition = transform.position;
+		
 		inputAction = GetComponent<PlayerInput>();
 		rigidbody = GetComponent<Rigidbody2D>();
 		animator = GetComponent<Animator>();
@@ -71,14 +72,10 @@ public class PlayerController : MonoBehaviourPun
 			yield break;
 	}
 
-    private void Update()
-	{
-        Move();
-    }
-
 	private void FixedUpdate()
 	{
         GroundCheck();
+        Move();
     }
 		
 	public void Move()
@@ -86,13 +83,13 @@ public class PlayerController : MonoBehaviourPun
 		// 최고 속력일 경우 힘을 가해도 속력이 빨라지지 않음
 		if (inputDirection.x < 0 && rigidbody.velocity.x > -maxSpeed)
 		{
-			gfx.rotation = Quaternion.Euler(0, -90, 0);
-			rigidbody.AddForce(Vector2.right * inputDirection.x * moveSpeed, ForceMode2D.Force);
+            gfx.rotation = Quaternion.Euler(0, -90, 0);
+            rigidbody.AddForce(Vector2.right * inputDirection.x * moveSpeed * Time.deltaTime, ForceMode2D.Force);
 		}
 		else if (inputDirection.x > 0 && rigidbody.velocity.x < maxSpeed)
 		{
-			gfx.rotation = Quaternion.Euler(0, 90, 0);
-			rigidbody.AddForce(Vector2.right * inputDirection.x * moveSpeed, ForceMode2D.Force);
+            gfx.rotation = Quaternion.Euler(0, 90, 0);
+            rigidbody.AddForce(Vector2.right * inputDirection.x * moveSpeed * Time.deltaTime, ForceMode2D.Force);
 		}
 	}
 
@@ -174,29 +171,29 @@ public class PlayerController : MonoBehaviourPun
         inputAction.enabled = false;
 	}
 
-	//public void GetScore()
-	//{
-	//	// 발판 트리거에 들어오면 100점을 얻음
-	//	dataManager.CurrentScore += 100;
-	//	OnScored?.Invoke();
-	//}
+    //public void GetScore()
+    //{
+    //	// 발판 트리거에 들어오면 100점을 얻음
+    //	dataManager.CurrentScore += 100;
+    //	OnScored?.Invoke();
+    //}
 
-	//// TODO : Platform에 만들어지면 삭제 예정 
-	////발판 트리거에 들어오면 점수를 얻음
-	//private void OnTriggerEnter2D(Collider2D collision)
-	//{
-	//	// 태그가 Platform인 발판 트리거에서만 충돌 체크함
-	//	if (collision.CompareTag("Platform"))
-	//	{
-	//		// 발판 트리거에 들어오면 100점을 얻음
-	//		dataManager.CurrentScore += 100;
-	//		OnScored?.Invoke();
-	//		// 점수 1번만 얻게함
-	//		GameObject.Destroy(collision.gameObject);
-	//	}
-	//}
+    //// TODO : Platform에 만들어지면 삭제 예정 
+    ////발판 트리거에 들어오면 점수를 얻음
+    //private void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //	// 태그가 Platform인 발판 트리거에서만 충돌 체크함
+    //	if (collision.CompareTag("Platform"))
+    //	{
+    //		// 발판 트리거에 들어오면 100점을 얻음
+    //		dataManager.CurrentScore += 100;
+    //		OnScored?.Invoke();
+    //		// 점수 1번만 얻게함
+    //		GameObject.Destroy(collision.gameObject);
+    //	}
+    //}
 
 
-	// 발판 디버프 없어지는 순간, 플레이어가 밟은 발판이 바꼈을때로
-	// isGround 발판이 밟은 발판의 정보가 바뀌는지 
+    // 발판 디버프 없어지는 순간, 플레이어가 밟은 발판이 바꼈을때로
+    // isGround 발판이 밟은 발판의 정보가 바뀌는지 
 }

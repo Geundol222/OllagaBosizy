@@ -30,7 +30,17 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         RoomOptions options = new RoomOptions() { IsVisible = false };
-        PhotonNetwork.JoinOrCreateRoom("DebugRoom", options, TypedLobby.Default);
+        PhotonNetwork.JoinOrCreateRoom("DebugRoom123", options, TypedLobby.Default);
+    }
+
+    public override void OnCreateRoomFailed(short returnCode, string message)
+    {
+        Debug.Log(message);
+    }
+
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        Debug.Log(message);
     }
 
     public override void OnJoinedRoom()
