@@ -22,6 +22,9 @@ public class PlayerController : MonoBehaviourPun
 	[SerializeField] Transform gfx;
 	[SerializeField] Collider2D platformTrigger;
 
+	[Header("Manager")]
+	[SerializeField] DebuffManager debuffManager;
+
 	//[Header("DataManager")]
 	//[SerializeField] private DataManager dataManager;
 
@@ -36,6 +39,7 @@ public class PlayerController : MonoBehaviourPun
 	private Animator animator;
 	private Vector2 inputDirection;
 	private bool isGround;
+	private RaycastHit2D hit;
 
     private void Awake()
 	{
@@ -114,7 +118,7 @@ public class PlayerController : MonoBehaviourPun
 	{
 		Debug.DrawRay(transform.position, Vector2.down * 0.5f, Color.red);
 
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.5f, platformLayer);
+        hit = Physics2D.Raycast(transform.position, Vector2.down, 0.5f, platformLayer);
 		if (hit.collider != null)
 		{
 			isGround = true;
@@ -128,6 +132,11 @@ public class PlayerController : MonoBehaviourPun
 			animator.SetBool("IsGround", false);
             animator.SetBool("IsFall", false);
         }
+	}
+
+	private void StepOnPlatform()
+	{
+		// debuffManager.ClimberStepOnPlatform(hit.collider.gameObject);
 	}
 
 	private void HowmuchFallingHeight()

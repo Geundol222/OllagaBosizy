@@ -1466,14 +1466,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debug: 1
-  maxSpeed: 2000
-  moveSpeed: 1000
+  maxSpeed: 1000
+  moveSpeed: 900
   jumpPower: 20
   platformLayer:
     serializedVersion: 2
     m_Bits: 64
   gfx: {fileID: 5745586318708099254}
   platformTrigger: {fileID: 654479627456177507}
+  debuffManager: {fileID: 0}
 --- !u!61 &654479627456177507
 BoxCollider2D:
   m_ObjectHideFlags: 0
