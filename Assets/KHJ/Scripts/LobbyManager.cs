@@ -13,7 +13,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     [SerializeField] MenuCanvas menuCanvas;
     [SerializeField] RoomCanvas roomCanvas;
     [SerializeField] SignUpCanvas signUpCanvas;
-    [SerializeField] GameObject foundCanvas;
+    [SerializeField] FoundCanvas foundCanvas;
 
     public void Start()
     {
@@ -29,7 +29,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     public override void OnConnectedToMaster()
     {
-        SetActivePanel(Panel.Menu);
+        PhotonNetwork.JoinLobby();
     }
 
     public override void OnDisconnected(DisconnectCause cause)
@@ -71,7 +71,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     public override void OnLeftRoom()
     {
-        SetActivePanel(Panel.Menu);
+        Debug.Log("State = LeftRoom");
+        PhotonNetwork.JoinLobby();
     }
 
     public void OnSignUpCanvas()
@@ -101,12 +102,13 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedLobby()
     {
+        Debug.Log("State = Lobby");
         SetActivePanel(Panel.Menu);
     }
 
     public override void OnLeftLobby()
     {
-        SetActivePanel(Panel.Menu);
+        SetActivePanel(Panel.Login);
     }
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
@@ -120,6 +122,6 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         if (menuCanvas != null) menuCanvas.gameObject.SetActive(panel == Panel.Menu);
         if (roomCanvas != null) roomCanvas.gameObject.SetActive(panel == Panel.Room);
         if (signUpCanvas != null) signUpCanvas.gameObject.SetActive(panel == Panel.SignUp);
-        if (foundCanvas != null) foundCanvas.SetActive(panel == Panel.Found);
+        if (foundCanvas != null) foundCanvas.gameObject.SetActive(panel == Panel.Found);
     }
 }

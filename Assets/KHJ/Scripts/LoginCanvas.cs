@@ -8,6 +8,8 @@ public class LoginCanvas : MonoBehaviour
 {
     [SerializeField] TMP_InputField idInputField;
     [SerializeField] TMP_InputField PasswordInputField;
+    [SerializeField] GameObject logCanvas;
+    [SerializeField] TMP_Text log;
 
     public MySqlConnection con;
     public MySqlDataReader reader;
@@ -63,13 +65,15 @@ public class LoginCanvas : MonoBehaviour
                     }
                     else
                     {
-                        Debug.Log("비번틀림");
+                        logCanvas.SetActive(true);
+                        log.text = "비밀번호가 틀렸습니다.";
                     }
                 }
             }
             else
             {
-                Debug.Log("해당 아이디가 없슴");
+                logCanvas.SetActive(true);
+                log.text = "해당 아이디가 없습니다.";
             }
             if (!reader.IsClosed)
                 reader.Close();
@@ -78,5 +82,11 @@ public class LoginCanvas : MonoBehaviour
         {
             Debug.Log(e.Message);
         }
+    }
+
+    public void CloseLogCanvas()
+    {
+        log.text = "";
+        logCanvas.SetActive(false);
     }
 }

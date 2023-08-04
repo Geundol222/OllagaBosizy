@@ -22,7 +22,6 @@ public class RoomEntry : MonoBehaviour
     
     public void JoinRoom()
     {
-        PhotonNetwork.LeaveLobby();
         PhotonNetwork.JoinRoom(info.Name);
     }
 }

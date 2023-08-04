@@ -9,6 +9,8 @@ public class FoundCanvas : MonoBehaviour
 {
     [SerializeField] TMP_InputField answerInputField;
     [SerializeField] LoginCanvas LC;
+    [SerializeField] GameObject answerCanvas;
+    [SerializeField] TMP_Text answer;
 
     private MySqlConnection con;
     private MySqlDataReader reader;
@@ -24,19 +26,20 @@ public class FoundCanvas : MonoBehaviour
         {
             string id = answerInputField.text;
 
-            string sqlCommand = string.Format("SELECT PWDANSWER FROM user_info WHERE ID='{0}';", id);
+            string sqlCommand = string.Format("SELECT ID FROM user_info WHERE PWDANSWER='{0}';", id);
 
             MySqlCommand cmd = new MySqlCommand(sqlCommand, con);
             reader = cmd.ExecuteReader();
             if (reader.HasRows)
             {
                 string readID = reader["ID"].ToString();
-
-                Debug.Log($"ID : {readID}");
+                answerCanvas.SetActive(true);
+                answer.text = readID;
             }
             else
             {
-                Debug.Log("그런 답변은 없슴!");
+                answerCanvas.SetActive(true);
+                answer.text = "그런 답변은 없습니다.";
             }
             reader.Close();
         }
@@ -52,19 +55,20 @@ public class FoundCanvas : MonoBehaviour
         {
             string id = answerInputField.text;
 
-            string sqlCommand = string.Format("SELECT PWDANSWER FROM user_info WHERE ID='{0}';", id);
+            string sqlCommand = string.Format("SELECT PWD FROM user_info WHERE PWDANSWER='{0}';", id);
 
             MySqlCommand cmd = new MySqlCommand(sqlCommand, con);
             reader = cmd.ExecuteReader();
             if (reader.HasRows)
             {
                 string readPass = reader["PWD"].ToString();
-
-                Debug.Log($"Password : {readPass}");
+                answerCanvas.SetActive(true);
+                answer.text = readPass;
             }
             else
             {
-                Debug.Log("그런 답변은 없슴!");
+                answerCanvas.SetActive(true);
+                answer.text = "그런 답변은 없습니다.";
             }
             reader.Close();
         }
@@ -72,5 +76,11 @@ public class FoundCanvas : MonoBehaviour
         {
             Debug.Log(e.Message);
         }
+    }
+
+    public void OkButton()
+    {
+        answer.text = "";
+        answerCanvas.SetActive(false);
     }
 }
