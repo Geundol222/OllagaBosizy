@@ -23,12 +23,23 @@ public class TrollerPlayerController : MonoBehaviourPun
 
     private void Awake()
     {
+        if (!photonView.IsMine)
+        {
+            Debug.Log("≥ª≤®æ∆¥‘");
+            Destroy(gameObject);
+        }
+        else
+        {
+            Debug.Log("≥ª≤®¿”");
+        }
         Original_Debuff = new Debuff((int)Debuff_State.None);
         DebuffQueueInit();
     }
 
     private void Start()
     {
+        if (!photonView.IsMine)
+            return;
         allPlatformList = GameObject.FindGameObjectsWithTag("Platform");
         foreach (GameObject go in allPlatformList)
         {
@@ -38,6 +49,8 @@ public class TrollerPlayerController : MonoBehaviourPun
 
     public void UpdateTrapList()
     {
+        if (!photonView.IsMine)
+            return;
         Debuff[] debuffArray = new Debuff[debuffQueue.Count];
         debuffQueue.CopyTo(debuffArray, 0);
         trapListUI.UpdateList(debuffArray);
@@ -45,6 +58,8 @@ public class TrollerPlayerController : MonoBehaviourPun
 
     public void DebuffQueueInit()
     {
+        if (!photonView.IsMine)
+            return;
         debuffQueue = new Queue<IDebuff>();
         trapListUI = GameObject.Find("TrapList").GetComponent<TrapListUI>();
 
@@ -62,6 +77,8 @@ public class TrollerPlayerController : MonoBehaviourPun
 
     public void DebuffQueueEnqueue()
     {
+        if (!photonView.IsMine)
+            return;
         if (debuffQueue.Count >= debuffQueueLength)
             return;
 
@@ -74,22 +91,40 @@ public class TrollerPlayerController : MonoBehaviourPun
       
     public void ClearBothPlatform()
     {
+        if (!photonView.IsMine)
+            return;
         currentPlatform = null;
         prevPlatform = null;
     }
 
     public void ClearCurrentPlatform()
     {
+        if (!photonView.IsMine)
+            return;
         currentPlatform = null;
     }
 
     public void SetCurrentPlatform(Platform platform)
     {
+        if (!photonView.IsMine)
+            return;
         currentPlatform = platform;
     }
 
     public void SetPrevPlatform(Platform platform)
     {
+        if (!photonView.IsMine)
+            return;
         prevPlatform = platform;
+    }
+
+    public Debuff CreateNoneStateDebuff()
+    {
+        if (!photonView.IsMine)
+            return null;
+        Debuff debuff = (Debuff) Original_Debuff.clone();
+        debuff.SetState((int) Debuff_State.None);
+
+        return debuff;
     }
 }
