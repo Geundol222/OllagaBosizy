@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Debuff_State { None,NoColider,Surface,ZeroSpeed,Spring,Ice,Length }
+public enum Debuff_State { None,NoColider,Surface,Spring,Ice,Length }
 
 public class Debuff : IDebuff
 {
