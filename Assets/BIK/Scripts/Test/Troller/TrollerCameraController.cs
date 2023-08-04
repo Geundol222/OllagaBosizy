@@ -3,24 +3,31 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.InputSystem;
-using System.Text;
+using Cinemachine;
 
 public class TrollerCameraController : MonoBehaviourPunCallbacks
 { 
     [SerializeField] Texture2D cursor;
     [SerializeField] float cameraMoveSpeed;
     [SerializeField] float padding;
+    [SerializeField] CinemachineVirtualCamera vcam;
+
     Vector3 cameraMoveDir;
     bool pressArrows = false;
 
+    private void Awake()
+    {
+        vcam = GameObject.Find("Troller_Cam").GetComponent<CinemachineVirtualCamera>();
+    }
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Confined;                         // 마우스 커서 게임 윈도우 안에서만 
         Cursor.SetCursor(cursor, Vector3.zero, CursorMode.ForceSoftware);   // 마우스 커서 이미지 넣기
     }
 
-    private void OnDisable()
+    public override void OnDisable()
     {
+        base.OnDisable();
         Cursor.lockState = CursorLockMode.None;
     }
 
@@ -40,12 +47,12 @@ public class TrollerCameraController : MonoBehaviourPunCallbacks
     /// </summary>
     private void CheckCameraInCamZone()
     {
-        if (transform.position.x <= -16.5 || transform.position.x >= 16)
+        if (vcam.transform.position.x <= -16.5 || vcam.transform.position.x >= 16)
         {
             cameraMoveDir.x = 0;
         }
 
-        if (transform.position.y <= -0.5 || transform.position.y >= 33)
+        if (vcam.transform.position.y <= -0.5 || vcam.transform.position.y >= 33)
         {
             cameraMoveDir.y = 0;
         }
@@ -53,8 +60,8 @@ public class TrollerCameraController : MonoBehaviourPunCallbacks
 
     private void CameraMove()
     {
-        transform.Translate(Vector3.right * cameraMoveDir.x * cameraMoveSpeed * Time.deltaTime, Space.World);
-        transform.Translate(Vector3.up * cameraMoveDir.y * cameraMoveSpeed * Time.deltaTime, Space.World);    
+        vcam.transform.Translate(Vector3.right * cameraMoveDir.x * cameraMoveSpeed * Time.deltaTime, Space.World);
+        vcam.transform.Translate(Vector3.up * cameraMoveDir.y * cameraMoveSpeed * Time.deltaTime, Space.World);    
     }
 
     private void OnMove(InputValue value) // 방향키 입력 감지
@@ -71,7 +78,6 @@ public class TrollerCameraController : MonoBehaviourPunCallbacks
         }
 
         cameraMoveDir = keyboardPos;
-
     }
 
     private void OnPointer(InputValue value) // 마우스 커서 이동감지

@@ -3,7 +3,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 public class Platform : MonoBehaviourPun,IPunObservable
 {
@@ -12,6 +12,8 @@ public class Platform : MonoBehaviourPun,IPunObservable
     [SerializeField] bool isFirst;
     [SerializeField] bool isClickable;
     [SerializeField] private TMP_Text currentStateText;
+    [SerializeField] private Slider countDownSlider;
+
     public bool IsClickable { get { return isClickable; } }
     private Renderer[] renderers;
     private int playerCount; 
@@ -22,24 +24,47 @@ public class Platform : MonoBehaviourPun,IPunObservable
 
     private Debuff platformCurrentDebuff;
     private Debuff_State currentDebuffState;
+    public Debuff_State _currentDebuffState {  get { return currentDebuffState; } }
+
+    private Coroutine debuffCountDownCoroutine;
 
     private void Awake()
     {
-        currentDebuffState = Debuff_State.None;
+        if (!photonView.IsMine)
+        {
+            Debug.Log("내꺼아님");
+            Destroy(gameObject);
+
+        }
+        else
+        {
+            Debug.Log("내꺼임");
+        }
         if (isFirst)
             isClickable = false;
         else
             isClickable = true;
 
-        trollerPlayerController = GameObject.Find("TrollerController").GetComponent<TrollerPlayerController>(); // 추후 DataManager로 구현되어야함
+        trollerPlayerController = GameObject.Find("TrollerController(Clone)").GetComponent<TrollerPlayerController>(); // 추후 DataManager로 구현되어야함
         closeArea = GameObject.Find("UICloseArea").GetComponent<UICloseArea>();
         renderers = GetComponentsInChildren<Renderer>();
+    }
+
+    private void Start()
+    {
+        platformCurrentDebuff = trollerPlayerController.CreateNoneStateDebuff();
+        currentDebuffState = platformCurrentDebuff.state;
     }
 
     [PunRPC]
     public void UpdateCurrentStateText()
     {
-        currentStateText.text = currentDebuffState.ToString();
+        string text = "";
+        if(currentDebuffState != Debuff_State.None)
+        {
+            text = currentDebuffState.ToString();
+        }
+        currentStateText.text = text;
     }
 
     public void DebuffQueueEnqueue()
@@ -141,11 +166,17 @@ public class Platform : MonoBehaviourPun,IPunObservable
     /// <param name="collision"></param>
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        Debug.Log("플레이어 닿음");
         if (PhotonNetwork.IsConnectedAndReady)
         {
             // 디버프가 없으면 return
-            if (platformCurrentDebuff == null)
+            if (platformCurrentDebuff == null || platformCurrentDebuff.state == Debuff_State.None)
                 return;
+
+            // 현재 플랫폼에 함정을 설치하는 함수 호출
+            if(currentDebuffState == Debuff_State.NoColider)
+                platformCurrentDebuff.SetTrap(this);
+            StartDebuffCountDown();
         }
     }
 
@@ -156,8 +187,8 @@ public class Platform : MonoBehaviourPun,IPunObservable
 
         if (PhotonNetwork.IsConnectedAndReady)
         {
-            photonView.RPC("PlayerEnteredPlatform", RpcTarget.AllBufferedViaServer);
-            photonView.RPC("SwitchRenderColorEnter", RpcTarget.AllBufferedViaServer);
+            CallRPCFunction("PlayerEnteredPlatform");
+            CallRPCFunction("SwitchRenderColorEnter");
         }
     }
 
@@ -175,7 +206,7 @@ public class Platform : MonoBehaviourPun,IPunObservable
             return;
 
         if (PhotonNetwork.IsConnectedAndReady)
-            photonView.RPC("PlayerExitPlatform", RpcTarget.AllBufferedViaServer);
+            CallRPCFunction("PlayerExitPlatform");
     }
 
     [PunRPC]
@@ -219,7 +250,7 @@ public class Platform : MonoBehaviourPun,IPunObservable
     {
         if (PhotonNetwork.IsConnectedAndReady)
         {
-            photonView.RPC("SetTrap",RpcTarget.AllBufferedViaServer);
+            CallRPCFunction("SetTrap");
         }
     }
       
@@ -232,15 +263,28 @@ public class Platform : MonoBehaviourPun,IPunObservable
         // 현재 플랫폼의 DebuffState 업데이트 
         currentDebuffState = platformCurrentDebuff.state;
         // 텍스트 업데이트 
-        UpdateCurrentStateText();
-        // 현재 플랫폼에 함정을 설치하는 함수 호출
-        platformCurrentDebuff.SetTrap(this);
+        CallRPCFunction("UpdateCurrentStateText");
+        // NoCollider가 아니라면현재 플랫폼에 함정을 설치하는 함수 호출
+        if (currentDebuffState != Debuff_State.NoColider)
+            platformCurrentDebuff.SetTrap(this);
         // 디버프 슬롯에 랜덤 디버프 하나 추가해주기
         DebuffQueueEnqueue();
         // 함정리스트 갱신하기
 
         Debug.Log(platformCurrentDebuff.state);
-    } 
+    }
+
+    [PunRPC]
+    public void ClearTrap()
+    {
+        platformCurrentDebuff = trollerPlayerController.CreateNoneStateDebuff();
+        currentDebuffState = platformCurrentDebuff.state;
+        CallRPCFunction("UpdateCurrentStateText");
+        platformCurrentDebuff.SetTrap(this);
+        countDownSlider.value = 1;
+        countDownSlider.gameObject.SetActive(false);
+        debuffCountDownCoroutine = null;
+    }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
@@ -254,11 +298,45 @@ public class Platform : MonoBehaviourPun,IPunObservable
         }
     }
 
+    public void StartDebuffCountDown()
+    { 
+        countDownSlider.gameObject.SetActive(true);
+        if (debuffCountDownCoroutine == null)
+        {
+            debuffCountDownCoroutine = StartCoroutine(CountDownCoroutine());
+        }
+    }
+
+    public IEnumerator CountDownCoroutine()
+    {
+        float time = 0;
+        while(currentDebuffState != Debuff_State.None)
+        {
+            yield return new WaitForSeconds(1f);
+            countDownSlider.value -= 0.2f;
+            time++;
+            if(time >= 5)
+            {
+                CallRPCFunction("ClearTrap");
+                yield return null;
+            }
+                     
+        }
+    }
+
     public void ClearDebuff()
     {
         if(playerCount != 0)
         {
             return;
+        }
+    }
+
+    public void CallRPCFunction(string functionName)
+    {
+        if (PhotonNetwork.IsConnectedAndReady)
+        {
+            photonView.RPC(functionName, RpcTarget.AllBufferedViaServer);
         }
     }
 }
