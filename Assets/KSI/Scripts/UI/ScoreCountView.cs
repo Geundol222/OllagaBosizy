@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class ScoreCountView : MonoBehaviour
 {
 	[Header("Transform")]
-	[SerializeField] private Transform player; // 플래이어 위치
+	[SerializeField] private Transform player; // 플레이어 위치
 	[SerializeField] private Transform startPoint; // 시작 지점
 	[SerializeField] private Transform endPoint; // 마지막 지점
 

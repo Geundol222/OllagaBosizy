@@ -6,18 +6,16 @@ public class PlayerUIDisappear : MonoBehaviour
 {
 	private void Start()
 	{
-		StartCoroutine(DisappearRoutine());
+		StartCoroutine(ActiveFalseRoutine());
 		Invoke("ActiveFalse", 5.0f);
 	}
 
 	// 비활성화 코루틴
-	IEnumerator DisappearRoutine()
+	IEnumerator ActiveFalseRoutine()
 	{
 		while(true)
 		{
 			yield return null;
-
-			Debug.Log("Active");
 		}
 	}
 
