@@ -1,3 +1,4 @@
+using Cinemachine;
 using Photon.Pun;
 using System.Collections;
 using UnityEngine;
@@ -27,7 +28,8 @@ public class PlayerController : MonoBehaviourPun
 	//public UnityEvent OnScored;
 	//public UnityEvent OnJumped;
 
-	private PlayerInput inputAction;
+	private CinemachineVirtualCamera playerCamera;
+    private PlayerInput inputAction;
 	private Vector3 prevPlayerPosition;
 	private Vector3 curPlayerPosition;
 	private new Rigidbody2D rigidbody;
@@ -40,8 +42,19 @@ public class PlayerController : MonoBehaviourPun
 		prevPlayerPosition = transform.position;
 		inputAction = GetComponent<PlayerInput>();
 		rigidbody = GetComponent<Rigidbody2D>();
-		animator = GetComponent<Animator>();	
-	}
+		animator = GetComponent<Animator>();
+
+		playerCamera = GameObject.FindGameObjectWithTag("VirtualCamera").GetComponent<CinemachineVirtualCamera>();
+
+        if (!photonView.IsMine)
+            Destroy(inputAction);
+
+        if (photonView.IsMine)
+        {
+			playerCamera.Follow = transform;
+			playerCamera.LookAt = transform;
+        }
+    }
 
     private void Start()
     {
@@ -67,7 +80,7 @@ public class PlayerController : MonoBehaviourPun
 	{
         GroundCheck();
     }
-
+		
 	public void Move()
 	{
 		// 최고 속력일 경우 힘을 가해도 속력이 빨라지지 않음
@@ -147,12 +160,18 @@ public class PlayerController : MonoBehaviourPun
 
 	public void InputEnable()
 	{
+		if (!photonView.IsMine)
+			return;
+
 		inputAction.enabled = true;
 	}
 
 	public void InputDisable()
 	{
-		inputAction.enabled = false;
+        if (!photonView.IsMine)
+            return;
+
+        inputAction.enabled = false;
 	}
 
 	//public void GetScore()
