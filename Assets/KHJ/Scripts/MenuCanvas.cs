@@ -31,10 +31,6 @@ public class MenuCanvas : MonoBehaviour
 
     private void OnDisable()
     {
-        foreach (string key in roomDictionary.Keys)
-        {
-            Destroy(roomDictionary[key].gameObject);
-        }
         roomDictionary.Clear();
     }
 
