@@ -5,33 +5,41 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class TimerView : MonoBehaviourPunCallbacks
+public class TimerView : MonoBehaviourPunCallbacks //, IPunObservable
 {
 	[SerializeField] private float limitTime = 300f; // 제한 시간 5분
 	private float remainLimitTime; // 남은 제한 시간
 
-	private int time = 0;
 	private TMP_Text timerText;
-	public PhotonView pv;
-
 
 	private void Awake()
 	{
 		timerText = GetComponent<TMP_Text>();
+
+		// Photon Network 초기화
+		//PhotonNetwork.ConnectUsingSettings();
 	}
 
 	private void Start()
 	{
-		DisplayTimer(limitTime);
+		if (PhotonNetwork.IsMasterClient)
+		{
+			// 마스터 클라이언트인 경우 타이머를 시작하고 다른 클라이언트와 동기화
+			photonView.RPC("CallDisplayTimerRPC", RpcTarget.All, limitTime);
+		}
 	}
 
 	private void DisplayTimer(float second)
 	{
-		if (PhotonNetwork.IsMasterClient)
-		{
-			remainLimitTime = second;
-			StartCoroutine(UpdateTimerRoutine());
-		}	
+		remainLimitTime = second;
+		StartCoroutine(UpdateTimerRoutine());
+	}
+
+	[PunRPC]
+	public void CallDisplayTimerRPC(float second)
+	{
+		// 현재 PhotonView를 통해 RPC를 호출
+		photonView.RPC("DisplayTimer", RpcTarget.All, second);
 	}
 
 	// 타이머 코루틴
@@ -46,23 +54,25 @@ public class TimerView : MonoBehaviourPunCallbacks
 			remainLimitTime--;
 			yield return new WaitForSeconds(1f);
 		}
+
 		TimeOut();
-
-		pv.RPC("ShowTimer", RpcTarget.All, time); // 1초마다 방 모두에게 전달
-
-		yield return new WaitForSeconds(1);
-		StartCoroutine(UpdateTimerRoutine());
-	}
-
-	[PunRPC]
-	private void ShowTimer(int number)
-	{
-		timerText.text = number.ToString(); //타이머 갱신
 	}
 
 	private void TimeOut()
 	{
 		timerText.text = "TIME OUT";
 		timerText.color = Color.red;
-	}	
+	}
+
+	//public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+	//{
+	//	if (stream.IsWriting)
+	//	{
+	//		stream.SendNext(remainLimitTime);
+	//	}
+	//	else
+	//	{
+	//		remainLimitTime = (float)stream.ReceiveNext();
+	//	}
+	//}
 }
