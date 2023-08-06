@@ -17,7 +17,7 @@ public class TimerViewTest : MonoBehaviourPunCallbacks
 	[SerializeField] private float limitTime = 300f; // 제한 시간 5분
 	private float remainLimitTime; // 남은 제한 시간
 
-	private TMP_Text timerText;
+	[SerializeField] private TMP_Text timerText;
 
 	private void Awake()
 	{
@@ -118,11 +118,11 @@ public class TimerViewTest : MonoBehaviourPunCallbacks
 		infoText.text = "";
 	}
 
-	private void DisplayTimer(float second)
-	{
-		remainLimitTime = second;
-		StartCoroutine(UpdateTimerRoutine());
-	}
+	//private void DisplayTimer(float second)
+	//{
+	//	remainLimitTime = second;
+	//	StartCoroutine(UpdateTimerRoutine());
+	//}
 
 	// 타이머 코루틴
 	private IEnumerator UpdateTimerRoutine()
@@ -164,7 +164,13 @@ public class TimerViewTest : MonoBehaviourPunCallbacks
 	{
 		Debug.Log("Debug Game Mode. IsMasterClient : " + PhotonNetwork.IsMasterClient);
 
-		StartCoroutine(UpdateTimerRoutine());
+		//if (PhotonNetwork.IsMasterClient)
+		//{
+			// 마스터 클라이언트인 경우 타이머를 시작하고 다른 클라이언트와 동기화
+			//photonView.RPC("CallDisplayTimerRPC", RpcTarget.All, limitTime);
+
+			StartCoroutine(UpdateTimerRoutine());
+		//}	
 	}
 
 	private int PlayerLoadCount()

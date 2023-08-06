@@ -881,6 +881,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 49.8739}
   m_EdgeRadius: 0
+--- !u!114 &664172800 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 610196560140634534, guid: ea2c3fbb277976e46b5014805b6674ca,
+    type: 3}
+  m_PrefabInstance: {fileID: 610196560735596710}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &673343497 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6364041507085286315, guid: 6c281899aaab5c54992789428859dde4,
@@ -2424,6 +2436,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 597210770085634502, guid: ea2c3fbb277976e46b5014805b6674ca,
+        type: 3}
+      propertyPath: timerText
+      value: 
+      objectReference: {fileID: 664172800}
+    - target: {fileID: 610196558752813824, guid: ea2c3fbb277976e46b5014805b6674ca,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 610196558752813827, guid: ea2c3fbb277976e46b5014805b6674ca,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -844
+      objectReference: {fileID: 0}
+    - target: {fileID: 610196558752813827, guid: ea2c3fbb277976e46b5014805b6674ca,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -513
+      objectReference: {fileID: 0}
     - target: {fileID: 610196558783847026, guid: ea2c3fbb277976e46b5014805b6674ca,
         type: 3}
       propertyPath: player
@@ -2439,6 +2471,36 @@ PrefabInstance:
       propertyPath: startPoint
       value: 
       objectReference: {fileID: 97487240}
+    - target: {fileID: 610196558783847028, guid: ea2c3fbb277976e46b5014805b6674ca,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 610196558783847029, guid: ea2c3fbb277976e46b5014805b6674ca,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 63
+      objectReference: {fileID: 0}
+    - target: {fileID: 610196558846926788, guid: ea2c3fbb277976e46b5014805b6674ca,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 610196558855523272, guid: ea2c3fbb277976e46b5014805b6674ca,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -831
+      objectReference: {fileID: 0}
+    - target: {fileID: 610196558855523272, guid: ea2c3fbb277976e46b5014805b6674ca,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -512
+      objectReference: {fileID: 0}
+    - target: {fileID: 610196558855523273, guid: ea2c3fbb277976e46b5014805b6674ca,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 610196558914063808, guid: ea2c3fbb277976e46b5014805b6674ca,
         type: 3}
       propertyPath: m_Pivot.x
@@ -2549,6 +2611,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: UICanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 610196558914063812, guid: ea2c3fbb277976e46b5014805b6674ca,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 610196559338815882, guid: ea2c3fbb277976e46b5014805b6674ca,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 610196559401676380, guid: ea2c3fbb277976e46b5014805b6674ca,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 610196559773994099, guid: ea2c3fbb277976e46b5014805b6674ca,
         type: 3}
       propertyPath: player
@@ -2564,6 +2641,21 @@ PrefabInstance:
       propertyPath: startPoint
       value: 
       objectReference: {fileID: 97487240}
+    - target: {fileID: 610196559773994101, guid: ea2c3fbb277976e46b5014805b6674ca,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 610196560687289401, guid: ea2c3fbb277976e46b5014805b6674ca,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6873519331723714569, guid: ea2c3fbb277976e46b5014805b6674ca,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 12
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ea2c3fbb277976e46b5014805b6674ca, type: 3}
 --- !u!4 &1367101562130790183 stripped
