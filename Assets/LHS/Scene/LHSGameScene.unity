@@ -734,6 +734,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   limitTime: 300
+  pv: {fileID: 0}
 --- !u!1 &738595818
 GameObject:
   m_ObjectHideFlags: 0
@@ -1284,6 +1285,8 @@ MonoBehaviour:
   player: {fileID: 0}
   startPoint: {fileID: 97487240}
   endPoint: {fileID: 1362850675}
+  scoreText: {fileID: 0}
+  scoreSlider: {fileID: 0}
 --- !u!1 &1304877940
 GameObject:
   m_ObjectHideFlags: 0
@@ -2450,7 +2453,7 @@ GameObject:
   - component: {fileID: 420095766635877482}
   - component: {fileID: 410404327705165752}
   - component: {fileID: 402867339760130220}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Cube_GroundWGrass_6 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2468,7 +2471,7 @@ GameObject:
   - component: {fileID: 420095766562925126}
   - component: {fileID: 410404327643726228}
   - component: {fileID: 402867339698677376}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Cube_GroundWGrass_6 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2486,7 +2489,7 @@ GameObject:
   - component: {fileID: 420095765752844116}
   - component: {fileID: 410404328449516678}
   - component: {fileID: 402867340508677010}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Cube_GroundWGrass_6 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2504,7 +2507,7 @@ GameObject:
   - component: {fileID: 420095767460347860}
   - component: {fileID: 410404326876533766}
   - component: {fileID: 402867341083685650}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Cube_GroundWGrass_6 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2522,7 +2525,7 @@ GameObject:
   - component: {fileID: 420095767277313024}
   - component: {fileID: 410404327030110162}
   - component: {fileID: 402867341266636998}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Cube_GroundWGrass_6 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2540,7 +2543,7 @@ GameObject:
   - component: {fileID: 420095766908305049}
   - component: {fileID: 410404327399281995}
   - component: {fileID: 402867341635793503}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Cube_GroundWGrass_6 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2558,7 +2561,7 @@ GameObject:
   - component: {fileID: 420095767183751470}
   - component: {fileID: 410404327123702524}
   - component: {fileID: 402867341359691240}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Cube_GroundWGrass_6 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2576,7 +2579,7 @@ GameObject:
   - component: {fileID: 420095767088296053}
   - component: {fileID: 410404327084874663}
   - component: {fileID: 402867341320862899}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Cube_GroundWGrass_6 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2594,7 +2597,7 @@ GameObject:
   - component: {fileID: 420095767092213658}
   - component: {fileID: 410404327114480712}
   - component: {fileID: 402867341317471068}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Cube_GroundWGrass_6 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2612,7 +2615,7 @@ GameObject:
   - component: {fileID: 420095766955810544}
   - component: {fileID: 410404327247050018}
   - component: {fileID: 402867341453660726}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Cube_GroundWGrass_6 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3430,7 +3433,7 @@ GameObject:
   - component: {fileID: 714379248237639850}
   - component: {fileID: 688921500253770616}
   - component: {fileID: 696583830376887404}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Cube_GroundWGrass_6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3448,7 +3451,7 @@ GameObject:
   - component: {fileID: 714379248173287046}
   - component: {fileID: 688921500184194388}
   - component: {fileID: 696583830307326528}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Cube_GroundWGrass_6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3466,7 +3469,7 @@ GameObject:
   - component: {fileID: 714379247912706964}
   - component: {fileID: 688921500448933958}
   - component: {fileID: 696583830567858002}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Cube_GroundWGrass_6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3484,7 +3487,7 @@ GameObject:
   - component: {fileID: 714379249560654612}
   - component: {fileID: 688921498934917318}
   - component: {fileID: 696583831200817106}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Cube_GroundWGrass_6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3502,7 +3505,7 @@ GameObject:
   - component: {fileID: 714379249474269376}
   - component: {fileID: 688921499050892050}
   - component: {fileID: 696583831287413766}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Cube_GroundWGrass_6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3520,7 +3523,7 @@ GameObject:
   - component: {fileID: 714379248760428014}
   - component: {fileID: 688921499764702780}
   - component: {fileID: 696583832001763624}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Cube_GroundWGrass_6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3538,7 +3541,7 @@ GameObject:
   - component: {fileID: 714379248718732122}
   - component: {fileID: 688921499638591624}
   - component: {fileID: 696583831908652956}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Cube_GroundWGrass_6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3556,7 +3559,7 @@ GameObject:
   - component: {fileID: 714379248723696821}
   - component: {fileID: 688921499667150695}
   - component: {fileID: 696583831904211059}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Cube_GroundWGrass_6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3574,7 +3577,7 @@ GameObject:
   - component: {fileID: 714379248586764848}
   - component: {fileID: 688921499774523874}
   - component: {fileID: 696583832040963830}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Cube_GroundWGrass_6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3592,7 +3595,7 @@ GameObject:
   - component: {fileID: 714379249037972057}
   - component: {fileID: 688921499487025547}
   - component: {fileID: 696583831723564703}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Cube_GroundWGrass_6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4235,7 +4238,7 @@ GameObject:
   - component: {fileID: 4846024435849138881}
   - component: {fileID: 4838836174132525331}
   - component: {fileID: 4828904321013702151}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Cube_GroundWGrass_6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4303,7 +4306,7 @@ GameObject:
   - component: {fileID: 5727751305334750721}
   - component: {fileID: 5700282963499800019}
   - component: {fileID: 5710054285773484743}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Cube_GroundWGrass_6 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
