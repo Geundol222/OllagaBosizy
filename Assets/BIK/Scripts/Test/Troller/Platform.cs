@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class Platform : MonoBehaviourPun,IPunObservable
 {
-    [SerializeField] private TrollerPlayerController trollerPlayerController;
+    private TrollerPlayerController trollerPlayerController { get { return GameManager.TrollerData.trollerPlayerController; } set { GameManager.TrollerData.trollerPlayerController = value;  } }
     [SerializeField] private Color pointerOverColor;
     [SerializeField] bool isFirst;
     [SerializeField] bool isClickable;
@@ -18,13 +18,13 @@ public class Platform : MonoBehaviourPun,IPunObservable
     private Renderer[] renderers;
     private int playerCount; 
     private Color pointerOutColor = Color.white;
-    private SetTrapUI setTrapUI;
-    public SetTrapUI _setTrapUI { get { return setTrapUI; } }
     private UICloseArea closeArea;
 
+    private SetTrapUI setTrapUI;
+    public SetTrapUI _setTrapUI { get { return setTrapUI; } set { setTrapUI = value; } }
+
     private Debuff platformCurrentDebuff;
-    private Debuff_State currentDebuffState;
-    public Debuff_State _currentDebuffState {  get { return currentDebuffState; } }
+    public Debuff_State currentDebuffState {  get { return platformCurrentDebuff.state; } set { platformCurrentDebuff.state = value;  } }
 
     private Coroutine debuffCountDownCoroutine;
 
@@ -32,28 +32,21 @@ public class Platform : MonoBehaviourPun,IPunObservable
     {
         if (!photonView.IsMine)
         {
-            Debug.Log("내꺼아님");
             Destroy(gameObject);
 
-        }
-        else
-        {
-            Debug.Log("내꺼임");
         }
         if (isFirst)
             isClickable = false;
         else
             isClickable = true;
-
-        trollerPlayerController = GameObject.Find("TrollerController(Clone)").GetComponent<TrollerPlayerController>(); // 추후 DataManager로 구현되어야함
+        
         closeArea = GameObject.Find("UICloseArea").GetComponent<UICloseArea>();
         renderers = GetComponentsInChildren<Renderer>();
     }
 
     private void Start()
     {
-        platformCurrentDebuff = trollerPlayerController.CreateNoneStateDebuff();
-        currentDebuffState = platformCurrentDebuff.state;
+        platformCurrentDebuff = GameManager.Debuff.CreateNoneStateDebuff();
     }
 
     [PunRPC]
@@ -69,7 +62,7 @@ public class Platform : MonoBehaviourPun,IPunObservable
 
     public void DebuffQueueEnqueue()
     {
-        trollerPlayerController.DebuffQueueEnqueue();
+        GameManager.Debuff.DebuffQueueEnqueue();
     }
 
     public void ClearBothPlatform()
@@ -92,28 +85,38 @@ public class Platform : MonoBehaviourPun,IPunObservable
         trollerPlayerController.SetPrevPlatform(this);
     }
 
+    public void ShowSetTrapUI(Platform platform)
+    {
+        setTrapUI = GameManager.UI.ShowInGameUI<SetTrapUI>("UI/SetTrapButton");
+        setTrapUI.SetParentPlatform(platform);
+        setTrapUI.SetTarget(transform);
+        setTrapUI.SetOffset(new Vector3(200, 0));
+    }
+
+    public void HideSetTrapUI()
+    {
+        GameManager.UI.CloseInGameUI(setTrapUI);
+    }
     /// <summary>
     /// 함정 설치 버튼 보여주기
     /// </summary>
     public void ShowSetTrapButton()
     {
-        if (!photonView.IsMine)
-            return;
         isClickable = false;
 
         //1. 클릭된 플랫폼을 트롤러 컨트롤러의 현재 플랫폼으로 설정
         SetCurrentPlatform();
 
         //1-2. 혹시 이전 플랫폼이 NULL이면 현재 플랫폼을 이전 플랫폼으로 설정
-        if (trollerPlayerController._prevPlatform == null)
+        if (GameManager.TrollerData.prevPlatform == null)
         {
             SetPrevPlatform();
         }
 
         //2. 현재 플랫폼과 이전 플랫폼이 다르다면 이전 플랫폼을 닫아줌.
-        if (trollerPlayerController._currentPlatform != trollerPlayerController._prevPlatform)
+        if (GameManager.TrollerData.currentPlatform != GameManager.TrollerData.prevPlatform)
         {
-            trollerPlayerController._prevPlatform._setTrapUI.ExecuteSetTrapButtonClosing();
+            GameManager.TrollerData.prevPlatform._setTrapUI.ExecuteSetTrapButtonClosing();
             //SetTrapUI가 생성되어 Platform을 참조하면 스크립트 내부에서 CloseArea의 Platform을 초기화 해주는 구조로 바꿈 - 230801 02:19 AM 
             //trollerPlayerController._prevPlatform.ClearCloseAreaPlatform();
         }
@@ -131,10 +134,8 @@ public class Platform : MonoBehaviourPun,IPunObservable
             photonView.RPC("PlayerEnteredPlatform", RpcTarget.AllBufferedViaServer);
         }
 
-        setTrapUI = GameManager.UI.ShowInGameUI<SetTrapUI>("UI/SetTrapButton");
-        setTrapUI.SetParentPlatform(this);
-        setTrapUI.SetTarget(transform);
-        setTrapUI.SetOffset(new Vector3(200, 0));
+        Debug.Log("얘 호출");
+        ShowSetTrapUI(this);
     }
 
     /// <summary>
@@ -142,9 +143,6 @@ public class Platform : MonoBehaviourPun,IPunObservable
     /// </summary>
     public void HideSetTrapButton()
     {
-        if (!photonView.IsMine)
-            return;
-
         if (setTrapUI == null)
             return;
 
@@ -157,7 +155,7 @@ public class Platform : MonoBehaviourPun,IPunObservable
 
         //SetTrapUI 스크립트 내부에서 HideSetTrapButton 시 CloseArea의 Platform을 초기화 해주는 구조로 바꿈 - 230801 02:19 AM  
         //ClearCloseAreaPlatform();
-        GameManager.UI.CloseInGameUI(setTrapUI);
+        HideSetTrapUI();
     }
       
     /// <summary>
@@ -170,10 +168,10 @@ public class Platform : MonoBehaviourPun,IPunObservable
         if (PhotonNetwork.IsConnectedAndReady)
         {
             // 디버프가 없으면 return
-            if (platformCurrentDebuff == null || platformCurrentDebuff.state == Debuff_State.None)
+            if (platformCurrentDebuff == null || currentDebuffState == Debuff_State.None)
                 return;
 
-            // 현재 플랫폼에 함정을 설치하는 함수 호출
+            // 현재 플랫폼에 설치된 함정을 실행하는
             if(currentDebuffState == Debuff_State.NoColider)
                 platformCurrentDebuff.SetTrap(this);
             StartDebuffCountDown();
@@ -223,9 +221,8 @@ public class Platform : MonoBehaviourPun,IPunObservable
     [PunRPC]
     public void SwitchRenderColorEnter()
     {
-        if (!photonView.IsMine || isClickable == false)
+        if (isClickable == false)
             return;
-
         foreach (Renderer renderer in renderers)
         {
             if (renderer != null)
@@ -236,9 +233,6 @@ public class Platform : MonoBehaviourPun,IPunObservable
     [PunRPC]
     public void SwitchRenderColorExit()
     {
-        if (!photonView.IsMine)
-            return;
-
         foreach (Renderer renderer in renderers)
         {
             if (renderer != null)
@@ -259,9 +253,7 @@ public class Platform : MonoBehaviourPun,IPunObservable
     {
         // 디버그 큐에서 하나 빼오고 Dequeue();
         // 현재 플랫폼의 디버프를 지정
-        platformCurrentDebuff = (Debuff) trollerPlayerController.debuffQueue.Dequeue();
-        // 현재 플랫폼의 DebuffState 업데이트 
-        currentDebuffState = platformCurrentDebuff.state;
+        platformCurrentDebuff = (Debuff) GameManager.TrollerData.debuffQueue.Dequeue();
         // 텍스트 업데이트 
         CallRPCFunction("UpdateCurrentStateText");
         // NoCollider가 아니라면현재 플랫폼에 함정을 설치하는 함수 호출
@@ -277,7 +269,7 @@ public class Platform : MonoBehaviourPun,IPunObservable
     [PunRPC]
     public void ClearTrap()
     {
-        platformCurrentDebuff = trollerPlayerController.CreateNoneStateDebuff();
+        platformCurrentDebuff = GameManager.Debuff.CreateNoneStateDebuff();
         currentDebuffState = platformCurrentDebuff.state;
         CallRPCFunction("UpdateCurrentStateText");
         platformCurrentDebuff.SetTrap(this);

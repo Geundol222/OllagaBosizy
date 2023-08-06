@@ -167,6 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e743f2630080af94aa6e904289b7bf8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TrapListTexts: []
 --- !u!1 &197778114
 GameObject:
   m_ObjectHideFlags: 0
@@ -2650,7 +2651,7 @@ PrefabInstance:
     - target: {fileID: 2536648093007826038, guid: 3f25194b66185444c9047a0f06b62af3,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7753828077278772599, guid: 3f25194b66185444c9047a0f06b62af3,
         type: 3}

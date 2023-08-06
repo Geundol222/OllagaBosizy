@@ -547,6 +547,8 @@ MonoBehaviour:
   isClickable: 0
   currentStateText: {fileID: 6076061800789390678}
   countDownSlider: {fileID: 7603889547240825984}
+  setTrapUI: {fileID: 6765985505419511837, guid: 5263f17debc142f4b93a10e97b682c7f,
+    type: 3}
 --- !u!114 &6985754947287861461
 MonoBehaviour:
   m_ObjectHideFlags: 0
