@@ -10,34 +10,33 @@ public class PlayerEntry : MonoBehaviour
 {
     [SerializeField] TMP_Text playerName;
     [SerializeField] TMP_Text playerReady;
+    [SerializeField] TeamManager teamManager;
 
-    private Player player;
+    private void Awake()
+    {
+        PhotonNetwork.LocalPlayer.LeaveCurrentTeam();
+    }
 
     public void SetPlayer(Player player)
     {
-        this.player = player;
         playerName.text = player.NickName;
         playerReady.text = player.GetReady() ? "준비 완료!" : "";
     }
 
-    [System.Obsolete]
-    public void SetPlayerRedTeam()
+    public void SetPlayerTrollerTeam()
     {
-        PhotonNetwork.LocalPlayer.SetTeam(PunTeams.Team.red);
+        teamManager.SetTeam(PlayerTeam.Climber);
     }
 
-    [System.Obsolete]
-    public void SetPlayerBlueTeam()
+    public void SetPlayerClimberTeam()
     {
-        PhotonNetwork.LocalPlayer.SetTeam(PunTeams.Team.blue);
+        teamManager.SetTeam(PlayerTeam.Troller);
     }
 
-    [System.Obsolete]
     public void ChangeCustomProperty(PhotonHashtable property)
     {
         if (property.TryGetValue(CustomProperty.READY, out object value))
         {
-            Debug.Log(PhotonNetwork.LocalPlayer.GetTeam());
             bool ready = (bool)value;
             playerReady.text = ready ? "준비 완료!" : "";
         }

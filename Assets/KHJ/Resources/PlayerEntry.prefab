@@ -1,5 +1,58 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6418630786894132026
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4330820267674238571}
+  - component: {fileID: 1417356615614558668}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4330820267674238571
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6418630786894132026}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 26.138672, y: -2.277649, z: -0.65183914}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7665593317055731024}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1417356615614558668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6418630786894132026}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93594142740922049ac245d23b174dd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trollerTeam:
+    Name: Troller
+    Code: 10
+  climberTeam:
+    Name: Climber
+    Code: 11
+  noneTeam:
+    Name: None
+    Code: 12
 --- !u!1 &7665593315062066077
 GameObject:
   m_ObjectHideFlags: 0
@@ -383,6 +436,7 @@ RectTransform:
   - {fileID: 7665593316343884095}
   - {fileID: 7665593316000242593}
   - {fileID: 7665593315062066076}
+  - {fileID: 4330820267674238571}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -463,3 +517,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerName: {fileID: 7665593316000242592}
   playerReady: {fileID: 7665593315062066079}
+  teamManager: {fileID: 1417356615614558668}
