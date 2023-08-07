@@ -23,8 +23,8 @@ public class Platform : MonoBehaviourPun,IPunObservable
     private SetTrapUI setTrapUI;
     public SetTrapUI _setTrapUI { get { return setTrapUI; } set { setTrapUI = value; } }
 
-    private Debuff platformCurrentDebuff;
-    public Debuff_State currentDebuffState {  get { return platformCurrentDebuff.state; } set { platformCurrentDebuff.state = value;  } }
+    [SerializeField] Debuff platformCurrentDebuff;
+    public Debuff_State currentDebuffState {  get { return platformCurrentDebuff.state; } set { platformCurrentDebuff.state = value; UpdateCurrentStateText(); } }
 
     private Coroutine debuffCountDownCoroutine;
 
@@ -42,6 +42,7 @@ public class Platform : MonoBehaviourPun,IPunObservable
         
         closeArea = GameObject.Find("UICloseArea").GetComponent<UICloseArea>();
         renderers = GetComponentsInChildren<Renderer>();
+        UpdateCurrentStateText();
     }
 
     private void Start()
@@ -53,6 +54,7 @@ public class Platform : MonoBehaviourPun,IPunObservable
     public void UpdateCurrentStateText()
     {
         string text = "";
+        Debug.Log($"현재 CurrentPlatformState는 {currentDebuffState.ToString()}");
         if(currentDebuffState != Debuff_State.None)
         {
             text = currentDebuffState.ToString();
@@ -97,6 +99,7 @@ public class Platform : MonoBehaviourPun,IPunObservable
     {
         GameManager.UI.CloseInGameUI(setTrapUI);
     }
+
     /// <summary>
     /// 함정 설치 버튼 보여주기
     /// </summary>
@@ -146,7 +149,10 @@ public class Platform : MonoBehaviourPun,IPunObservable
         if (setTrapUI == null)
             return;
 
-        isClickable = true;
+        if (platformCurrentDebuff.state == Debuff_State.None)
+        {
+            isClickable = true;
+        }
 
         if (PhotonNetwork.IsConnectedAndReady)
         {
@@ -173,7 +179,7 @@ public class Platform : MonoBehaviourPun,IPunObservable
 
             // 현재 플랫폼에 설치된 함정을 실행하는
             if(currentDebuffState == Debuff_State.NoColider)
-                platformCurrentDebuff.SetTrap(this);
+                GameManager.Debuff.SetTrap(platformCurrentDebuff, this);
             StartDebuffCountDown();
         }
     }
@@ -213,8 +219,9 @@ public class Platform : MonoBehaviourPun,IPunObservable
         playerCount--;
         if (playerCount <= 0)
         {
-            playerCount = 0;
-            isClickable = true;
+            playerCount = 0;    
+            if(platformCurrentDebuff.state == Debuff_State.None)
+                isClickable = true;
         }
     }
 
@@ -244,35 +251,36 @@ public class Platform : MonoBehaviourPun,IPunObservable
     {
         if (PhotonNetwork.IsConnectedAndReady)
         {
-            CallRPCFunction("SetTrap");
+            Debuff debuff = (Debuff) GameManager.TrollerData.debuffQueue.Dequeue();
+            CallRPCFunction("SetTrap",(int) debuff.state);
+            // 디버프 슬롯에 랜덤 디버프 하나 추가해주기
+            if(GameManager.TrollerData.debuffCount < GameManager.TrollerData.debuffQueueLength)
+                DebuffQueueEnqueue();
         }
     }
       
     [PunRPC]
-    public void SetTrap()
+    public void SetTrap(int debuffIndex)
     {
-        // 디버그 큐에서 하나 빼오고 Dequeue();
-        // 현재 플랫폼의 디버프를 지정
-        platformCurrentDebuff = (Debuff) GameManager.TrollerData.debuffQueue.Dequeue();
-        // 텍스트 업데이트 
+        isClickable = false;
+        Debuff setTrapDebuff = (Debuff) GameManager.TrollerData.Original_Debuff.clone();
+        setTrapDebuff.SetState(debuffIndex);
+        platformCurrentDebuff = setTrapDebuff;
         CallRPCFunction("UpdateCurrentStateText");
         // NoCollider가 아니라면현재 플랫폼에 함정을 설치하는 함수 호출
         if (currentDebuffState != Debuff_State.NoColider)
-            platformCurrentDebuff.SetTrap(this);
-        // 디버프 슬롯에 랜덤 디버프 하나 추가해주기
-        DebuffQueueEnqueue();
-        // 함정리스트 갱신하기
-
-        Debug.Log(platformCurrentDebuff.state);
+            GameManager.Debuff.SetTrap(platformCurrentDebuff, this);
     }
 
     [PunRPC]
     public void ClearTrap()
     {
+        isClickable = true;
+        Debug.Log("이아이가 호출");
         platformCurrentDebuff = GameManager.Debuff.CreateNoneStateDebuff();
-        currentDebuffState = platformCurrentDebuff.state;
+        //currentDebuffState = platformCurrentDebuff.state;
         CallRPCFunction("UpdateCurrentStateText");
-        platformCurrentDebuff.SetTrap(this);
+        GameManager.Debuff.SetTrap(platformCurrentDebuff, this);
         countDownSlider.value = 1;
         countDownSlider.gameObject.SetActive(false);
         debuffCountDownCoroutine = null;
@@ -283,10 +291,13 @@ public class Platform : MonoBehaviourPun,IPunObservable
         if (stream.IsWriting)
         {
             stream.SendNext((int)currentDebuffState);
+            stream.SendNext((bool)isClickable);
         }
         else
         {
             currentDebuffState = (Debuff_State) stream.ReceiveNext();
+            Debug.Log($"포톤시리얼라이즈뷰로 받아온 현재 디버프 State : {currentDebuffState.ToString()} ");
+            isClickable = (bool) stream.ReceiveNext();
         }
     }
 
@@ -311,8 +322,7 @@ public class Platform : MonoBehaviourPun,IPunObservable
             {
                 CallRPCFunction("ClearTrap");
                 yield return null;
-            }
-                     
+            }                     
         }
     }
 
@@ -331,4 +341,13 @@ public class Platform : MonoBehaviourPun,IPunObservable
             photonView.RPC(functionName, RpcTarget.AllBufferedViaServer);
         }
     }
+
+    public void CallRPCFunction(string functionName, int index)
+    {
+        if (PhotonNetwork.IsConnectedAndReady)
+        {
+            photonView.RPC(functionName, RpcTarget.AllBufferedViaServer, index);
+        }
+    }
+
 }
