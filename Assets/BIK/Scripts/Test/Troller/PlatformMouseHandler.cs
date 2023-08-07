@@ -11,7 +11,13 @@ public class PlatformMouseHandler : MonoBehaviour,IPointerClickHandler,IPointerE
     {
         platform = GetComponent<Platform>();
     }
-      
+
+    private void SetTrollerController()
+    {
+        if(GameManager.TrollerData.trollerPlayerController == null)
+            GameManager.TrollerData.trollerPlayerController = GameObject.Find("TrollerController(Clone)").GetComponent<TrollerPlayerController>();
+    }
+
     /// <summary>
     /// 클릭 된다면 clickAbleState 가 true면 ..
     /// </summary>
@@ -21,6 +27,7 @@ public class PlatformMouseHandler : MonoBehaviour,IPointerClickHandler,IPointerE
 
         if (platform.IsClickable)
         {
+            SetTrollerController();
             platform.ShowSetTrapButton();
         }                
     }
@@ -31,11 +38,13 @@ public class PlatformMouseHandler : MonoBehaviour,IPointerClickHandler,IPointerE
     /// <param name="eventData"></param>
     public void OnPointerExit(PointerEventData eventData)
     {
+        SetTrollerController();
         platform.SwitchRenderColorExit();
     }
       
     public void OnPointerEnter(PointerEventData eventData)
     {
+        SetTrollerController();
         platform.SwitchRenderColorEnter();
     }
       

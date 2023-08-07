@@ -47,9 +47,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f680ed0803f0d954babb845e8ef331ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debuffQueueLength: 0
-  debuffCount: 0
-  TrapListTexts: []
 --- !u!114 &6424942176873923229
 MonoBehaviour:
   m_ObjectHideFlags: 0

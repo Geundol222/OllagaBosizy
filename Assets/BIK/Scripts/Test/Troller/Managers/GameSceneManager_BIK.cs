@@ -111,13 +111,7 @@ public class GameSceneManager_BIK : MonoBehaviourPunCallbacks
         // 방해자 컨트롤러 생성
         //StartCoroutine(StateLoadCoroutine());
         PhotonNetwork.Instantiate("Player/TrollerController", new Vector3(0, 0, 0), Quaternion.identity);
-        if (PhotonNetwork.IsMasterClient)
-        {
-            PhotonNetwork.InstantiateRoomObject("Stage/Platforms", new Vector3(0, 0, 0), Quaternion.identity);
-        }
     }
-
-
 
     private int PlayerLoadCount()
     {
