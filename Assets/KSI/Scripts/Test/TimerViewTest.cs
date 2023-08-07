@@ -32,20 +32,27 @@ public class TimerViewTest : MonoBehaviourPunCallbacks
 		}
 		else
 		{
-			infoText.text = "Degug Mode";
+			infoText.text = "Debug Mode";
 			PhotonNetwork.LocalPlayer.NickName = $"DebugPlayer {Random.Range(1000, 10000)}";
 			PhotonNetwork.ConnectUsingSettings();
-		}
+		}		
+	}
+
+	public override void OnConnected()
+	{
+		Debug.Log("OnConnected");
 	}
 
 	public override void OnConnectedToMaster()
 	{
+		Debug.Log("ConnectToMaster");
 		RoomOptions options = new RoomOptions() { IsVisible = false };
 		PhotonNetwork.JoinOrCreateRoom("DebugRoom", options, TypedLobby.Default);
 	}
 
 	public override void OnJoinedRoom()
 	{
+		Debug.Log("OnJoinedRoom");
 		StartCoroutine(DebugGameSetupDelay());
 	}
 
@@ -100,7 +107,7 @@ public class TimerViewTest : MonoBehaviourPunCallbacks
 			StartCoroutine(GameStartTimer());
 		}
 	}
-
+	
 	IEnumerator GameStartTimer()
 	{
 		int loadTime = PhotonNetwork.CurrentRoom.GetLoadTime();
@@ -118,11 +125,12 @@ public class TimerViewTest : MonoBehaviourPunCallbacks
 		infoText.text = "";
 	}
 
-	//private void DisplayTimer(float second)
-	//{
-	//	remainLimitTime = second;
-	//	StartCoroutine(UpdateTimerRoutine());
-	//}
+	[PunRPC]
+	private void DisplayTimer(float second)
+	{
+		remainLimitTime = second;
+		StartCoroutine(UpdateTimerRoutine());
+	}
 
 	// 타이머 코루틴
 	private IEnumerator UpdateTimerRoutine()
@@ -164,13 +172,12 @@ public class TimerViewTest : MonoBehaviourPunCallbacks
 	{
 		Debug.Log("Debug Game Mode. IsMasterClient : " + PhotonNetwork.IsMasterClient);
 
-		//if (PhotonNetwork.IsMasterClient)
-		//{
-			// 마스터 클라이언트인 경우 타이머를 시작하고 다른 클라이언트와 동기화
-			//photonView.RPC("CallDisplayTimerRPC", RpcTarget.All, limitTime);
+		if (PhotonNetwork.IsMasterClient)
+		{
+			photonView.RPC("DisplayTimer", RpcTarget.AllBuffered, limitTime);
 
 			StartCoroutine(UpdateTimerRoutine());
-		//}	
+		}
 	}
 
 	private int PlayerLoadCount()

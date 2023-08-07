@@ -5,7 +5,13 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/LHS/Scene/LHSGameScene.unity
     guid: ff1c84dd3122e554d819d5d3c57c5666
+  - enabled: 1
+    path: Assets/KSI/Scene/Test/GameSceneKSI.unity
+    guid: aa9c032f874720a4591727b68fd8d544
+  - enabled: 1
+    path: Assets/KSI/Scene/Test/NewSceneKSI.unity
+    guid: d9df41f091a93184ba4fdd8a89b91558
   m_configObjects: {}
