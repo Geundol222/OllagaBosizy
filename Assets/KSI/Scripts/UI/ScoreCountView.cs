@@ -1,6 +1,9 @@
+using Photon.Pun;
 using TMPro;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class ScoreCountView : MonoBehaviour
 {
@@ -10,22 +13,34 @@ public class ScoreCountView : MonoBehaviour
 	[SerializeField] private Transform endPoint; // 마지막 지점
 
 	[Header("ScoreUI")]
-	//[SerializeField] private TextMeshProUGUI scoreText;
+	[SerializeField] private TextMeshProUGUI scoreText;
 	[SerializeField] private Slider scoreSlider;
 
-	private Vector2 lastScoreValue;
+	PlayerController playerController;
 
 	private void Awake()
 	{
-		//scoreText = GetComponentInChildren<TextMeshProUGUI>();
+		scoreText = GetComponentInChildren<TextMeshProUGUI>();
+
+		StartCoroutine(NetworkConnectCheckRoutine());
+	}
+
+	IEnumerator NetworkConnectCheckRoutine()
+	{
+		yield return new WaitUntil(() => { return PhotonNetwork.IsConnected; });
+
+		scoreSlider.enabled = true;
+
+		if (PhotonNetwork.IsConnected)
+			yield break;
 	}
 
 	private void Start()
 	{
-		scoreSlider.maxValue = 100;
-		scoreSlider.minValue = 0;
+		//scoreSlider.maxValue = 100;
+		//scoreSlider.minValue = 0;
 
-		scoreSlider.value = 0;
+		//scoreSlider.value = 0;
 	}
 
 	private void Update()
@@ -48,9 +63,11 @@ public class ScoreCountView : MonoBehaviour
 		int score = Mathf.RoundToInt(percentage);
 
 		// 백분율 값을 텍스트로 표시
-		//scoreText.text = score.ToString() + "%";
+		scoreText.text = score.ToString() + "%";
 
 		// 백분율 값을 슬라이더에 연결
 		scoreSlider.value = score;
 	}
+
+
 }
