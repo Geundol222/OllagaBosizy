@@ -10,12 +10,14 @@ public class ScoreCountView : MonoBehaviour
 	[SerializeField] private Transform endPoint; // 마지막 지점
 
 	[Header("ScoreUI")]
-	[SerializeField] private TextMeshProUGUI scoreText;
+	//[SerializeField] private TextMeshProUGUI scoreText;
 	[SerializeField] private Slider scoreSlider;
+
+	private Vector2 lastScoreValue;
 
 	private void Awake()
 	{
-		scoreText = GetComponentInChildren<TextMeshProUGUI>();
+		//scoreText = GetComponentInChildren<TextMeshProUGUI>();
 	}
 
 	private void Start()
@@ -28,6 +30,11 @@ public class ScoreCountView : MonoBehaviour
 
 	private void Update()
 	{
+		ScoreCalculate();
+	}
+
+	private void ScoreCalculate()
+	{
 		// 시작 지점과 마지막 지점 사이의 y 거리 계산
 		float totalYDistance = Mathf.Abs(endPoint.position.y - startPoint.position.y);
 
@@ -39,8 +46,10 @@ public class ScoreCountView : MonoBehaviour
 
 		// 백분율 값을 정수로 변환
 		int score = Mathf.RoundToInt(percentage);
+
 		// 백분율 값을 텍스트로 표시
 		//scoreText.text = score.ToString() + "%";
+
 		// 백분율 값을 슬라이더에 연결
 		scoreSlider.value = score;
 	}
