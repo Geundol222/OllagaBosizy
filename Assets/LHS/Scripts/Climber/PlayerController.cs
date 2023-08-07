@@ -22,12 +22,6 @@ public class PlayerController : MonoBehaviourPun
 	[SerializeField] Transform gfx;
 	[SerializeField] Collider2D platformTrigger;
 
-	//[Header("DataManager")]
-	//[SerializeField] private DataManager dataManager;
-
-	//public UnityEvent OnScored;
-	//public UnityEvent OnJumped;
-
 	private CinemachineVirtualCamera playerCamera;
     private PlayerInput inputAction;	
 	private Vector3 prevPlayerPosition;
@@ -112,9 +106,8 @@ public class PlayerController : MonoBehaviourPun
 
 	private void GroundCheck()
 	{
-		Debug.DrawRay(transform.position, Vector2.down * 0.5f, Color.red);
-		
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.5f, platformLayer);
+        RaycastHit2D hit = Physics2D.BoxCast(transform.position, new Vector2(0.2f, 0.2f), 0, Vector2.down, 0.5f, platformLayer);
+		DrawBox(transform.position, transform.rotation, new Vector2(0.2f, 0.2f), Color.red);
 		if (hit.collider != null)
 		{
 			isGround = true;
@@ -134,11 +127,11 @@ public class PlayerController : MonoBehaviourPun
 	{
 		if (isGround && prevPlayerPosition.y > curPlayerPosition.y)
 		{
-			if (curPlayerPosition.y > 0 && (prevPlayerPosition.y - curPlayerPosition.y) > 3)
+			if (curPlayerPosition.y > 0 && (prevPlayerPosition.y - curPlayerPosition.y) > 5)
 			{
                 animator.SetBool("IsFall", true);
             }
-			else if (curPlayerPosition.y <= 0 && (prevPlayerPosition.y + Mathf.Abs(curPlayerPosition.y)) > 3)
+			else if (curPlayerPosition.y <= 0 && (prevPlayerPosition.y + Mathf.Abs(curPlayerPosition.y)) > 5)
 			{
                 animator.SetBool("IsFall", true);
             }
@@ -171,29 +164,35 @@ public class PlayerController : MonoBehaviourPun
         inputAction.enabled = false;
 	}
 
-    //public void GetScore()
-    //{
-    //	// 발판 트리거에 들어오면 100점을 얻음
-    //	dataManager.CurrentScore += 100;
-    //	OnScored?.Invoke();
-    //}
+    public void DrawBox(Vector2 pos, Quaternion rot, Vector2 scale, Color c)
+    {
+        // create matrix
+        Matrix4x4 m = new Matrix4x4();
+        m.SetTRS(pos, rot, scale);
 
-    //// TODO : Platform에 만들어지면 삭제 예정 
-    ////발판 트리거에 들어오면 점수를 얻음
-    //private void OnTriggerEnter2D(Collider2D collision)
-    //{
-    //	// 태그가 Platform인 발판 트리거에서만 충돌 체크함
-    //	if (collision.CompareTag("Platform"))
-    //	{
-    //		// 발판 트리거에 들어오면 100점을 얻음
-    //		dataManager.CurrentScore += 100;
-    //		OnScored?.Invoke();
-    //		// 점수 1번만 얻게함
-    //		GameObject.Destroy(collision.gameObject);
-    //	}
-    //}
+        var point1 = m.MultiplyPoint(new Vector3(-0.5f, -0.5f, 0.5f));
+        var point2 = m.MultiplyPoint(new Vector3(0.5f, -0.5f, 0.5f));
+        var point3 = m.MultiplyPoint(new Vector3(0.5f, -0.5f, -0.5f));
+        var point4 = m.MultiplyPoint(new Vector3(-0.5f, -0.5f, -0.5f));
 
+        var point5 = m.MultiplyPoint(new Vector3(-0.5f, 0.5f, 0.5f));
+        var point6 = m.MultiplyPoint(new Vector3(0.5f, 0.5f, 0.5f));
+        var point7 = m.MultiplyPoint(new Vector3(0.5f, 0.5f, -0.5f));
+        var point8 = m.MultiplyPoint(new Vector3(-0.5f, 0.5f, -0.5f));
 
-    // 발판 디버프 없어지는 순간, 플레이어가 밟은 발판이 바꼈을때로
-    // isGround 발판이 밟은 발판의 정보가 바뀌는지 
+        Debug.DrawLine(point1, point2, c);
+        Debug.DrawLine(point2, point3, c);
+        Debug.DrawLine(point3, point4, c);
+        Debug.DrawLine(point4, point1, c);
+
+        Debug.DrawLine(point5, point6, c);
+        Debug.DrawLine(point6, point7, c);
+        Debug.DrawLine(point7, point8, c);
+        Debug.DrawLine(point8, point5, c);
+
+        Debug.DrawLine(point1, point5, c);
+        Debug.DrawLine(point2, point6, c);
+        Debug.DrawLine(point3, point7, c);
+        Debug.DrawLine(point4, point8, c);
+    }
 }

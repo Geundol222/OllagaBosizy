@@ -1475,6 +1475,7 @@ MonoBehaviour:
     m_Bits: 64
   gfx: {fileID: 5745586318708099254}
   platformTrigger: {fileID: 654479627456177507}
+  footTrigger: {fileID: 507841549148376250}
 --- !u!61 &654479627456177507
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1913,7 +1914,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b8cf3e37ec610f408b3fdef3e6d0fea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debuffManager: {fileID: 0}
   platformLayer:
     serializedVersion: 2
     m_Bits: 64
