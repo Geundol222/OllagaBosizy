@@ -17,6 +17,7 @@ public class TrollerCameraController : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
+
         vcam = GameObject.Find("Troller_Cam").GetComponent<CinemachineVirtualCamera>();
     }
     private void Start()
