@@ -10,10 +10,10 @@ using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 public class GameSceneManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] TMP_Text infoText;
+    [SerializeField] TMP_Text timerText;
     [SerializeField] float countDownTimer;
     [SerializeField] float gameCountDown;
     [SerializeField] List<GameObject> playerSpawnPoints;
-    [SerializeField] TMP_Text timerText;
 
     private void Start()
     {
@@ -121,7 +121,13 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
 
     private void GameStart()
     {
-        // TODO : GameStart
+        int playerIndex = PhotonNetwork.LocalPlayer.GetPlayerNumber();
+        PhotonNetwork.Instantiate("PlayerBoy", playerSpawnPoints[playerIndex].transform.position, playerSpawnPoints[playerIndex].transform.rotation);
+
+        if (PhotonNetwork.IsMasterClient)
+            PhotonNetwork.CurrentRoom.SetCountDownTime(PhotonNetwork.ServerTimestamp);
+        else
+            StartCoroutine(UpdateTimerRoutine());
     }
 
     private void DebugGameStart()

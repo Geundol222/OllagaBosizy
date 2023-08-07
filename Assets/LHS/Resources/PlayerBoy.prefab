@@ -1336,6 +1336,7 @@ GameObject:
   - component: {fileID: 5955588769262720582}
   - component: {fileID: 5955588769262720585}
   - component: {fileID: 5955588769262720583}
+  - component: {fileID: 1439082971932964993}
   - component: {fileID: 654479627456177507}
   - component: {fileID: 3775672587214023610}
   - component: {fileID: 6795964851008915683}
@@ -1467,15 +1468,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debug: 1
-  maxSpeed: 1000
-  moveSpeed: 900
-  jumpPower: 20
   platformLayer:
     serializedVersion: 2
     m_Bits: 64
-  gfx: {fileID: 5745586318708099254}
   platformTrigger: {fileID: 654479627456177507}
-  footTrigger: {fileID: 507841549148376250}
+--- !u!114 &1439082971932964993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5955588769262720579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 137933c0c7b716d4eb0b08e1705bfaae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxSpeed: 1000
+  moveSpeed: 900
+  jumpPower: 20
+  gfx: {fileID: 5745586318708099254}
 --- !u!61 &654479627456177507
 BoxCollider2D:
   m_ObjectHideFlags: 0

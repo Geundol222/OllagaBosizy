@@ -22,5 +22,17 @@ public class FootTrigger : MonoBehaviour
             //debuffManager.ClimberStepOnPlatform(platform);
             Debug.Log(collision.gameObject.name);
         }
+
+        if (collision.gameObject.name == "EndPoint")
+        {
+            if (GameManager.Round.GetRound() == Round.ROUND1)
+            {
+                GameManager.Round.SetRound(Round.ROUND2);
+            }
+            else
+            {
+                GameManager.Round.SetRound(Round.END);
+            }
+        }
     }
 }

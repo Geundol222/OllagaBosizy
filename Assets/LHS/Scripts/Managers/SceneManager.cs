@@ -1,12 +1,14 @@
+using Photon.Pun;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnitySceneManager = UnityEngine.SceneManagement.SceneManager;
 
+public enum Scene { LOBBY, GAME };
+
 public class SceneManager : MonoBehaviour
 {
-    private LoadingUI loadingUI;
-    private int nextIndex = 0;
+    // private LoadingUI loadingUI;
+    private Scene nextScene = Scene.LOBBY;
 
     private BaseScene curScene;
     public BaseScene CurScene
@@ -22,57 +24,58 @@ public class SceneManager : MonoBehaviour
 
     private void Awake()
     {
-        LoadingUI ui = Resources.Load<LoadingUI>("UI/LoadingSceneUI");
-        loadingUI = Instantiate(ui);
-        loadingUI.transform.SetParent(transform, false);
+        // LoadingUI ui = Resources.Load<LoadingUI>("UI/LoadingSceneUI");
+        // loadingUI = Instantiate(ui);
+        // loadingUI.transform.SetParent(transform, false);
     }
 
-    public void NextScene()
+    public void NextScene(Scene scene)
     {
-        int index = UnitySceneManager.GetActiveScene().buildIndex;
-        if (UnitySceneManager.sceneCountInBuildSettings - 1 > index)
-            nextIndex = index + 1;
+        if (UnitySceneManager.sceneCountInBuildSettings - 1 > (int)scene)
+            nextScene = (Scene)((int)scene + 1);
         else
-            nextIndex = index;
+            nextScene = (Scene)((int)scene);
 
-        LoadScene(nextIndex);
+        LoadScene(nextScene);
     }
 
-    public void LoadScene(int index)
+    public void LoadScene(Scene scene)
     {
-        StartCoroutine(LoadingRoutine(index));
+        StartCoroutine(LoadingRoutine(scene));
     }
 
-    IEnumerator LoadingRoutine(int index)
+    IEnumerator LoadingRoutine(Scene scene)
     {
-        loadingUI.FadeOut();
+        // loadingUI.FadeOut();
         yield return new WaitForSeconds(1f);
         GameManager.Sound.Clear();
         yield return new WaitUntil(() => { return GameManager.Sound.IsMuted(); });
         Time.timeScale = 0f;
 
-        AsyncOperation oper = UnitySceneManager.LoadSceneAsync(index);
+        //AsyncOperation oper = UnitySceneManager.LoadSceneAsync(index);
+        PhotonNetwork.LoadLevel((int)scene);
 
-        while (!oper.isDone)
+        while (PhotonNetwork.LevelLoadingProgress < 1f)
         {
-            loadingUI.SetProgress(Mathf.Lerp(0f, 0.5f, oper.progress));
+            // loadingUI.SetProgress(Mathf.Lerp(0f, 0.5f, PhotonNetwork.LevelLoadingProgress));
             yield return null;
         }
 
         GameManager.Pool.InitPool();
+
         GameManager.UI.InitUI();
         GameManager.Sound.InitSound();
         GameManager.Sound.FadeInAudio();
 
-        CurScene.LoadAsync();
-        while (CurScene.progress < 1f)
-        {
-            loadingUI.SetProgress(Mathf.Lerp(0.5f, 1.0f, CurScene.progress));
-            yield return null;
-        }
+        // CurScene.LoadAsync();
+        // while (CurScene.progress < 1f)
+        // {
+        //     // loadingUI.SetProgress(Mathf.Lerp(0.5f, 1.0f, CurScene.progress));
+        //     yield return null;
+        // }
 
         Time.timeScale = 1f;
-        loadingUI.FadeIn();
+        // loadingUI.FadeIn();
         yield return new WaitWhile(() => { return GameManager.Sound.IsMuted(); });
     }
 }

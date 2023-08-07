@@ -1,45 +1,38 @@
 using Cinemachine;
 using Photon.Pun;
+using Photon.Pun.Demo.Cockpit;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(Rigidbody2D))]
+
 public class PlayerController : MonoBehaviourPun
 {
 	[Header("Gizmo")]
 	[SerializeField] bool debug;
 
-	[Header("Value")]
-	[SerializeField] private float maxSpeed;
-	[SerializeField] private float moveSpeed;
-	[SerializeField] private float jumpPower;
-
 	[Header("LayerMask")]
 	[SerializeField] private LayerMask platformLayer;
 
-	[Header("GFX")]
-	[SerializeField] Transform gfx;
+    [Header("Collider")]
 	[SerializeField] Collider2D platformTrigger;
 
-	private CinemachineVirtualCamera playerCamera;
-    private PlayerInput inputAction;	
+    private PlayerInput inputAction;
+    private CinemachineVirtualCamera playerCamera;
 	private Vector3 prevPlayerPosition;
 	private Vector3 curPlayerPosition;
-	private new Rigidbody2D rigidbody;
 	private Animator animator;
-	private Vector2 inputDirection;
 	private bool isGround;
+
+    public bool IsGround { get { return isGround; } }
 
     private void Awake()
 	{
 		prevPlayerPosition = transform.position;
 		
-		inputAction = GetComponent<PlayerInput>();
-		rigidbody = GetComponent<Rigidbody2D>();
 		animator = GetComponent<Animator>();
-
-		playerCamera = GameObject.FindGameObjectWithTag("VirtualCamera").GetComponent<CinemachineVirtualCamera>();
+        inputAction = GetComponent<PlayerInput>();
+        playerCamera = GameObject.FindGameObjectWithTag("VirtualCamera").GetComponent<CinemachineVirtualCamera>();
 
         if (!photonView.IsMine)
             Destroy(inputAction);
@@ -68,41 +61,8 @@ public class PlayerController : MonoBehaviourPun
 
 	private void FixedUpdate()
 	{
-        GroundCheck();
-        Move();
+        GroundCheck();        
     }
-		
-	public void Move()
-	{
-		// 최고 속력일 경우 힘을 가해도 속력이 빨라지지 않음
-		if (inputDirection.x < 0 && rigidbody.velocity.x > -maxSpeed)
-		{
-            gfx.rotation = Quaternion.Euler(0, -90, 0);
-            rigidbody.AddForce(Vector2.right * inputDirection.x * moveSpeed * Time.deltaTime, ForceMode2D.Force);
-		}
-		else if (inputDirection.x > 0 && rigidbody.velocity.x < maxSpeed)
-		{
-            gfx.rotation = Quaternion.Euler(0, 90, 0);
-            rigidbody.AddForce(Vector2.right * inputDirection.x * moveSpeed * Time.deltaTime, ForceMode2D.Force);
-		}
-	}
-
-	public void Jump()
-	{
-		rigidbody.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
-	}
-
-	private void OnMove(InputValue value)
-	{
-		inputDirection = value.Get<Vector2>();
-		animator.SetFloat("MoveSpeed", Mathf.Abs(inputDirection.x));
-	}
-
-	private void OnJump(InputValue value)
-	{
-		if (value.isPressed && isGround)
-			Jump();
-	}
 
 	private void GroundCheck()
 	{
@@ -194,5 +154,20 @@ public class PlayerController : MonoBehaviourPun
         Debug.DrawLine(point2, point6, c);
         Debug.DrawLine(point3, point7, c);
         Debug.DrawLine(point4, point8, c);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.name == "EndPoint")
+        {
+            if (GameManager.Round.GetRound() == Round.ROUND1)
+            {
+                GameManager.Round.SetRound(Round.ROUND2);
+            }
+            else
+            {
+                GameManager.Round.SetRound(Round.END);
+            }
+        }
     }
 }
