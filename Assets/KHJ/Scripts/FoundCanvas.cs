@@ -9,8 +9,7 @@ public class FoundCanvas : MonoBehaviour
 {
     [SerializeField] TMP_InputField answerInputField;
     [SerializeField] LoginCanvas LC;
-    [SerializeField] GameObject answerCanvas;
-    [SerializeField] TMP_Text answer;
+    [SerializeField] LogImage answer;
     [SerializeField] Animator anim;
 
     private MySqlConnection con;
@@ -20,6 +19,7 @@ public class FoundCanvas : MonoBehaviour
     {
         con = LC.con;
         anim.SetTrigger("IsOpen");
+        answer.gameObject.SetActive(false);
     }
 
     public void FoundID()
@@ -36,16 +36,17 @@ public class FoundCanvas : MonoBehaviour
                 while (reader.Read())
                 {
                     string readID = reader["ID"].ToString();
-                    answerCanvas.SetActive(true);
-                    answer.text = readID;
+                    answer.gameObject.SetActive(true);
+                    string text = ("당신의 아이디는 '{0}' 입니다.", readID).ToString();
+                    answer.SetText(text);
                     if (!reader.IsClosed)
                         reader.Close();
                 }
             }
             else
             {
-                answerCanvas.SetActive(true);
-                answer.text = "그런 답변은 없습니다.";
+                answer.gameObject.SetActive(true);
+                answer.SetText("그런 답변은 없습니다.");
             }
             if (!reader.IsClosed)
                 reader.Close();
@@ -70,16 +71,17 @@ public class FoundCanvas : MonoBehaviour
                 while (reader.Read())
                 {
                     string readPass = reader["PWD"].ToString();
-                    answerCanvas.SetActive(true);
-                    answer.text = readPass;
+                    answer.gameObject.SetActive(true);
+                    string text = ("당신의 비밀번호는 '{0}' 입니다.", readPass).ToString();
+                    answer.SetText(text);
                     if (!reader.IsClosed)
                         reader.Close();
                 }
             }
             else
             {
-                answerCanvas.SetActive(true);
-                answer.text = "그런 답변은 없습니다.";
+                answer.gameObject.SetActive(true);
+                answer.SetText("그런 답변은 없습니다.");
             }
             if (!reader.IsClosed)
                 reader.Close();
@@ -90,23 +92,16 @@ public class FoundCanvas : MonoBehaviour
         }
     }
 
-    public void OkButton()
-    {
-        answer.text = "";
-        answerCanvas.SetActive(false);
-    }
-
     public void CloseCanvas()
     {
         StartCoroutine(CloseCanvasRoutine());
     }
 
-
     IEnumerator CloseCanvasRoutine()
     {
         answerInputField.text = "";
         anim.SetTrigger("IsClose");
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(0.5f);
         gameObject.SetActive(false);
         yield return null;
     }
