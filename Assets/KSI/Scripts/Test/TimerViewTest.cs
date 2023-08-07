@@ -13,16 +13,12 @@ public class TimerViewTest : MonoBehaviourPunCallbacks
 
 	[SerializeField] TMP_Text infoText;
 	[SerializeField] float countDownTimer;
+	[SerializeField] float gameCountDown;
+	[SerializeField] List<GameObject> playerSpawnPoints;
+	[SerializeField] private TextMeshProUGUI timerText;
 
-	[SerializeField] private float limitTime = 300f; // 제한 시간 5분
-	private float remainLimitTime; // 남은 제한 시간
-
-	[SerializeField] private TMP_Text timerText;
-
-	private void Awake()
-	{
-		timerText = GetComponent<TMP_Text>();
-	}
+	//[SerializeField] private float limitTime = 300f; // 제한 시간 5분
+	// private float remainLimitTime; // 남은 제한 시간
 
 	private void Start()
 	{
@@ -32,21 +28,46 @@ public class TimerViewTest : MonoBehaviourPunCallbacks
 		}
 		else
 		{
-			infoText.text = "Degug Mode";
+			infoText.text = "Debug Mode";
 			PhotonNetwork.LocalPlayer.NickName = $"DebugPlayer {Random.Range(1000, 10000)}";
 			PhotonNetwork.ConnectUsingSettings();
-		}
+		}		
+	}
+
+	public override void OnConnected()
+	{
+		Debug.Log("OnConnected");
 	}
 
 	public override void OnConnectedToMaster()
 	{
+		Debug.Log("ConnectToMaster");
 		RoomOptions options = new RoomOptions() { IsVisible = false };
 		PhotonNetwork.JoinOrCreateRoom("DebugRoom", options, TypedLobby.Default);
 	}
 
+	public override void OnCreateRoomFailed(short returnCode, string message)
+	{
+		Debug.Log(message);
+	}
+
 	public override void OnJoinedRoom()
 	{
+		Debug.Log("OnJoinedRoom");
 		StartCoroutine(DebugGameSetupDelay());
+	}
+
+	// 1초 딜레이 코루틴
+	IEnumerator DebugGameSetupDelay()
+	{
+		// 서버에게 여유 시간 1초 기다려주기
+		yield return new WaitForSeconds(1f);
+		DebugGameStart();
+	}
+
+	public override void OnJoinRoomFailed(short returnCode, string message)
+	{
+		Debug.Log(message);
 	}
 
 	public override void OnDisconnected(DisconnectCause cause)
@@ -72,23 +93,15 @@ public class TimerViewTest : MonoBehaviourPunCallbacks
 	{
 		if (changedProps.ContainsKey("Load"))
 		{
-			// 모든 플레이어 로딩 완료
 			if (PlayerLoadCount() == PhotonNetwork.PlayerList.Length)
 			{
-				// 게임 시작
-				Debug.Log($"All Player Loaded");
-				infoText.text = $"All Player Loaded";
-
-				// 방장만 서버 시간 설정
 				if (PhotonNetwork.IsMasterClient)
 					PhotonNetwork.CurrentRoom.SetLoadTime(PhotonNetwork.ServerTimestamp);
 			}
-			// 일부 플레이어 로딩 완료
 			else
 			{
-				// 다른 플레이어 로딩 될 때 까지 대기
-				Debug.Log($"Wait players {PlayerLoadCount()} / {PhotonNetwork.PlayerList.Length}");
-				infoText.text = $"Wait players {PlayerLoadCount()} / {PhotonNetwork.PlayerList.Length}";
+				Debug.Log($"Wait Players {PlayerLoadCount()} / {PhotonNetwork.PlayerList.Length}");
+				infoText.text = $"Wait Players {PlayerLoadCount()} / {PhotonNetwork.PlayerList.Length}";
 			}
 		}
 	}
@@ -98,6 +111,11 @@ public class TimerViewTest : MonoBehaviourPunCallbacks
 		if (propertiesThatChanged.ContainsKey("LoadTime"))
 		{
 			StartCoroutine(GameStartTimer());
+		}
+
+		if (propertiesThatChanged.ContainsKey("CountDownTime"))
+		{
+			StartCoroutine(UpdateTimerRoutine());
 		}
 	}
 
@@ -110,6 +128,7 @@ public class TimerViewTest : MonoBehaviourPunCallbacks
 			infoText.text = $"All Player Loaded,\nStart CountDown : {remainTime + 1}";
 			yield return new WaitForEndOfFrame();
 		}
+
 		Debug.Log("Game Start!");
 		infoText.text = "Game Start!";
 		GameStart();
@@ -118,23 +137,20 @@ public class TimerViewTest : MonoBehaviourPunCallbacks
 		infoText.text = "";
 	}
 
-	//private void DisplayTimer(float second)
-	//{
-	//	remainLimitTime = second;
-	//	StartCoroutine(UpdateTimerRoutine());
-	//}
-
 	// 타이머 코루틴
 	private IEnumerator UpdateTimerRoutine()
 	{
-		while (remainLimitTime >= 0)
+		int loadTime = PhotonNetwork.CurrentRoom.GetCountDownTime();
+
+		while (gameCountDown > (PhotonNetwork.ServerTimestamp - loadTime) / 1000f)
 		{
+			int remainLimitTime = (int)(gameCountDown - (PhotonNetwork.ServerTimestamp - loadTime) / 1000f);
+
 			int minutes = Mathf.FloorToInt(remainLimitTime / 60);
 			int seconds = Mathf.FloorToInt(remainLimitTime % 60);
 			timerText.text = $"{minutes:00} : {seconds:00}";
 
-			remainLimitTime--;
-			yield return new WaitForSeconds(1f);
+			yield return new WaitForEndOfFrame();
 		}
 
 		TimeOut();
@@ -152,25 +168,15 @@ public class TimerViewTest : MonoBehaviourPunCallbacks
 		// TODO : GameStart
 	}
 
-	// 1초 딜레이 코루틴
-	IEnumerator DebugGameSetupDelay()
-	{
-		// 서버에게 여유 시간 1초 기다려주기
-		yield return new WaitForSeconds(1f);
-		DebugGameStart();
-	}
-
 	private void DebugGameStart()
 	{
-		Debug.Log("Debug Game Mode. IsMasterClient : " + PhotonNetwork.IsMasterClient);
+		int playerIndex = PhotonNetwork.LocalPlayer.GetPlayerNumber();
+		PhotonNetwork.Instantiate("PlayerBoy", playerSpawnPoints[playerIndex].transform.position, playerSpawnPoints[playerIndex].transform.rotation);
 
-		//if (PhotonNetwork.IsMasterClient)
-		//{
-			// 마스터 클라이언트인 경우 타이머를 시작하고 다른 클라이언트와 동기화
-			//photonView.RPC("CallDisplayTimerRPC", RpcTarget.All, limitTime);
-
+		if (PhotonNetwork.IsMasterClient)
+			PhotonNetwork.CurrentRoom.SetCountDownTime(PhotonNetwork.ServerTimestamp);
+		else
 			StartCoroutine(UpdateTimerRoutine());
-		//}	
 	}
 
 	private int PlayerLoadCount()
