@@ -12,6 +12,7 @@ public class MenuCanvas : MonoBehaviour
     [SerializeField] GameObject createRoomPanel;
     [SerializeField] TMP_InputField roomNameInputField;
     [SerializeField] TMP_Text maxPlayerText;
+    private Animator anim;
     //[SerializeField] GameObject peopleScrollView;
     //[SerializeField] Animator peopleAnimator;
 
@@ -20,6 +21,7 @@ public class MenuCanvas : MonoBehaviour
     private void Awake()
     {
         roomDictionary = new Dictionary<string, RoomInfo>();
+        anim = GetComponent<Animator>();
     }
 
     private void OnEnable()
@@ -27,6 +29,7 @@ public class MenuCanvas : MonoBehaviour
         createRoomPanel.SetActive(false);
         createRoomPanel.SetActive(false);
         Debug.Log("인에이블");
+        anim.SetTrigger("IsIn");
     }
 
     private void OnDisable()

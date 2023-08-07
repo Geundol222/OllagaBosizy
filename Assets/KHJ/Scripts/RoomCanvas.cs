@@ -1,8 +1,10 @@
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static Photon.Pun.UtilityScripts.PunTeams;
 using static UnityEngine.EventSystems.EventTrigger;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
@@ -20,7 +22,6 @@ public class RoomCanvas : MonoBehaviour
         playerDictionary = new Dictionary<int, PlayerEntry>();
     }
 
-    [System.Obsolete]
     private void OnEnable()
     {
         foreach (Player player in PhotonNetwork.PlayerList)
@@ -29,12 +30,12 @@ public class RoomCanvas : MonoBehaviour
             if (playerContent1.childCount < 2)
             {
                 entry = Instantiate(playerEntryPrefab, playerContent1);
-                playerEntryPrefab.SetPlayerRedTeam();
+                playerEntryPrefab.SetPlayerTrollerTeam();
             }
             else
             {
                 entry = Instantiate(playerEntryPrefab, playerContent2);
-                playerEntryPrefab.SetPlayerBlueTeam();
+                playerEntryPrefab.SetPlayerClimberTeam();
             }
             entry.SetPlayer(player);
             playerDictionary.Add(player.ActorNumber, entry);
@@ -98,7 +99,7 @@ public class RoomCanvas : MonoBehaviour
         PhotonNetwork.CurrentRoom.IsOpen = false;
         PhotonNetwork.CurrentRoom.IsVisible = false;
 
-        PhotonNetwork.LoadLevel("GameScene");
+        PhotonNetwork.LoadLevel("gggg");
     }
 
     public void LeaveRoom()
@@ -138,5 +139,9 @@ public class RoomCanvas : MonoBehaviour
             startButton.gameObject.SetActive(true);
         else
             startButton.gameObject.SetActive(false);
+    }
+    public void PlayerTeam()
+    {
+        Debug.Log(PhotonNetwork.LocalPlayer.GetPhotonTeam().Name);
     }
 }

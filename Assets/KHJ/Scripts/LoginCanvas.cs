@@ -8,21 +8,21 @@ public class LoginCanvas : MonoBehaviour
 {
     [SerializeField] TMP_InputField idInputField;
     [SerializeField] TMP_InputField PasswordInputField;
-    [SerializeField] GameObject logCanvas;
-    [SerializeField] TMP_Text log;
+    [SerializeField] LogImage logImage;
     public MySqlConnection con;
     public MySqlDataReader reader;
 
     private void Start()
     {
         ConnectDataBase();
+        logImage.gameObject.SetActive(false);
     }
 
     private void ConnectDataBase()
     {
         try
         {
-            string serverInfo = "Server=192.168.0.111; Database=userdata; Uid=root; PWD=shdP23gh; Port=3306; CharSet=utf8mb4_general_ci;";
+            string serverInfo = "Server=127.0.0.1; Database=userdata; Uid=root; PWD=shdP23gh; Port=3306; CharSet=utf8mb4_general_ci;";
             con = new MySqlConnection(serverInfo);
             con.Open();
 
@@ -63,15 +63,15 @@ public class LoginCanvas : MonoBehaviour
                     }
                     else
                     {
-                        logCanvas.SetActive(true);
-                        log.text = "비밀번호가 틀렸습니다.";
+                        logImage.gameObject.SetActive(true);
+                        logImage.SetText("비밀번호가 틀렸습니다.");
                     }
                 }
             }
             else
             {
-                logCanvas.SetActive(true);
-                log.text = "해당 아이디가 없습니다.";
+                logImage.gameObject.SetActive(true);
+                logImage.SetText("해당 아이디가 없습니다.");
             }
             if (!reader.IsClosed)
                 reader.Close();
@@ -80,11 +80,5 @@ public class LoginCanvas : MonoBehaviour
         {
             Debug.Log(e.Message);
         }
-    }
-
-    public void CloseLogCanvas()
-    {
-        log.text = "";
-        logCanvas.SetActive(false);
     }
 }

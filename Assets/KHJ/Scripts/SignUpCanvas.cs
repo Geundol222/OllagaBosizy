@@ -15,8 +15,7 @@ public class SignUpCanvas : MonoBehaviour
     [SerializeField] TMP_InputField answerInputField;
     [SerializeField] LoginCanvas LC;
     [SerializeField] GameObject answer;
-    [SerializeField] GameObject logCanvas;
-    [SerializeField] TMP_Text log;
+    [SerializeField] LogImage logImage;
     [SerializeField] Animator anim;
     private MySqlConnection con;
     private MySqlDataReader reader;
@@ -28,6 +27,7 @@ public class SignUpCanvas : MonoBehaviour
         con = LC.con;
         isCheckID = false;
         isCheckNickName = false;
+        logImage.gameObject.SetActive(false);
         answer.SetActive(false);
         anim.SetTrigger("IsOpen");
     }
@@ -44,14 +44,14 @@ public class SignUpCanvas : MonoBehaviour
             reader = cmd.ExecuteReader();
             if (reader.HasRows)
             {
-                logCanvas.SetActive(true);
-                log.text = "중복 아이디가 있습니다.";
+                logImage.gameObject.SetActive(true);
+                logImage.SetText("중복 아이디가 있습니다.");
                 isCheckID = false;
             }
             else
             {
-                logCanvas.SetActive(true);
-                log.text = "아이디를 만들 수 있습니다.";
+                logImage.gameObject.SetActive(true);
+                logImage.SetText("아이디를 만들 수 있습니다.");
                 isCheckID = true;
             }
             reader.Close();
@@ -74,14 +74,14 @@ public class SignUpCanvas : MonoBehaviour
             reader = cmd.ExecuteReader();
             if (reader.HasRows)
             {
-                logCanvas.SetActive(true);
-                log.text = "중복 유저이름이 있습니다.";
+                logImage.gameObject.SetActive(true);
+                logImage.SetText("중복 유저이름이 있습니다.");
                 isCheckNickName = false;
             }
             else
             {
-                logCanvas.SetActive(true);
-                log.text = "유저이름을 만들 수 있습니다.";
+                logImage.gameObject.SetActive(true);
+                logImage.SetText("유저이름을 만들 수 있습니다.");
                 isCheckNickName = true;
             }
             reader.Close();
@@ -111,20 +111,20 @@ public class SignUpCanvas : MonoBehaviour
                     }
                     else
                     {
-                        logCanvas.SetActive(true);
-                        log.text = "유저이름 중복을 확인해주세요.";
+                        logImage.gameObject.SetActive(true);
+                        logImage.SetText("유저이름 중복을 확인해주세요.");
                     }
                 }
                 else
                 {
-                    logCanvas.SetActive(true);
-                    log.text = "아이디 중복을 확인해주세요.";
+                    logImage.gameObject.SetActive(true);
+                    logImage.SetText("아이디 중복을 확인해주세요.");
                 }
             }
             else
             {
-                logCanvas.SetActive(true);
-                log.text = "비밀번호와 확인비밀번호가 다릅니다.";
+                logImage.gameObject.SetActive(true);
+                logImage.SetText("비밀번호와 확인비밀번호가 다릅니다.");
             }
         }
         catch (Exception e)
@@ -151,12 +151,6 @@ public class SignUpCanvas : MonoBehaviour
     public void CloseCanvas()
     {
         StartCoroutine(CloseCanvasRoutine());
-    }
-
-    public void CloseLogCanvas()
-    {
-        log.text = "";
-        logCanvas.SetActive(false);
     }
 
     IEnumerator CloseCanvasRoutine()
