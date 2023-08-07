@@ -24,7 +24,6 @@ public class PlatformMouseHandler : MonoBehaviour,IPointerClickHandler,IPointerE
     /// <param name="eventData"></param>
     public void OnPointerClick(PointerEventData eventData)
     {
-
         if (platform.IsClickable)
         {
             SetTrollerController();
