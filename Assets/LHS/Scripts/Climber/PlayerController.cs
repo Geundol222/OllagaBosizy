@@ -155,19 +155,4 @@ public class PlayerController : MonoBehaviourPun
         Debug.DrawLine(point3, point7, c);
         Debug.DrawLine(point4, point8, c);
     }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.name == "EndPoint")
-        {
-            if (GameManager.Round.GetRound() == Round.ROUND1)
-            {
-                GameManager.Round.SetRound(Round.ROUND2);
-            }
-            else
-            {
-                GameManager.Round.SetRound(Round.END);
-            }
-        }
-    }
 }
