@@ -53,7 +53,7 @@ public class TrollerCameraController : MonoBehaviourPunCallbacks
             cameraMoveDir.x = 0;
         }
 
-        if (vcam.transform.position.y <= -0.5 || vcam.transform.position.y >= 33)
+        if (vcam.transform.position.y <= -0.5 || vcam.transform.position.y >= 122)
         {
             cameraMoveDir.y = 0;
         }
