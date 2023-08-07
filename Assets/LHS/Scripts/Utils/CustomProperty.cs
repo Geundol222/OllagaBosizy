@@ -7,6 +7,7 @@ public static class CustomProperty
     public const string LOAD = "Load";
     public const string NUMBER = "Number";
     public const string LOADTIME = "LoadTime";
+    public const string COUNTDOWNTIME = "CountDownTime";
 
     public static bool GetReady(this Player player)
     {
@@ -53,6 +54,22 @@ public static class CustomProperty
     {
         PhotonHashtable property = room.CustomProperties;
         property[LOADTIME] = loadTime;
+        room.SetCustomProperties(property);
+    }
+
+    public static int GetCountDownTime(this Room room)
+    {
+        PhotonHashtable property = room.CustomProperties;
+        if (property.ContainsKey(COUNTDOWNTIME))
+            return (int)property[COUNTDOWNTIME];
+        else
+            return -1;
+    }
+
+    public static void SetCountDownTime(this Room room, int countDownTime)
+    {
+        PhotonHashtable property = room.CustomProperties;
+        property[COUNTDOWNTIME] = countDownTime;
         room.SetCustomProperties(property);
     }
 }

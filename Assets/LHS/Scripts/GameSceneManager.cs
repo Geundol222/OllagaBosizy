@@ -10,7 +10,9 @@ using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 public class GameSceneManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] TMP_Text infoText;
+    [SerializeField] TMP_Text timerText;
     [SerializeField] float countDownTimer;
+    [SerializeField] float gameCountDown;
     [SerializeField] List<GameObject> playerSpawnPoints;
 
     private void Start()
@@ -94,6 +96,11 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
         {
             StartCoroutine(GameStartTimer());
         }
+
+        if (propertiesThatChanged.ContainsKey("CountDownTime"))
+        {
+            StartCoroutine(UpdateTimerRoutine());
+        }
     }
 
     IEnumerator GameStartTimer()
@@ -114,13 +121,24 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
 
     private void GameStart()
     {
-        // TODO : GameStart
+        int playerIndex = PhotonNetwork.LocalPlayer.GetPlayerNumber();
+        PhotonNetwork.Instantiate("PlayerBoy", playerSpawnPoints[playerIndex].transform.position, playerSpawnPoints[playerIndex].transform.rotation);
+
+        if (PhotonNetwork.IsMasterClient)
+            PhotonNetwork.CurrentRoom.SetCountDownTime(PhotonNetwork.ServerTimestamp);
+        else
+            StartCoroutine(UpdateTimerRoutine());
     }
 
     private void DebugGameStart()
     {
         int playerIndex = PhotonNetwork.LocalPlayer.GetPlayerNumber();
         PhotonNetwork.Instantiate("PlayerBoy", playerSpawnPoints[playerIndex].transform.position, playerSpawnPoints[playerIndex].transform.rotation);
+
+        if (PhotonNetwork.IsMasterClient)
+            PhotonNetwork.CurrentRoom.SetCountDownTime(PhotonNetwork.ServerTimestamp);
+        else
+            StartCoroutine(UpdateTimerRoutine());
     }
 
     private int PlayerLoadCount()
@@ -133,4 +151,30 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
         }
         return loadCount;
     }
+
+    // 타이머 코루틴
+    private IEnumerator UpdateTimerRoutine()
+    {
+        int loadTime = PhotonNetwork.CurrentRoom.GetCountDownTime();
+
+        while (gameCountDown > (PhotonNetwork.ServerTimestamp - loadTime) / 1000f)
+        {
+            int remainLimitTime = (int)(gameCountDown - (PhotonNetwork.ServerTimestamp - loadTime) / 1000f);
+
+            int minutes = Mathf.FloorToInt(remainLimitTime / 60);
+            int seconds = Mathf.FloorToInt(remainLimitTime % 60);
+            timerText.text = $"{minutes:00} : {seconds:00}";
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        TimeOut();
+    }
+
+    private void TimeOut()
+    {
+        timerText.text = "TIME OUT";
+        timerText.color = Color.red;
+    }
+
 }

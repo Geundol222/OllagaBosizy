@@ -1,51 +1,38 @@
 using Cinemachine;
 using Photon.Pun;
+using Photon.Pun.Demo.Cockpit;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(Rigidbody2D))]
+
 public class PlayerController : MonoBehaviourPun
 {
 	[Header("Gizmo")]
 	[SerializeField] bool debug;
 
-	[Header("Value")]
-	[SerializeField] private float maxSpeed;
-	[SerializeField] private float moveSpeed;
-	[SerializeField] private float jumpPower;
-
 	[Header("LayerMask")]
 	[SerializeField] private LayerMask platformLayer;
 
-	[Header("GFX")]
-	[SerializeField] Transform gfx;
+    [Header("Collider")]
 	[SerializeField] Collider2D platformTrigger;
 
-	//[Header("DataManager")]
-	//[SerializeField] private DataManager dataManager;
-
-	//public UnityEvent OnScored;
-	//public UnityEvent OnJumped;
-
-	private CinemachineVirtualCamera playerCamera;
-    private PlayerInput inputAction;	
+    private PlayerInput inputAction;
+    private CinemachineVirtualCamera playerCamera;
 	private Vector3 prevPlayerPosition;
 	private Vector3 curPlayerPosition;
-	private new Rigidbody2D rigidbody;
 	private Animator animator;
-	private Vector2 inputDirection;
 	private bool isGround;
+
+    public bool IsGround { get { return isGround; } }
 
     private void Awake()
 	{
 		prevPlayerPosition = transform.position;
 		
-		inputAction = GetComponent<PlayerInput>();
-		rigidbody = GetComponent<Rigidbody2D>();
 		animator = GetComponent<Animator>();
-
-		playerCamera = GameObject.FindGameObjectWithTag("VirtualCamera").GetComponent<CinemachineVirtualCamera>();
+        inputAction = GetComponent<PlayerInput>();
+        playerCamera = GameObject.FindGameObjectWithTag("VirtualCamera").GetComponent<CinemachineVirtualCamera>();
 
         if (!photonView.IsMine)
             Destroy(inputAction);
@@ -74,47 +61,13 @@ public class PlayerController : MonoBehaviourPun
 
 	private void FixedUpdate()
 	{
-        GroundCheck();
-        Move();
+        GroundCheck();        
     }
-		
-	public void Move()
-	{
-		// 최고 속력일 경우 힘을 가해도 속력이 빨라지지 않음
-		if (inputDirection.x < 0 && rigidbody.velocity.x > -maxSpeed)
-		{
-            gfx.rotation = Quaternion.Euler(0, -90, 0);
-            rigidbody.AddForce(Vector2.right * inputDirection.x * moveSpeed * Time.deltaTime, ForceMode2D.Force);
-		}
-		else if (inputDirection.x > 0 && rigidbody.velocity.x < maxSpeed)
-		{
-            gfx.rotation = Quaternion.Euler(0, 90, 0);
-            rigidbody.AddForce(Vector2.right * inputDirection.x * moveSpeed * Time.deltaTime, ForceMode2D.Force);
-		}
-	}
-
-	public void Jump()
-	{
-		rigidbody.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
-	}
-
-	private void OnMove(InputValue value)
-	{
-		inputDirection = value.Get<Vector2>();
-		animator.SetFloat("MoveSpeed", Mathf.Abs(inputDirection.x));
-	}
-
-	private void OnJump(InputValue value)
-	{
-		if (value.isPressed && isGround)
-			Jump();
-	}
 
 	private void GroundCheck()
 	{
-		Debug.DrawRay(transform.position, Vector2.down * 0.5f, Color.red);
-		
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.5f, platformLayer);
+        RaycastHit2D hit = Physics2D.BoxCast(transform.position, new Vector2(0.2f, 0.2f), 0, Vector2.down, 0.5f, platformLayer);
+		DrawBox(transform.position, transform.rotation, new Vector2(0.2f, 0.2f), Color.red);
 		if (hit.collider != null)
 		{
 			isGround = true;
@@ -134,11 +87,11 @@ public class PlayerController : MonoBehaviourPun
 	{
 		if (isGround && prevPlayerPosition.y > curPlayerPosition.y)
 		{
-			if (curPlayerPosition.y > 0 && (prevPlayerPosition.y - curPlayerPosition.y) > 3)
+			if (curPlayerPosition.y > 0 && (prevPlayerPosition.y - curPlayerPosition.y) > 5)
 			{
                 animator.SetBool("IsFall", true);
             }
-			else if (curPlayerPosition.y <= 0 && (prevPlayerPosition.y + Mathf.Abs(curPlayerPosition.y)) > 3)
+			else if (curPlayerPosition.y <= 0 && (prevPlayerPosition.y + Mathf.Abs(curPlayerPosition.y)) > 5)
 			{
                 animator.SetBool("IsFall", true);
             }
@@ -171,29 +124,50 @@ public class PlayerController : MonoBehaviourPun
         inputAction.enabled = false;
 	}
 
-    //public void GetScore()
-    //{
-    //	// 발판 트리거에 들어오면 100점을 얻음
-    //	dataManager.CurrentScore += 100;
-    //	OnScored?.Invoke();
-    //}
+    public void DrawBox(Vector2 pos, Quaternion rot, Vector2 scale, Color c)
+    {
+        // create matrix
+        Matrix4x4 m = new Matrix4x4();
+        m.SetTRS(pos, rot, scale);
 
-    //// TODO : Platform에 만들어지면 삭제 예정 
-    ////발판 트리거에 들어오면 점수를 얻음
-    //private void OnTriggerEnter2D(Collider2D collision)
-    //{
-    //	// 태그가 Platform인 발판 트리거에서만 충돌 체크함
-    //	if (collision.CompareTag("Platform"))
-    //	{
-    //		// 발판 트리거에 들어오면 100점을 얻음
-    //		dataManager.CurrentScore += 100;
-    //		OnScored?.Invoke();
-    //		// 점수 1번만 얻게함
-    //		GameObject.Destroy(collision.gameObject);
-    //	}
-    //}
+        var point1 = m.MultiplyPoint(new Vector3(-0.5f, -0.5f, 0.5f));
+        var point2 = m.MultiplyPoint(new Vector3(0.5f, -0.5f, 0.5f));
+        var point3 = m.MultiplyPoint(new Vector3(0.5f, -0.5f, -0.5f));
+        var point4 = m.MultiplyPoint(new Vector3(-0.5f, -0.5f, -0.5f));
 
+        var point5 = m.MultiplyPoint(new Vector3(-0.5f, 0.5f, 0.5f));
+        var point6 = m.MultiplyPoint(new Vector3(0.5f, 0.5f, 0.5f));
+        var point7 = m.MultiplyPoint(new Vector3(0.5f, 0.5f, -0.5f));
+        var point8 = m.MultiplyPoint(new Vector3(-0.5f, 0.5f, -0.5f));
 
-    // 발판 디버프 없어지는 순간, 플레이어가 밟은 발판이 바꼈을때로
-    // isGround 발판이 밟은 발판의 정보가 바뀌는지 
+        Debug.DrawLine(point1, point2, c);
+        Debug.DrawLine(point2, point3, c);
+        Debug.DrawLine(point3, point4, c);
+        Debug.DrawLine(point4, point1, c);
+
+        Debug.DrawLine(point5, point6, c);
+        Debug.DrawLine(point6, point7, c);
+        Debug.DrawLine(point7, point8, c);
+        Debug.DrawLine(point8, point5, c);
+
+        Debug.DrawLine(point1, point5, c);
+        Debug.DrawLine(point2, point6, c);
+        Debug.DrawLine(point3, point7, c);
+        Debug.DrawLine(point4, point8, c);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.name == "EndPoint")
+        {
+            if (GameManager.Round.GetRound() == Round.ROUND1)
+            {
+                GameManager.Round.SetRound(Round.ROUND2);
+            }
+            else
+            {
+                GameManager.Round.SetRound(Round.END);
+            }
+        }
+    }
 }

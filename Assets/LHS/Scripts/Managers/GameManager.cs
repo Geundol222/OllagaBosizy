@@ -7,14 +7,24 @@ public class GameManager : MonoBehaviour
     private static ResourceManager resource;
     private static UIManager ui;
     private static SoundManager sound;
+    private static SceneManager scene;
     private static DataManager data;
+    private static TrollerDataManager trollerData;
+    private static DebuffManager debuff;
+    private static TeamManager team;
+    private static RoundManager round;
 
     public static GameManager Instance { get { return instance; } }
     public static PoolManager Pool { get { return pool; } }
     public static ResourceManager Resource { get { return resource; } }
     public static UIManager UI { get { return ui; } }
     public static SoundManager Sound { get { return sound; } }
+    public static SceneManager Scene { get { return scene; } }
     public static DataManager Data { get { return data; } }
+    public static TrollerDataManager TrollerData { get { return trollerData; } }
+    public static DebuffManager Debuff { get { return debuff; } }
+    public static TeamManager Team { get { return team; } }
+    public static RoundManager Round { get { return round; } }
 
     private void Awake()
     {
@@ -57,9 +67,34 @@ public class GameManager : MonoBehaviour
         soundObj.transform.parent = transform;
         sound = soundObj.AddComponent<SoundManager>();
 
+        GameObject sceneObj = new GameObject();
+        sceneObj.name = "SceneManager";
+        sceneObj.transform.parent = transform;
+        scene = sceneObj.AddComponent<SceneManager>();
+
         GameObject dataObj = new GameObject();
         dataObj.name = "DataManager";
         dataObj.transform.parent = transform;
         data = dataObj.AddComponent<DataManager>();
+
+        GameObject trollerDataObj = new GameObject();
+        trollerDataObj.name = "TrollerDataManager";
+        trollerDataObj.transform.parent = transform;
+        trollerData = trollerDataObj.AddComponent<TrollerDataManager>();
+
+        GameObject debuffObj = new GameObject();
+        debuffObj.name = "DebuffManager";
+        debuffObj.transform.parent = transform;
+        debuff = debuffObj.AddComponent<DebuffManager>();
+
+        GameObject teamObj = new GameObject();
+        teamObj.name = "TeamManager";
+        teamObj.transform.parent = transform;
+        team = teamObj.AddComponent<TeamManager>();
+
+        GameObject roundObj = new GameObject();
+        roundObj.name = "RoundManager";
+        roundObj.transform.parent = transform;
+        round = roundObj.AddComponent<RoundManager>();
     }
 }
