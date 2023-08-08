@@ -70,7 +70,6 @@ public class DebuffManager : MonoBehaviour
         return debuff;
     }
 
-
     public void SetTrap(Debuff debuff,Platform platform)
     {
 
@@ -79,7 +78,6 @@ public class DebuffManager : MonoBehaviour
 
         // 각 state에 따른  AddComponent 또는 Player 수치 변화 함수 호출 
         // 아래 소스를 대리자를 사용, platform 내에서 구현되게 로직 수정
-        Debug.Log($"DEBUFF 의 STATE { debuff.state }");
         switch (debuff.state)
         {
             case Debuff_State.NoColider: platformCollider2D.isTrigger = true; break; // 1번(충돌체 없애기)일 경우

@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -27,6 +28,9 @@ public class Platform : MonoBehaviourPun,IPunObservable
     public Debuff_State currentDebuffState {  get { return platformCurrentDebuff.state; } set { platformCurrentDebuff.state = value; UpdateCurrentStateText(); } }
 
     private Coroutine debuffCountDownCoroutine;
+    private Coroutine debuffSetCoolDownCoroutine;
+
+    [SerializeField] private int photonPlayerNumber; // 이 플랫폼에 함정 부여한 플레이어의 Number를 가지고 있기
 
     private void Awake()
     {
@@ -42,12 +46,14 @@ public class Platform : MonoBehaviourPun,IPunObservable
         
         closeArea = GameObject.Find("UICloseArea").GetComponent<UICloseArea>();
         renderers = GetComponentsInChildren<Renderer>();
+        platformCurrentDebuff = GameManager.Debuff.CreateNoneStateDebuff();
         UpdateCurrentStateText();
     }
 
-    private void Start()
+
+    private void OnDisable()
     {
-        platformCurrentDebuff = GameManager.Debuff.CreateNoneStateDebuff();
+        StopAllCoroutines();
     }
 
     [PunRPC]
@@ -249,6 +255,17 @@ public class Platform : MonoBehaviourPun,IPunObservable
 
     public void OnClickSetTrap()
     {
+        Debug.Log("Set Trap 버튼 누름");
+        // 함정설치한 플레이어 Number 넣기
+        photonPlayerNumber = PhotonNetwork.LocalPlayer.GetPlayerNumber();
+        // 함정설치 또는 마우스 Over Exit 액션 못하게 처리
+        SetCanMouseAction(false);
+        // setTrapPlatform에 현재 플랫폼 추가,
+        if(photonPlayerNumber == PhotonNetwork.LocalPlayer.GetPlayerNumber())
+            GameManager.TrollerData.setTrapPlatforms.Add(this);
+        // 쿨타임 구현
+        debuffSetCoolDownCoroutine = StartCoroutine(DebuffSetCoolTimeCoroutine((int) GameManager.TrollerData.debuffSetCoolTime));
+        
         if (PhotonNetwork.IsConnectedAndReady)
         {
             Debuff debuff = (Debuff) GameManager.TrollerData.debuffQueue.Dequeue();
@@ -257,6 +274,17 @@ public class Platform : MonoBehaviourPun,IPunObservable
             if(GameManager.TrollerData.debuffCount < GameManager.TrollerData.debuffQueueLength)
                 DebuffQueueEnqueue();
         }
+    }
+
+    IEnumerator DebuffSetCoolTimeCoroutine(int cooltime)
+    {
+      while(cooltime > 0)
+        {
+            Debug.Log($"쿨타임 : {cooltime} 남음");
+            cooltime--;
+            yield return new WaitForSeconds(1f);
+        }
+        SetCanMouseAction(true);
     }
       
     [PunRPC]
@@ -271,12 +299,15 @@ public class Platform : MonoBehaviourPun,IPunObservable
         if (currentDebuffState != Debuff_State.NoColider)
             GameManager.Debuff.SetTrap(platformCurrentDebuff, this);
     }
-
+      
     [PunRPC]
     public void ClearTrap()
     {
+        if (photonPlayerNumber == PhotonNetwork.LocalPlayer.GetPlayerNumber())
+        {
+            GameManager.TrollerData.setTrapPlatforms.Remove(this);
+        }
         isClickable = true;
-        Debug.Log("이아이가 호출");
         platformCurrentDebuff = GameManager.Debuff.CreateNoneStateDebuff();
         //currentDebuffState = platformCurrentDebuff.state;
         CallRPCFunction("UpdateCurrentStateText");
@@ -296,7 +327,6 @@ public class Platform : MonoBehaviourPun,IPunObservable
         else
         {
             currentDebuffState = (Debuff_State) stream.ReceiveNext();
-            Debug.Log($"포톤시리얼라이즈뷰로 받아온 현재 디버프 State : {currentDebuffState.ToString()} ");
             isClickable = (bool) stream.ReceiveNext();
         }
     }
@@ -321,6 +351,8 @@ public class Platform : MonoBehaviourPun,IPunObservable
             if(time >= 5)
             {
                 CallRPCFunction("ClearTrap");
+                // 만약 이 플랫폼의 함정을 '내'가 설치했다면 리스트에서 삭제한다. 
+
                 yield return null;
             }                     
         }
@@ -348,6 +380,12 @@ public class Platform : MonoBehaviourPun,IPunObservable
         {
             photonView.RPC(functionName, RpcTarget.AllBufferedViaServer, index);
         }
+    }
+
+    
+    public void SetCanMouseAction(bool request)
+    {
+        GameManager.TrollerData.canSetTrap = request;
     }
 
 }
