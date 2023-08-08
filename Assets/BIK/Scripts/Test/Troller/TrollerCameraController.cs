@@ -23,7 +23,7 @@ public class TrollerCameraController : MonoBehaviourPunCallbacks
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Confined;                         // 마우스 커서 게임 윈도우 안에서만 
-        Cursor.SetCursor(cursor, Vector3.zero, CursorMode.ForceSoftware);   // 마우스 커서 이미지 넣기
+        //Cursor.SetCursor(cursor, Vector3.zero, CursorMode.ForceSoftware);   // 마우스 커서 이미지 넣기
     }
 
     public override void OnDisable()
@@ -53,7 +53,7 @@ public class TrollerCameraController : MonoBehaviourPunCallbacks
             cameraMoveDir.x = 0;
         }
 
-        if (vcam.transform.position.y <= -0.5 || vcam.transform.position.y >= 122)
+        if (vcam.transform.position.y <= -0.5 || vcam.transform.position.y >= 168)
         {
             cameraMoveDir.y = 0;
         }
