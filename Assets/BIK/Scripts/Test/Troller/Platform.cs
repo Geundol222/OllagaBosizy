@@ -1,7 +1,7 @@
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using System.Collections;
 using TMPro;
-using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -30,6 +30,8 @@ public class Platform : MonoBehaviourPun,IPunObservable
     private Coroutine debuffCountDownCoroutine;
     private Coroutine debuffSetCoolDownCoroutine;
 
+    [SerializeField] private int photonPlayerNumber; // 이 플랫폼에 함정 부여한 플레이어의 Number를 가지고 있기
+
     private void Awake()
     {
         if (!photonView.IsMine)
@@ -44,13 +46,10 @@ public class Platform : MonoBehaviourPun,IPunObservable
         
         closeArea = GameObject.Find("UICloseArea").GetComponent<UICloseArea>();
         renderers = GetComponentsInChildren<Renderer>();
+        platformCurrentDebuff = GameManager.Debuff.CreateNoneStateDebuff();
         UpdateCurrentStateText();
     }
 
-    private void Start()
-    {
-        platformCurrentDebuff = GameManager.Debuff.CreateNoneStateDebuff();
-    }
 
     private void OnDisable()
     {
@@ -257,10 +256,13 @@ public class Platform : MonoBehaviourPun,IPunObservable
     public void OnClickSetTrap()
     {
         Debug.Log("Set Trap 버튼 누름");
+        // 함정설치한 플레이어 Number 넣기
+        photonPlayerNumber = PhotonNetwork.LocalPlayer.GetPlayerNumber();
         // 함정설치 또는 마우스 Over Exit 액션 못하게 처리
         SetCanMouseAction(false);
-        // setTrapPlatform에 현재 플랫폼 추가
-        GameManager.TrollerData.setTrapPlatforms.Add(this);
+        // setTrapPlatform에 현재 플랫폼 추가,
+        if(photonPlayerNumber == PhotonNetwork.LocalPlayer.GetPlayerNumber())
+            GameManager.TrollerData.setTrapPlatforms.Add(this);
         // 쿨타임 구현
         debuffSetCoolDownCoroutine = StartCoroutine(DebuffSetCoolTimeCoroutine((int) GameManager.TrollerData.debuffSetCoolTime));
         
@@ -301,6 +303,10 @@ public class Platform : MonoBehaviourPun,IPunObservable
     [PunRPC]
     public void ClearTrap()
     {
+        if (photonPlayerNumber == PhotonNetwork.LocalPlayer.GetPlayerNumber())
+        {
+            GameManager.TrollerData.setTrapPlatforms.Remove(this);
+        }
         isClickable = true;
         platformCurrentDebuff = GameManager.Debuff.CreateNoneStateDebuff();
         //currentDebuffState = platformCurrentDebuff.state;
@@ -345,7 +351,8 @@ public class Platform : MonoBehaviourPun,IPunObservable
             if(time >= 5)
             {
                 CallRPCFunction("ClearTrap");
-                GameManager.TrollerData.setTrapPlatforms.Remove(this);
+                // 만약 이 플랫폼의 함정을 '내'가 설치했다면 리스트에서 삭제한다. 
+
                 yield return null;
             }                     
         }
