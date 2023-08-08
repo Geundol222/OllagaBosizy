@@ -4,7 +4,6 @@ using Photon.Realtime;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static Photon.Pun.UtilityScripts.PunTeams;
 using static UnityEngine.EventSystems.EventTrigger;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
@@ -12,8 +11,11 @@ public class RoomCanvas : MonoBehaviour
 {
     [SerializeField] RectTransform playerContent1;
     [SerializeField] RectTransform playerContent2;
-    [SerializeField] PlayerEntry playerEntryPrefab;
     [SerializeField] Button startButton;
+    [SerializeField] PlayerEntry playerEntryPrefab;
+    [SerializeField] LogImage logImage;
+    PlayerEntry entry;
+    PlayerEntry otherEntry;
 
     private Dictionary<int, PlayerEntry> playerDictionary;
 
@@ -26,26 +28,24 @@ public class RoomCanvas : MonoBehaviour
     {
         foreach (Player player in PhotonNetwork.PlayerList)
         {
-            PlayerEntry entry;
             if (playerContent1.childCount < 2)
             {
                 entry = Instantiate(playerEntryPrefab, playerContent1);
-                playerEntryPrefab.SetPlayerTrollerTeam();
+                entry.SetPlayerTrollerTeam();
             }
             else
             {
                 entry = Instantiate(playerEntryPrefab, playerContent2);
-                playerEntryPrefab.SetPlayerClimberTeam();
+                entry.SetPlayerClimberTeam();
             }
             entry.SetPlayer(player);
             playerDictionary.Add(player.ActorNumber, entry);
+            PhotonNetwork.LocalPlayer.SetReady(false);
+            PhotonNetwork.LocalPlayer.SetLoad(false);
+
+            AllPlayerReadyCheck();
+            PhotonNetwork.AutomaticallySyncScene = true;
         }
-
-        PhotonNetwork.LocalPlayer.SetReady(false);
-        PhotonNetwork.LocalPlayer.SetLoad(false);
-
-        AllPlayerReadyCheck();
-        PhotonNetwork.AutomaticallySyncScene = true;
     }
 
     private void OnDisable()
@@ -61,18 +61,43 @@ public class RoomCanvas : MonoBehaviour
 
     public void PlayerEnterRoom(Player newPlayer)
     {
-        PlayerEntry entry;
+        /*for (int i = 0; i < playerContent1.childCount; i++)
+        {
+            Destroy(playerContent1.GetChild(i).gameObject);
+        }
+        for (int i = 0; i < playerContent2.childCount; i++)
+        {
+            Destroy(playerContent2.GetChild(i).gameObject);
+        }
+
+        PlayerEntry entry1;
+        foreach (Player player in PhotonNetwork.PlayerList)
+        {
+            if (playerContent1.childCount < 2)
+            {
+                entry1 = Instantiate(playerEntryPrefab, playerContent1);
+                entry.SetPlayerTrollerTeam();
+            }
+            else
+            {
+                entry1 = Instantiate(playerEntryPrefab, playerContent2);
+                entry1.SetPlayerClimberTeam();
+            }
+            entry.SetPlayer(player);
+        }
+        playerDictionary.Add(newPlayer.ActorNumber, entry);
+        AllPlayerReadyCheck();*/
+        PlayerEntry entry1;
         if (playerContent1.childCount < 2)
         {
-            Debug.Log(playerContent1.childCount);
-            entry = Instantiate(playerEntryPrefab, playerContent1);
+            entry1 = Instantiate(playerEntryPrefab, playerContent1);
         }
         else
         {
-            entry = Instantiate(playerEntryPrefab, playerContent2);
+            entry1 = Instantiate(playerEntryPrefab, playerContent2);
         }
-        entry.SetPlayer(newPlayer);
-        playerDictionary.Add(newPlayer.ActorNumber, entry);
+        entry1.SetPlayer(newPlayer);
+        playerDictionary.Add(newPlayer.ActorNumber, entry1);
         AllPlayerReadyCheck();
     }
 
@@ -104,8 +129,8 @@ public class RoomCanvas : MonoBehaviour
 
     public void LeaveRoom()
     {
+        entry.LeaveRoom();
         PhotonNetwork.LeaveRoom();
-        Debug.Log("けいしかいしぉ");
     }
 
     public void PlayerReady()
@@ -142,6 +167,7 @@ public class RoomCanvas : MonoBehaviour
     }
     public void PlayerTeam()
     {
-        Debug.Log(PhotonNetwork.LocalPlayer.GetPhotonTeam().Name);
+        logImage.gameObject.SetActive(true);
+        logImage.SetText(entry.GetTeam());        
     }
 }

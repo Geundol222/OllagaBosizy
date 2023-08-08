@@ -3,7 +3,6 @@ using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
 public class PlayerEntry : MonoBehaviour
@@ -11,11 +10,6 @@ public class PlayerEntry : MonoBehaviour
     [SerializeField] TMP_Text playerName;
     [SerializeField] TMP_Text playerReady;
     [SerializeField] TeamManager teamManager;
-
-    private void Awake()
-    {
-        PhotonNetwork.LocalPlayer.LeaveCurrentTeam();
-    }
 
     public void SetPlayer(Player player)
     {
@@ -25,12 +19,12 @@ public class PlayerEntry : MonoBehaviour
 
     public void SetPlayerTrollerTeam()
     {
-        teamManager.SetTeam(PlayerTeam.Climber);
+        teamManager.SetTeam(PlayerTeam.Troller);
     }
 
     public void SetPlayerClimberTeam()
     {
-        teamManager.SetTeam(PlayerTeam.Troller);
+        teamManager.SetTeam(PlayerTeam.Climber);
     }
 
     public void ChangeCustomProperty(PhotonHashtable property)
@@ -44,5 +38,15 @@ public class PlayerEntry : MonoBehaviour
         {
             playerReady.text = "";
         }
+    }
+
+    public void LeaveRoom()
+    {
+        teamManager.LeaveTeam();
+    }
+
+    public string GetTeam()
+    {
+        return PhotonNetwork.LocalPlayer.GetPhotonTeam().Name;
     }
 }

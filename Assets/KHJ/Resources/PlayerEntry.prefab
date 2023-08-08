@@ -44,15 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93594142740922049ac245d23b174dd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trollerTeam:
-    Name: Troller
-    Code: 10
-  climberTeam:
-    Name: Climber
-    Code: 11
-  noneTeam:
-    Name: None
-    Code: 12
 --- !u!1 &7665593315062066077
 GameObject:
   m_ObjectHideFlags: 0
