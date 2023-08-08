@@ -11,13 +11,18 @@ public enum PlayerTeam {None, Troller, Climber }
 
 public class TeamManager : MonoBehaviour
 {
-    public PhotonTeam GetTeam()
+    public PlayerTeam GetTeam()
     {
-        return PhotonNetwork.LocalPlayer.GetPhotonTeam();
+        if (PhotonNetwork.LocalPlayer.GetPhotonTeam().Code == 1)
+            return PlayerTeam.Troller;
+        else if (PhotonNetwork.LocalPlayer.GetPhotonTeam().Code == 2)
+            return PlayerTeam.Climber;
+        else return PlayerTeam.None;
     }
 
     public void SetTeam(PlayerTeam team)
     {
+        PhotonNetwork.LocalPlayer.LeaveCurrentTeam();
         PhotonNetwork.LocalPlayer.JoinTeam((byte)team);
     }
 }
