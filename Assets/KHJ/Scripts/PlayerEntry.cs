@@ -10,6 +10,7 @@ public class PlayerEntry : MonoBehaviour
     [SerializeField] TMP_Text playerName;
     [SerializeField] TMP_Text playerReady;
     [SerializeField] TeamManager teamManager;
+    int playerNumber;
 
     public void SetPlayer(Player player)
     {
@@ -48,5 +49,10 @@ public class PlayerEntry : MonoBehaviour
     public string GetTeam()
     {
         return PhotonNetwork.LocalPlayer.GetPhotonTeam().Name;
+    }
+
+    public void SetNum(int num)
+    {
+        playerNumber = num;
     }
 }

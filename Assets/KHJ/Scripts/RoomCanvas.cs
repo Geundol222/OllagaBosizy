@@ -1,6 +1,7 @@
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,15 +10,14 @@ using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
 public class RoomCanvas : MonoBehaviour
 {
+    public Dictionary<int, PlayerEntry> playerDictionary;
     [SerializeField] RectTransform playerContent1;
     [SerializeField] RectTransform playerContent2;
     [SerializeField] Button startButton;
     [SerializeField] PlayerEntry playerEntryPrefab;
     [SerializeField] LogImage logImage;
+    public int ActorNum;
     PlayerEntry entry;
-    PlayerEntry otherEntry;
-
-    private Dictionary<int, PlayerEntry> playerDictionary;
 
     private void Awake()
     {
@@ -42,7 +42,6 @@ public class RoomCanvas : MonoBehaviour
             playerDictionary.Add(player.ActorNumber, entry);
             PhotonNetwork.LocalPlayer.SetReady(false);
             PhotonNetwork.LocalPlayer.SetLoad(false);
-
             AllPlayerReadyCheck();
             PhotonNetwork.AutomaticallySyncScene = true;
         }
@@ -59,9 +58,9 @@ public class RoomCanvas : MonoBehaviour
         PhotonNetwork.AutomaticallySyncScene = false;
     }
 
-    public void PlayerEnterRoom(Player newPlayer)
+    public void PlayerEnterRoom()
     {
-        /*for (int i = 0; i < playerContent1.childCount; i++)
+        for (int i = 0; i < playerContent1.childCount; i++)
         {
             Destroy(playerContent1.GetChild(i).gameObject);
         }
@@ -69,42 +68,32 @@ public class RoomCanvas : MonoBehaviour
         {
             Destroy(playerContent2.GetChild(i).gameObject);
         }
+        playerDictionary.Clear();
 
-        PlayerEntry entry1;
         foreach (Player player in PhotonNetwork.PlayerList)
         {
-            if (playerContent1.childCount < 2)
+            PlayerEntry entry1;
+            if (playerDictionary.Count < 2)
             {
                 entry1 = Instantiate(playerEntryPrefab, playerContent1);
-                entry.SetPlayerTrollerTeam();
             }
             else
             {
                 entry1 = Instantiate(playerEntryPrefab, playerContent2);
-                entry1.SetPlayerClimberTeam();
             }
-            entry.SetPlayer(player);
+            entry1.SetPlayer(player);
+            playerDictionary.Add(player.ActorNumber, entry1);
+            PhotonNetwork.LocalPlayer.SetReady(false);
+            PhotonNetwork.LocalPlayer.SetLoad(false);
+            AllPlayerReadyCheck();
         }
-        playerDictionary.Add(newPlayer.ActorNumber, entry);
-        AllPlayerReadyCheck();*/
-        PlayerEntry entry1;
-        if (playerContent1.childCount < 2)
-        {
-            entry1 = Instantiate(playerEntryPrefab, playerContent1);
-        }
-        else
-        {
-            entry1 = Instantiate(playerEntryPrefab, playerContent2);
-        }
-        entry1.SetPlayer(newPlayer);
-        playerDictionary.Add(newPlayer.ActorNumber, entry1);
-        AllPlayerReadyCheck();
     }
 
     public void PlayerLeftRoom(Player otherPlayer)
     {
         Destroy(playerDictionary[otherPlayer.ActorNumber].gameObject);
         playerDictionary.Remove(otherPlayer.ActorNumber);
+        PlayerEnterRoom();
         AllPlayerReadyCheck();
     }
 
