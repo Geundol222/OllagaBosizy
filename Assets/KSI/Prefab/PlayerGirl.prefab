@@ -1978,7 +1978,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8258851114626028850
 Transform:
   m_ObjectHideFlags: 0
@@ -2098,13 +2098,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debug: 1
-  maxSpeed: 20
-  moveSpeed: 20
-  jumpPower: 16
   platformLayer:
     serializedVersion: 2
     m_Bits: 64
-  gfx: {fileID: 7169335923345374366}
   platformTrigger: {fileID: 8258851115014319316}
 --- !u!61 &8258851115014319316
 BoxCollider2D:
@@ -2151,7 +2147,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents: []
-  sceneViewId: 14
+  sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!1 &8424151840275506169

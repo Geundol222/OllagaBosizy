@@ -3,8 +3,8 @@ using UnityEngine.Events;
 
 public class DataManager : MonoBehaviour
 {
-	private Platform currentPlatform;
-	private Platform presentPlatform;
+	public Transform startPoint; // 시작 지점
+	public Transform endPoint; // 마지막 지점
 
 	// 최고 점수
 	[SerializeField] private int bestScore;

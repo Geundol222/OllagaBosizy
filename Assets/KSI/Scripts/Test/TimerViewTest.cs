@@ -17,9 +17,6 @@ public class TimerViewTest : MonoBehaviourPunCallbacks
 	[SerializeField] List<GameObject> playerSpawnPoints;
 	[SerializeField] private TextMeshProUGUI timerText;
 
-	//[SerializeField] private float limitTime = 300f; // 제한 시간 5분
-	// private float remainLimitTime; // 남은 제한 시간
-
 	private void Start()
 	{
 		if (PhotonNetwork.InRoom)
@@ -171,7 +168,15 @@ public class TimerViewTest : MonoBehaviourPunCallbacks
 	private void DebugGameStart()
 	{
 		int playerIndex = PhotonNetwork.LocalPlayer.GetPlayerNumber();
-		PhotonNetwork.Instantiate("PlayerBoy", playerSpawnPoints[playerIndex].transform.position, playerSpawnPoints[playerIndex].transform.rotation);
+		if (playerIndex == 0)
+		{
+			PhotonNetwork.Instantiate("PlayerBoy", playerSpawnPoints[playerIndex].transform.position, playerSpawnPoints[playerIndex].transform.rotation);
+			Debug.Log("Player Boy Instantiate");
+		}
+		else if (playerIndex == 1)
+		{
+			PhotonNetwork.Instantiate("PlayerGirl", playerSpawnPoints[playerIndex].transform.position, playerSpawnPoints[playerIndex].transform.rotation);
+		}
 
 		if (PhotonNetwork.IsMasterClient)
 			PhotonNetwork.CurrentRoom.SetCountDownTime(PhotonNetwork.ServerTimestamp);
