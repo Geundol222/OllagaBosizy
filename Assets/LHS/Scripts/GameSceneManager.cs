@@ -17,6 +17,8 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
 
     private void Start()
     {
+        PhotonNetwork.AutomaticallySyncScene = false;
+
         if (PhotonNetwork.InRoom)
         {
             PhotonNetwork.LocalPlayer.SetLoad(true);
@@ -70,11 +72,12 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
     public override void OnMasterClientSwitched(Player newMasterClient)
     {
         if (PhotonNetwork.IsMasterClient) { }
-            // TODO : 방장이 바꼈을 때
+        // TODO : 방장이 바꼈을 때
     }
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, PhotonHashtable changedProps)
     {
+        Debug.Log("Player Load");
         if (changedProps.ContainsKey("Load"))
         {
             if (PlayerLoadCount() == PhotonNetwork.PlayerList.Length)
@@ -92,6 +95,7 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
 
     public override void OnRoomPropertiesUpdate(PhotonHashtable propertiesThatChanged)
     {
+        Debug.Log("Room Load");
         if (propertiesThatChanged.ContainsKey("LoadTime"))
         {
             StartCoroutine(GameStartTimer());
@@ -121,6 +125,8 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
 
     private void GameStart()
     {
+        Debug.Log("Game Start");
+
         int playerIndex = PhotonNetwork.LocalPlayer.GetPlayerNumber();
         PhotonNetwork.Instantiate("PlayerBoy", playerSpawnPoints[playerIndex].transform.position, playerSpawnPoints[playerIndex].transform.rotation);
 
@@ -132,6 +138,8 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
 
     private void DebugGameStart()
     {
+        Debug.Log("Debug Start");
+
         int playerIndex = PhotonNetwork.LocalPlayer.GetPlayerNumber();
         PhotonNetwork.Instantiate("PlayerBoy", playerSpawnPoints[playerIndex].transform.position, playerSpawnPoints[playerIndex].transform.rotation);
 
@@ -152,7 +160,6 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
         return loadCount;
     }
 
-    // 타이머 코루틴
     private IEnumerator UpdateTimerRoutine()
     {
         int loadTime = PhotonNetwork.CurrentRoom.GetCountDownTime();

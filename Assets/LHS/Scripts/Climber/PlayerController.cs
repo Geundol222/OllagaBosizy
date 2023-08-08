@@ -1,6 +1,5 @@
 using Cinemachine;
 using Photon.Pun;
-using Photon.Pun.Demo.Cockpit;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
