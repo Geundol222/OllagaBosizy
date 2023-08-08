@@ -6,8 +6,10 @@ using UnityEngine;
 
 public class gggg : MonoBehaviour
 {
+    public LogImage logImage;
     void Start()
     {
-        Debug.Log(PhotonNetwork.LocalPlayer.GetPhotonTeam().Name);
+        logImage.gameObject.SetActive(true);
+        logImage.SetText(PhotonNetwork.LocalPlayer.GetPhotonTeam().Name);
     }
 }

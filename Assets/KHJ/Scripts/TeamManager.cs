@@ -20,9 +20,13 @@ public class TeamManager : MonoBehaviour
         else return PlayerTeam.None;
     }
 
-    public void SetTeam(PlayerTeam team)
+    public void LeaveTeam()
     {
         PhotonNetwork.LocalPlayer.LeaveCurrentTeam();
+    }
+
+    public void SetTeam(PlayerTeam team)
+    {
         PhotonNetwork.LocalPlayer.JoinTeam((byte)team);
     }
 }
