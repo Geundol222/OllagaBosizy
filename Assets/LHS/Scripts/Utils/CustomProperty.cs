@@ -20,7 +20,7 @@ public static class CustomProperty
 
     public static void SetReady(this Player player, bool ready)
     {
-        PhotonHashtable property = player.CustomProperties;
+        PhotonHashtable property = new PhotonHashtable();
         property[READY] = ready;
         player.SetCustomProperties(property);
     }
@@ -36,7 +36,7 @@ public static class CustomProperty
 
     public static void SetLoad(this Player player, bool load)
     {
-        PhotonHashtable property = player.CustomProperties;
+        PhotonHashtable property = new PhotonHashtable();
         property[LOAD] = load;
         player.SetCustomProperties(property);
     }
@@ -52,7 +52,7 @@ public static class CustomProperty
 
     public static void SetLoadTime(this Room room, int loadTime)
     {
-        PhotonHashtable property = room.CustomProperties;
+        PhotonHashtable property = new PhotonHashtable();
         property[LOADTIME] = loadTime;
         room.SetCustomProperties(property);
     }
@@ -68,7 +68,7 @@ public static class CustomProperty
 
     public static void SetCountDownTime(this Room room, int countDownTime)
     {
-        PhotonHashtable property = room.CustomProperties;
+        PhotonHashtable property = new PhotonHashtable();
         property[COUNTDOWNTIME] = countDownTime;
         room.SetCustomProperties(property);
     }

@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
-public class FootTrigger : MonoBehaviour
+public class FootTrigger : MonoBehaviourPun
 {
     [SerializeField] LayerMask platformLayer;
 
@@ -15,24 +14,20 @@ public class FootTrigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (platformLayer.IsContain(collision.gameObject.layer))
+        if (photonView.IsMine)
         {
-            //Platform platform = collision.gameObject.GetComponent<Platform>();
-            //
-            //debuffManager.ClimberStepOnPlatform(platform);
-            Debug.Log(collision.gameObject.name);
+            if (platformLayer.IsContain(collision.gameObject.layer))
+            {
+                //Platform platform = collision.gameObject.GetComponent<Platform>();
+                //
+                //debuffManager.ClimberStepOnPlatform(platform);
+                Debug.Log(collision.gameObject.name);
+            }
         }
 
         if (collision.gameObject.name == "EndPoint")
         {
-            if (GameManager.Round.GetRound() == Round.ROUND1)
-            {
-                GameManager.Round.SetRound(Round.ROUND2);
-            }
-            else
-            {
-                GameManager.Round.SetRound(Round.END);
-            }
+            GameManager.Round.NextRound();
         }
     }
 }
