@@ -1,14 +1,13 @@
 using Photon.Pun;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnitySceneManager = UnityEngine.SceneManagement.SceneManager;
 
 public enum Scene { LOBBY, GAME };
 
 public class SceneManager : MonoBehaviour
 {
     // private LoadingUI loadingUI;
-    private Scene nextScene = Scene.LOBBY;
 
     private BaseScene curScene;
     public BaseScene CurScene
@@ -29,18 +28,10 @@ public class SceneManager : MonoBehaviour
         // loadingUI.transform.SetParent(transform, false);
     }
 
-    public void NextScene(Scene scene)
-    {
-        if (UnitySceneManager.sceneCountInBuildSettings - 1 > (int)scene)
-            nextScene = (Scene)((int)scene + 1);
-        else
-            nextScene = (Scene)((int)scene);
-
-        LoadScene(nextScene);
-    }
-
     public void LoadScene(Scene scene)
     {
+        PhotonNetwork.AutomaticallySyncScene = true;
+
         StartCoroutine(LoadingRoutine(scene));
     }
 

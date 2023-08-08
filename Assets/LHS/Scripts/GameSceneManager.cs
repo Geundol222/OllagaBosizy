@@ -17,6 +17,8 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
 
     private void Start()
     {
+        PhotonNetwork.AutomaticallySyncScene = false;
+
         if (PhotonNetwork.InRoom)
         {
             PhotonNetwork.LocalPlayer.SetLoad(true);

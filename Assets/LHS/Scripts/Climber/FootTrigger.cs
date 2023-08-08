@@ -23,11 +23,17 @@ public class FootTrigger : MonoBehaviourPun
                 //debuffManager.ClimberStepOnPlatform(platform);
                 Debug.Log(collision.gameObject.name);
             }
-        }
 
-        if (collision.gameObject.name == "EndPoint")
-        {
-            GameManager.Round.NextRound();
+            if (collision.gameObject.name == "EndPoint")
+            {
+                photonView.RPC("StepEndPoint", RpcTarget.AllBuffered);
+            }
         }
+    }
+
+    [PunRPC]
+    public void StepEndPoint()
+    {
+        GameManager.Round.NextRound();
     }
 }
