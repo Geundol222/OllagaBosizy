@@ -7,6 +7,17 @@ public class PlatformMouseHandler : MonoBehaviour,IPointerClickHandler,IPointerE
 {
 
     private Platform platform;                                      // isClickable 함수 사용을 위한 Platform 참조
+    private List<Platform> setTrapPlatforms { get { return GameManager.TrollerData.setTrapPlatforms; }  }
+    private bool canMouseAction { get { 
+            if(setTrapPlatforms.Count < GameManager.TrollerData.maxSetTrapPlatforms && GameManager.TrollerData.canSetTrap)
+            {
+                return true;
+            } else
+            {
+                return false;
+            }
+        } }
+
     private void Awake()
     {
         platform = GetComponent<Platform>();
@@ -14,8 +25,11 @@ public class PlatformMouseHandler : MonoBehaviour,IPointerClickHandler,IPointerE
 
     private void SetTrollerController()
     {
-        if(GameManager.TrollerData.trollerPlayerController == null)
-            GameManager.TrollerData.trollerPlayerController = GameObject.Find("TrollerController(Clone)").GetComponent<TrollerPlayerController>();
+        if (GameManager.TrollerData.trollerPlayerController == null)
+        {
+            if(GameObject.Find("TrollerController(Clone)").GetComponent<TrollerPlayerController>())
+                GameManager.TrollerData.trollerPlayerController = GameObject.Find("TrollerController(Clone)").GetComponent<TrollerPlayerController>();
+        }
     }
 
     /// <summary>
@@ -24,6 +38,8 @@ public class PlatformMouseHandler : MonoBehaviour,IPointerClickHandler,IPointerE
     /// <param name="eventData"></param>
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (!canMouseAction)
+            return;
         if (platform.IsClickable)
         {
             SetTrollerController();
@@ -43,6 +59,8 @@ public class PlatformMouseHandler : MonoBehaviour,IPointerClickHandler,IPointerE
       
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if (!canMouseAction)
+            return;
         SetTrollerController();
         platform.SwitchRenderColorEnter();
     }
