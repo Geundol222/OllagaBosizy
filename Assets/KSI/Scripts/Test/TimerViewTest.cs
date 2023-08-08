@@ -168,9 +168,15 @@ public class TimerViewTest : MonoBehaviourPunCallbacks
 	private void DebugGameStart()
 	{
 		int playerIndex = PhotonNetwork.LocalPlayer.GetPlayerNumber();
-		// if (playerIndex)가 0 이면 보이, 1이면 걸
-		PhotonNetwork.Instantiate("PlayerBoy", playerSpawnPoints[playerIndex].transform.position, playerSpawnPoints[playerIndex].transform.rotation);
-
+		if (playerIndex == 0)
+		{
+			PhotonNetwork.Instantiate("PlayerBoy", playerSpawnPoints[playerIndex].transform.position, playerSpawnPoints[playerIndex].transform.rotation);
+			Debug.Log("Player Boy Instantiate");
+		}
+		else if (playerIndex == 1)
+		{
+			PhotonNetwork.Instantiate("PlayerGirl", playerSpawnPoints[playerIndex].transform.position, playerSpawnPoints[playerIndex].transform.rotation);
+		}
 
 		if (PhotonNetwork.IsMasterClient)
 			PhotonNetwork.CurrentRoom.SetCountDownTime(PhotonNetwork.ServerTimestamp);
