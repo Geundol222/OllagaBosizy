@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 
 public class DebuffManager : MonoBehaviour
-{
+{   
     public Debuff Original_Debuff { get { return GameManager.TrollerData.Original_Debuff; } } // Clone에 사용될 디버프 변수
     
     int debuffQueueLength { get { return GameManager.TrollerData.debuffQueueLength; } set { GameManager.TrollerData.debuffQueueLength = value; } } // 디버프 큐 길이
@@ -17,14 +17,6 @@ public class DebuffManager : MonoBehaviour
         
     //[SerializeField] public TMP_Text[] TrapListTexts;
     TrapListUI trapListUI;
-
-    public void ClimberStepOnPlatform(Platform platform)
-    {
-        if (platform.currentDebuffState != Debuff_State.None)
-        {
-            platform.StartDebuffCountDown();
-        }
-    }
 
     public void UpdateTrapList()
     {

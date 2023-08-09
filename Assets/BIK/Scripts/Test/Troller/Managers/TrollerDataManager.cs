@@ -18,8 +18,12 @@ public class TrollerDataManager : MonoBehaviour
     public int debuffQueueLength = 4;                               // Debuff를 담을 Queue의 최대크기
     public int debuffCount { get { return debuffQueue.Count; } }    // 현재 Queue의 크기
 
-    public List<Platform> setTrapPlatforms;
-    public int maxSetTrapPlatforms = 3;
+    private List<Platform> setTrapPlatforms;
+    public List<Platform> _setTrapPlatforms { get { return setTrapPlatforms; } set { setTrapPlatforms = value; } }
+    public int maxSetTrapPlatforms = 5;
+
+    public LeftTrapUI leftTrapUI;
+    public DebuffManager debuffManager;
 
     private void Awake()
     {
@@ -29,6 +33,12 @@ public class TrollerDataManager : MonoBehaviour
         canSetTrap = true;
         setTrapPlatforms = new List<Platform>();
         InitPhysicsList();
+    }
+
+    private void Start()
+    {
+        leftTrapUI = GameObject.Find("LeftTrap").GetComponent<LeftTrapUI>();
+        debuffManager = GameObject.Find("DebuffManager").GetComponent<DebuffManager>();
     }
 
     public void InitPhysicsList()
