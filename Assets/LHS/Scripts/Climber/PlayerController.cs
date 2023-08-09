@@ -50,8 +50,11 @@ public class PlayerController : MonoBehaviourPun
     {
 		StartCoroutine(NetworkConnectChecker());
 
-        Destroy(debuffList);
-        Destroy(trollerCamera.gameObject);
+        if (GameManager.Team.GetTeam() == PlayerTeam.Climber)
+        {
+            Destroy(debuffList);
+            Destroy(trollerCamera.gameObject);
+        }
     }
 
 	IEnumerator NetworkConnectChecker()
