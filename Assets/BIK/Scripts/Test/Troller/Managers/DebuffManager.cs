@@ -5,21 +5,23 @@ using TMPro;
 using UnityEngine;
 
 public class DebuffManager : MonoBehaviour
-{   
+{
     public Debuff Original_Debuff { get { return GameManager.TrollerData.Original_Debuff; } } // Clone에 사용될 디버프 변수
-    
+
     int debuffQueueLength { get { return GameManager.TrollerData.debuffQueueLength; } set { GameManager.TrollerData.debuffQueueLength = value; } } // 디버프 큐 길이
-    //int debuffCount { get { return GameManager.TrollerData.debuffCount; } }
-    
+                                                                                                                                                   //int debuffCount { get { return GameManager.TrollerData.debuffCount; } }
+
     Queue<IDebuff> debuffQueue { get { return GameManager.TrollerData.debuffQueue; } set { GameManager.TrollerData.debuffQueue = value; } } // 디버프 큐
 
     public PhysicsMaterial2D[] debuff_PhysicsMaterials { get { return GameManager.TrollerData.debuff_PhysicsMaterials; } } // 디버프 물리머테리얼 배열
-        
+
     //[SerializeField] public TMP_Text[] TrapListTexts;
     TrapListUI trapListUI;
 
     public void UpdateTrapList()
     {
+        if (GameManager.Team.GetTeam() != PlayerTeam.Troller)
+            return;
         Debuff[] debuffArray = new Debuff[debuffQueue.Count];
         debuffQueue.CopyTo(debuffArray, 0);
         trapListUI.UpdateList(debuffArray);
@@ -27,8 +29,10 @@ public class DebuffManager : MonoBehaviour
 
     public void DebuffQueueInit()
     {
+        if (GameManager.Team.GetTeam() != PlayerTeam.Troller)
+            return;
         debuffQueue = new Queue<IDebuff>();
-        trapListUI = GameObject.Find("TrapList").GetComponent<TrapListUI>();
+        trapListUI = GameObject.Find("TrapList(Clone)").GetComponent<TrapListUI>();
 
         debuffQueueLength = 4;
 
@@ -44,6 +48,8 @@ public class DebuffManager : MonoBehaviour
 
     public void DebuffQueueEnqueue()
     {
+        if (GameManager.Team.GetTeam() != PlayerTeam.Troller)
+            return;
         if (debuffQueue.Count >= debuffQueueLength)
             return;
 
@@ -56,14 +62,18 @@ public class DebuffManager : MonoBehaviour
 
     public Debuff CreateNoneStateDebuff()
     {
+        if (GameManager.Team.GetTeam() != PlayerTeam.Troller)
+            return null;
         Debuff debuff = (Debuff)Original_Debuff.clone();
         debuff.SetState((int)Debuff_State.None);
 
         return debuff;
     }
 
-    public void SetTrap(Debuff debuff,Platform platform)
+    public void SetTrap(Debuff debuff, Platform platform)
     {
+        if (GameManager.Team.GetTeam() != PlayerTeam.Troller)
+            return;
 
         Collider2D platformCollider2D = platform.GetComponent<Collider2D>();
         SurfaceEffector2D surfaceEffector2D = platform.GetComponent<SurfaceEffector2D>();

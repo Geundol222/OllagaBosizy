@@ -37,10 +37,13 @@ public class TrollerDataManager : MonoBehaviour
 
     private void Start()
     {
+    }
+
+    public void Init()
+    {
         leftTrapUI = GameObject.Find("LeftTrap").GetComponent<LeftTrapUI>();
         debuffManager = GameObject.Find("DebuffManager").GetComponent<DebuffManager>();
     }
-
     public void InitPhysicsList()
     {
         debuff_PhysicsMaterials[(int)Debuff_State.Ice] = GameManager.Resource.Load<PhysicsMaterial2D>("Debuff/Ice");

@@ -3,21 +3,29 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Rendering;
+using UnityEngine.InputSystem;
 
 public class TrollerPlayerController : MonoBehaviourPun
 {
+    private PlayerInput inputAction;
     private GameObject[] allPlatformList;
-    private DebuffManager debuffManager { get { return GameManager.TrollerData.debuffManager; }  }
+    private DebuffManager debuffManager { get { return GameManager.TrollerData.debuffManager; } }
     int platformList_index = 0;
 
     private void Awake()
     {
+        GameManager.Resource.Instantiate<Canvas>("Troller/TrapList");
+
+        if (GameManager.Team.GetTeam() == PlayerTeam.Troller)
+        {
+            debuffManager.DebuffQueueInit();
+        }
+
         if (!photonView.IsMine)
         {
-            Destroy(gameObject);
+            Destroy(inputAction);
+            //Destroy(gameObject);
         }
-        debuffManager.DebuffQueueInit();
     }
 
     private void Start()
@@ -30,7 +38,7 @@ public class TrollerPlayerController : MonoBehaviourPun
             go.name = $"Platform_{platformList_index++}";
         }
     }
-      
+
     public void ClearBothPlatform()
     {
         GameManager.TrollerData.currentPlatform = null;
