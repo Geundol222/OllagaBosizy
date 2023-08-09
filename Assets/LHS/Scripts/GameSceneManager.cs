@@ -141,7 +141,17 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
         Debug.Log("Debug Start");
 
         int playerIndex = PhotonNetwork.LocalPlayer.GetPlayerNumber();
-        PhotonNetwork.Instantiate("PlayerBoy", playerSpawnPoints[playerIndex].transform.position, playerSpawnPoints[playerIndex].transform.rotation);
+
+        if (playerIndex == 2 || playerIndex == 3)
+        {
+            PhotonNetwork.Instantiate("PlayerBoy", playerSpawnPoints[playerIndex].transform.position, playerSpawnPoints[playerIndex].transform.rotation);
+            GameManager.Team.SetTeam(PlayerTeam.Climber);
+        }
+        else if (playerIndex == 0 || playerIndex == 1)
+        {
+            PhotonNetwork.Instantiate("Player/TrollerController", playerSpawnPoints[playerIndex].transform.position, playerSpawnPoints[playerIndex].transform.rotation);
+            GameManager.Team.SetTeam(PlayerTeam.Troller);
+        }
 
         if (PhotonNetwork.IsMasterClient)
             PhotonNetwork.CurrentRoom.SetCountDownTime(PhotonNetwork.ServerTimestamp);
