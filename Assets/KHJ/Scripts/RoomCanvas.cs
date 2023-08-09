@@ -51,6 +51,7 @@ public class RoomCanvas : MonoBehaviour
             AllPlayerReadyCheck();
             PhotonNetwork.AutomaticallySyncScene = true;
         }
+        entry?.Sprite();
     }
 
     private void OnDisable()
@@ -94,6 +95,10 @@ public class RoomCanvas : MonoBehaviour
                 entry1 = Instantiate(playerEntryPrefab, playerContent2);
                 entry.SetPlayer(player);
                 bTeamDictionary.Add(player.ActorNumber, entry);
+            }
+            if (PhotonNetwork.LocalPlayer == player)
+            {
+                entry1.Sprite();
             }
             entry1.SetPlayer(player);
             playerDictionary.Add(player.ActorNumber, entry1);
