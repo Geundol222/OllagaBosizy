@@ -31,6 +31,5 @@ public class TeamManager : MonoBehaviour
         {
             PhotonNetwork.LocalPlayer.SwitchTeam((byte)team);
         }
-        PhotonNetwork.LocalPlayer.JoinTeam((byte)team);
     }
 }

@@ -11,6 +11,8 @@ using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 public class RoomCanvas : MonoBehaviour
 {
     public Dictionary<int, PlayerEntry> playerDictionary;
+    public Dictionary<int, PlayerEntry> aTeamDictionary;
+    public Dictionary<int, PlayerEntry> bTeamDictionary;
     [SerializeField] RectTransform playerContent1;
     [SerializeField] RectTransform playerContent2;
     [SerializeField] Button startButton;
@@ -22,6 +24,8 @@ public class RoomCanvas : MonoBehaviour
     private void Awake()
     {
         playerDictionary = new Dictionary<int, PlayerEntry>();
+        aTeamDictionary = new Dictionary<int, PlayerEntry>();
+        bTeamDictionary = new Dictionary<int, PlayerEntry>();
     }
 
     private void OnEnable()
@@ -31,12 +35,14 @@ public class RoomCanvas : MonoBehaviour
             if (playerContent1.childCount < 2)
             {
                 entry = Instantiate(playerEntryPrefab, playerContent1);
-                entry.SetPlayerTrollerTeam();
+                entry.SetPlayer(player);
+                aTeamDictionary.Add(player.ActorNumber, entry);
             }
             else
             {
                 entry = Instantiate(playerEntryPrefab, playerContent2);
-                entry.SetPlayerClimberTeam();
+                entry.SetPlayer(player);
+                bTeamDictionary.Add(player.ActorNumber, entry);
             }
             entry.SetPlayer(player);
             playerDictionary.Add(player.ActorNumber, entry);
@@ -54,6 +60,8 @@ public class RoomCanvas : MonoBehaviour
             Destroy(playerDictionary[actorNumber].gameObject);
         }
         playerDictionary.Clear();
+        aTeamDictionary.Clear();
+        bTeamDictionary.Clear();
 
         PhotonNetwork.AutomaticallySyncScene = false;
     }
@@ -69,6 +77,8 @@ public class RoomCanvas : MonoBehaviour
             Destroy(playerContent2.GetChild(i).gameObject);
         }
         playerDictionary.Clear();
+        aTeamDictionary.Clear();
+        bTeamDictionary.Clear();
 
         foreach (Player player in PhotonNetwork.PlayerList)
         {
@@ -76,10 +86,14 @@ public class RoomCanvas : MonoBehaviour
             if (playerDictionary.Count < 2)
             {
                 entry1 = Instantiate(playerEntryPrefab, playerContent1);
+                entry.SetPlayer(player);
+                aTeamDictionary.Add(player.ActorNumber, entry);
             }
             else
             {
                 entry1 = Instantiate(playerEntryPrefab, playerContent2);
+                entry.SetPlayer(player);
+                bTeamDictionary.Add(player.ActorNumber, entry);
             }
             entry1.SetPlayer(player);
             playerDictionary.Add(player.ActorNumber, entry1);
@@ -131,6 +145,20 @@ public class RoomCanvas : MonoBehaviour
         else
         {
             PhotonNetwork.LocalPlayer.SetReady(true);
+        }
+    }
+
+    public void PlayerTeamJoin()
+    {
+        PlayerEntry playerEntry;
+        if (aTeamDictionary.TryGetValue(PhotonNetwork.LocalPlayer.ActorNumber, out playerEntry))
+        {
+            playerEntry.SetPlayerTrollerTeam();
+        }
+        else
+        {
+            bTeamDictionary.TryGetValue(PhotonNetwork.LocalPlayer.ActorNumber, out playerEntry);
+            playerEntry.SetPlayerClimberTeam();
         }
     }
 
