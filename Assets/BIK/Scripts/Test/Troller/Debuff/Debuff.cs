@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Debuff_State { None,NoColider,Surface,Spring,Ice,Length }
+public enum Debuff_State { None,NoCollider,Surface,Spring,Ice,Length }
 
-[Serializable]
+[Serializable] 
 public class Debuff : IDebuff
 {
     public Debuff_State state;
