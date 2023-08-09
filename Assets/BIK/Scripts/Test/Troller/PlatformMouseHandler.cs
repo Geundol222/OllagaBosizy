@@ -1,3 +1,4 @@
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,20 +17,25 @@ public class PlatformMouseHandler : MonoBehaviour,IPointerClickHandler,IPointerE
             {
                 return false;
             }
-        } }
+        }
+    }
 
     private void Awake()
     {
         platform = GetComponent<Platform>();
     }
 
-    private void SetTrollerController()
+    private void Start()
     {
-        if (GameManager.TrollerData.trollerPlayerController == null)
-        {
-            if(GameObject.Find("TrollerController(Clone)").GetComponent<TrollerPlayerController>())
-                GameManager.TrollerData.trollerPlayerController = GameObject.Find("TrollerController(Clone)").GetComponent<TrollerPlayerController>();
-        }
+        StartCoroutine(TrollerControllerFindRoutine());
+    }
+
+
+    IEnumerator TrollerControllerFindRoutine()
+    {
+        yield return new WaitUntil(() => { return GameObject.Find("TrollerController(Clone)"); });
+        GameManager.TrollerData.trollerPlayerController = GameObject.Find("TrollerController(Clone)").GetComponent<TrollerPlayerController>();
+        yield break;
     }
 
     /// <summary>
@@ -42,7 +48,6 @@ public class PlatformMouseHandler : MonoBehaviour,IPointerClickHandler,IPointerE
             return;
         if (platform.IsClickable)
         {
-            SetTrollerController();
             platform.ShowSetTrapButton();
         }                
     }
@@ -53,7 +58,6 @@ public class PlatformMouseHandler : MonoBehaviour,IPointerClickHandler,IPointerE
     /// <param name="eventData"></param>
     public void OnPointerExit(PointerEventData eventData)
     {
-        SetTrollerController();
         platform.SwitchRenderColorExit();
     }
       
@@ -61,7 +65,6 @@ public class PlatformMouseHandler : MonoBehaviour,IPointerClickHandler,IPointerE
     {
         if (!canMouseAction)
             return;
-        SetTrollerController();
         platform.SwitchRenderColorEnter();
     }
       

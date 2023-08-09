@@ -335,13 +335,13 @@ Transform:
   - {fileID: 1657999578}
   - {fileID: 1712094501}
   - {fileID: 1225683203}
+  - {fileID: 1936704014}
   - {fileID: 1843271135}
   - {fileID: 1651130837}
   - {fileID: 1237445904}
   - {fileID: 879063086}
   - {fileID: 123063958}
   - {fileID: 2047945411}
-  - {fileID: 1936704014}
   - {fileID: 616260530}
   - {fileID: 465436746}
   - {fileID: 962196255}
@@ -4276,6 +4276,11 @@ PrefabInstance:
         type: 3}
       propertyPath: sceneViewId
       value: 34
+      objectReference: {fileID: 0}
+    - target: {fileID: 5564046496008952321, guid: 5bf50ce7c53771d4fbe8c3abcb3311d5,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 125
       objectReference: {fileID: 0}
     - target: {fileID: 5955588769262720579, guid: 5bf50ce7c53771d4fbe8c3abcb3311d5,
         type: 3}

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Debuff_NoColider : MonoBehaviour, IDebuff
+public class Debuff_NoCollider : MonoBehaviour, IDebuff
 {
     // 현재 디버프를 복제
     public IDebuff clone()

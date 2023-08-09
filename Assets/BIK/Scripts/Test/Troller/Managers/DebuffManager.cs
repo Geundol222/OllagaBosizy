@@ -80,7 +80,7 @@ public class DebuffManager : MonoBehaviour
         // 아래 소스를 대리자를 사용, platform 내에서 구현되게 로직 수정
         switch (debuff.state)
         {
-            case Debuff_State.NoColider: platformCollider2D.isTrigger = true; break; // 1번(충돌체 없애기)일 경우
+            case Debuff_State.NoCollider: platformCollider2D.isTrigger = true; break; // 1번(충돌체 없애기)일 경우
             case Debuff_State.Surface: surfaceEffector2D.enabled = true; break; // 2번(표면이펙트)일 경우
             case Debuff_State.Spring: platformCollider2D.sharedMaterial = debuff_PhysicsMaterials[(int)Debuff_State.Spring]; break;
             case Debuff_State.Ice: platformCollider2D.sharedMaterial = debuff_PhysicsMaterials[(int)Debuff_State.Ice]; break;

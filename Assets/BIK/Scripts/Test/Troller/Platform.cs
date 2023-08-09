@@ -184,7 +184,7 @@ public class Platform : MonoBehaviourPun,IPunObservable
                 return;
 
             // 현재 플랫폼에 설치된 함정을 실행하는
-            if(currentDebuffState == Debuff_State.NoColider)
+            if(currentDebuffState == Debuff_State.NoCollider)
                 GameManager.Debuff.SetTrap(platformCurrentDebuff, this);
             StartDebuffCountDown();
         }
@@ -296,7 +296,7 @@ public class Platform : MonoBehaviourPun,IPunObservable
         platformCurrentDebuff = setTrapDebuff;
         CallRPCFunction("UpdateCurrentStateText");
         // NoCollider가 아니라면현재 플랫폼에 함정을 설치하는 함수 호출
-        if (currentDebuffState != Debuff_State.NoColider)
+        if (currentDebuffState != Debuff_State.NoCollider)
             GameManager.Debuff.SetTrap(platformCurrentDebuff, this);
     }
       
