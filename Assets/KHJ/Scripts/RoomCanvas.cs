@@ -132,7 +132,7 @@ public class RoomCanvas : MonoBehaviour
         PhotonNetwork.CurrentRoom.IsOpen = false;
         PhotonNetwork.CurrentRoom.IsVisible = false;
 
-        PhotonNetwork.LoadLevel("gggg");
+        GameManager.Scene.LoadScene(Scene.GAME);
     }
 
     public void LeaveRoom()
