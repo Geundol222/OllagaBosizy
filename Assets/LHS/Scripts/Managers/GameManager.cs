@@ -10,7 +10,6 @@ public class GameManager : MonoBehaviour
     private static SceneManager scene;
     private static DataManager data;
     private static TrollerDataManager trollerData;
-    private static DebuffManager debuff;
     private static TeamManager team;
     private static RoundManager round;
 
@@ -22,7 +21,6 @@ public class GameManager : MonoBehaviour
     public static SceneManager Scene { get { return scene; } }
     public static DataManager Data { get { return data; } }
     public static TrollerDataManager TrollerData { get { return trollerData; } }
-    public static DebuffManager Debuff { get { return debuff; } }
     public static TeamManager Team { get { return team; } }
     public static RoundManager Round { get { return round; } }
 
@@ -81,11 +79,6 @@ public class GameManager : MonoBehaviour
         trollerDataObj.name = "TrollerDataManager";
         trollerDataObj.transform.parent = transform;
         trollerData = trollerDataObj.AddComponent<TrollerDataManager>();
-
-        GameObject debuffObj = new GameObject();
-        debuffObj.name = "DebuffManager";
-        debuffObj.transform.parent = transform;
-        debuff = debuffObj.AddComponent<DebuffManager>();
 
         GameObject teamObj = new GameObject();
         teamObj.name = "TeamManager";

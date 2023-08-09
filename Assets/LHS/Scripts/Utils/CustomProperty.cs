@@ -5,6 +5,7 @@ public static class CustomProperty
 {
     public const string READY = "Ready";
     public const string LOAD = "Load";
+    public const string TEAM = "Team";
     public const string NUMBER = "Number";
     public const string LOADTIME = "LoadTime";
     public const string COUNTDOWNTIME = "CountDownTime";
@@ -38,6 +39,22 @@ public static class CustomProperty
     {
         PhotonHashtable property = new PhotonHashtable();
         property[LOAD] = load;
+        player.SetCustomProperties(property);
+    }
+
+    public static PlayerTeam GetPlayerTeam(this Player player)
+    {
+        PhotonHashtable property = player.CustomProperties;
+        if (property.ContainsKey(TEAM))
+            return (PlayerTeam)property[TEAM];
+        else
+            return PlayerTeam.None;
+    }
+
+    public static void SetPlayerTeam(this Player player, PlayerTeam team)
+    {
+        PhotonHashtable property = new PhotonHashtable();
+        property[TEAM] = team;
         player.SetCustomProperties(property);
     }
 

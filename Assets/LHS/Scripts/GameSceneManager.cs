@@ -127,8 +127,22 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("Game Start");
 
-        int playerIndex = PhotonNetwork.LocalPlayer.GetPlayerNumber();
-        PhotonNetwork.Instantiate("PlayerBoy", playerSpawnPoints[playerIndex].transform.position, playerSpawnPoints[playerIndex].transform.rotation);
+        GameManager.TrollerData.Init();
+
+        foreach (Player player in PhotonNetwork.PlayerList)
+        {
+            if (player == PhotonNetwork.LocalPlayer)
+            {
+                if (player.GetPlayerTeam() == PlayerTeam.Troller)
+                {
+                    PhotonNetwork.Instantiate("Troller/TrollerController", playerSpawnPoints[player.GetPlayerNumber()].transform.position, playerSpawnPoints[player.GetPlayerNumber()].transform.rotation);
+                }
+                else if (player.GetPlayerTeam() == PlayerTeam.Climber)
+                {
+                    PhotonNetwork.Instantiate("Climber/PlayerBoy", playerSpawnPoints[player.GetPlayerNumber()].transform.position, playerSpawnPoints[player.GetPlayerNumber()].transform.rotation);
+                }
+            }
+        }
 
         if (PhotonNetwork.IsMasterClient)
             PhotonNetwork.CurrentRoom.SetCountDownTime(PhotonNetwork.ServerTimestamp);
@@ -142,15 +156,13 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
 
         int playerIndex = PhotonNetwork.LocalPlayer.GetPlayerNumber();
 
-        if (playerIndex == 2 || playerIndex == 3)
-        {
-            PhotonNetwork.Instantiate("PlayerBoy", playerSpawnPoints[playerIndex].transform.position, playerSpawnPoints[playerIndex].transform.rotation);
-            GameManager.Team.SetTeam(PlayerTeam.Climber);
-        }
-        else if (playerIndex == 0 || playerIndex == 1)
+        if (GameManager.Team.GetTeam() == PlayerTeam.Troller)
         {
             PhotonNetwork.Instantiate("Player/TrollerController", playerSpawnPoints[playerIndex].transform.position, playerSpawnPoints[playerIndex].transform.rotation);
-            GameManager.Team.SetTeam(PlayerTeam.Troller);
+        }
+        else if (GameManager.Team.GetTeam() == PlayerTeam.Climber)
+        {
+            PhotonNetwork.Instantiate("PlayerBoy", playerSpawnPoints[playerIndex].transform.position, playerSpawnPoints[playerIndex].transform.rotation);
         }
 
         if (PhotonNetwork.IsMasterClient)
