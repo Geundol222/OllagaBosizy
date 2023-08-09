@@ -16,8 +16,10 @@ public class PlayerController : MonoBehaviourPun
     [Header("Collider")]
 	[SerializeField] Collider2D platformTrigger;
 
+    private GameObject debuffList;
     private PlayerInput inputAction;
     private CinemachineVirtualCamera playerCamera;
+    private CinemachineVirtualCamera trollerCamera;
 	private Vector3 prevPlayerPosition;
 	private Vector3 curPlayerPosition;
 	private Animator animator;
@@ -31,7 +33,9 @@ public class PlayerController : MonoBehaviourPun
 		
 		animator = GetComponent<Animator>();
         inputAction = GetComponent<PlayerInput>();
-        playerCamera = GameObject.FindGameObjectWithTag("VirtualCamera").GetComponent<CinemachineVirtualCamera>();
+        playerCamera = GameObject.Find("Climber_Cam").GetComponent<CinemachineVirtualCamera>();
+        trollerCamera = GameObject.Find("Troller_Cam").GetComponent<CinemachineVirtualCamera>();
+        debuffList = GameObject.Find("TrapList");
 
         if (!photonView.IsMine)
             Destroy(inputAction);
@@ -46,6 +50,9 @@ public class PlayerController : MonoBehaviourPun
     private void Start()
     {
 		StartCoroutine(NetworkConnectChecker());
+
+        Destroy(debuffList);
+        Destroy(trollerCamera.gameObject);
     }
 
 	IEnumerator NetworkConnectChecker()
