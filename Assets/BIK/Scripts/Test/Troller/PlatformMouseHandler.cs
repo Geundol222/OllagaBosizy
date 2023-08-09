@@ -8,9 +8,11 @@ public class PlatformMouseHandler : MonoBehaviour,IPointerClickHandler,IPointerE
 {
 
     private Platform platform;                                      // isClickable 함수 사용을 위한 Platform 참조
-    private List<Platform> setTrapPlatforms { get { return GameManager.TrollerData.setTrapPlatforms; }  }
+    private List<Platform> setTrapPlatforms { get { return GameManager.TrollerData._setTrapPlatforms; } }
+    private int setTrapPlatformsCount { get { return GameManager.TrollerData._setTrapPlatforms.Count; } }
+
     private bool canMouseAction { get { 
-            if(setTrapPlatforms.Count < GameManager.TrollerData.maxSetTrapPlatforms && GameManager.TrollerData.canSetTrap)
+            if(setTrapPlatformsCount < GameManager.TrollerData.maxSetTrapPlatforms && GameManager.TrollerData.canSetTrap)
             {
                 return true;
             } else

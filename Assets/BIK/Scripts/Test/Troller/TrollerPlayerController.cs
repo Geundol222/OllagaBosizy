@@ -3,10 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class TrollerPlayerController : MonoBehaviourPun
 {
     private GameObject[] allPlatformList;
+    private DebuffManager debuffManager { get { return GameManager.TrollerData.debuffManager; }  }
     int platformList_index = 0;
 
     private void Awake()
@@ -15,7 +17,7 @@ public class TrollerPlayerController : MonoBehaviourPun
         {
             Destroy(gameObject);
         }
-        GameManager.Debuff.DebuffQueueInit();
+        debuffManager.DebuffQueueInit();
     }
 
     private void Start()
