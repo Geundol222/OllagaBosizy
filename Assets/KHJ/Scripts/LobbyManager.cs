@@ -72,7 +72,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        roomCanvas.PlayerEnterRoom(newPlayer);
+        roomCanvas.PlayerEnterRoom();
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
