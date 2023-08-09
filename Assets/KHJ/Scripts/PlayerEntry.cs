@@ -35,10 +35,6 @@ public class PlayerEntry : MonoBehaviour
             bool ready = (bool)value;
             playerReady.text = ready ? "준비 완료!" : "";
         }
-        else
-        {
-            playerReady.text = "";
-        }
     }
 
     public void LeaveRoom()
