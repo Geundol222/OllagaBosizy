@@ -51,6 +51,7 @@ public class RoomCanvas : MonoBehaviour
             AllPlayerReadyCheck();
             PhotonNetwork.AutomaticallySyncScene = true;
         }
+        entry?.Sprite();
     }
 
     private void OnDisable()
@@ -95,6 +96,10 @@ public class RoomCanvas : MonoBehaviour
                 entry.SetPlayer(player);
                 bTeamDictionary.Add(player.ActorNumber, entry);
             }
+            if (PhotonNetwork.LocalPlayer == player)
+            {
+                entry1.Sprite();
+            }
             entry1.SetPlayer(player);
             playerDictionary.Add(player.ActorNumber, entry1);
             PhotonNetwork.LocalPlayer.SetReady(false);
@@ -127,7 +132,7 @@ public class RoomCanvas : MonoBehaviour
         PhotonNetwork.CurrentRoom.IsOpen = false;
         PhotonNetwork.CurrentRoom.IsVisible = false;
 
-        PhotonNetwork.LoadLevel("gggg");
+        GameManager.Scene.LoadScene(Scene.GAME);
     }
 
     public void LeaveRoom()
