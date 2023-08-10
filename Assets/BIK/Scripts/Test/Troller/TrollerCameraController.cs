@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using UnityEngine.InputSystem;
 using Cinemachine;
+using UnityEngine.Video;
 
 public class TrollerCameraController : MonoBehaviourPunCallbacks
 { 
@@ -14,32 +15,41 @@ public class TrollerCameraController : MonoBehaviourPunCallbacks
 
     Vector3 cameraMoveDir;
     bool pressArrows = false;
+    bool foundCamera = false;
 
-    private void Awake()
-    {
 
-        vcam = GameObject.Find("Troller_Cam").GetComponent<CinemachineVirtualCamera>();
-    }
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Confined;                         // 마우스 커서 게임 윈도우 안에서만 
         //Cursor.SetCursor(cursor, Vector3.zero, CursorMode.ForceSoftware);   // 마우스 커서 이미지 넣기
+        StartCoroutine(FindCameraCoroutine());
     }
+
+    IEnumerator FindCameraCoroutine()
+    {
+        yield return new WaitUntil(() => { return vcam = GameObject.Find("Troller_Cam").GetComponent<CinemachineVirtualCamera>(); });
+        foundCamera = true;
+        yield break;
+    }
+
 
     public override void OnDisable()
     {
         base.OnDisable();
         Cursor.lockState = CursorLockMode.None;
+        StopAllCoroutines();
     }
 
     private void LateUpdate()
     {
-        CameraMove();
+        if(foundCamera)
+            CameraMove();
     }
 
     private void FixedUpdate()
     {
-        CheckCameraInCamZone();
+        if (foundCamera)
+            CheckCameraInCamZone();
     }
 
     /// <summary>
