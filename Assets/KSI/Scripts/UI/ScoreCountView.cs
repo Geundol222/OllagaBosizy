@@ -43,7 +43,7 @@ public class ScoreCountView : MonoBehaviourPunCallbacks, IPunObservable
 
 	IEnumerator PlayerFindRoutine()
 	{
-		yield return new WaitUntil(() => { return gameObject.name == "ScoreSliderBoy" ? GameObject.Find("PlayerBoy(Clone)") : GameObject.Find("PlayerGirl(Clone)"); });
+		yield return new WaitUntil(() => { return gameObject.name == "ScoreSliderBoy" ? GameObject.Find("PlayerBoy(Clone)") : GameObject.Find("PlayerBoy(Clone)"); });
 
 		if (gameObject.name == "ScoreSliderBoy")
 		{
@@ -51,7 +51,7 @@ public class ScoreCountView : MonoBehaviourPunCallbacks, IPunObservable
 		}
 		else if (gameObject.name == "ScoreSliderGirl")
 		{
-			player = GameObject.Find("PlayerGirl(Clone)").transform;
+			player = GameObject.Find("PlayerBoy(Clone)").transform;
 		}
 
 		yield break;
