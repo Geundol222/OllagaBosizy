@@ -277,13 +277,18 @@ public class Platform : MonoBehaviourPun, IPunObservable
 
     IEnumerator DebuffSetCoolTimeCoroutine(int cooltime)
     {
+        GameManager.TrollerData.debuffManager.ShowCoolTimeUI();
+        yield return null;
         while (cooltime > 0)
         {
+            GameManager.TrollerData.debuffManager.SetCoolTimeText(cooltime);
             Debug.Log($"쿨타임 : {cooltime} 남음");
             cooltime--;
             yield return new WaitForSeconds(1f);
         }
+        GameManager.TrollerData.debuffManager.HideCoolTimeUI();
         SetCanMouseAction(true);
+        yield break;
     }
 
     [PunRPC]
