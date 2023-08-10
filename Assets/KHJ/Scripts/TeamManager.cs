@@ -1,5 +1,6 @@
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum PlayerTeam { None, Troller, Climber }
@@ -22,7 +23,19 @@ public class TeamManager : MonoBehaviour
         if (PhotonNetwork.LocalPlayer.GetPlayerTeam() == PlayerTeam.None)
         {
             if (PhotonNetwork.LocalPlayer.JoinTeam((byte)team))
+            {
                 PhotonNetwork.LocalPlayer.SetPlayerTeam(team);
+            }
+        }
+    }
+
+    public void SwitchTeam(PlayerTeam team)
+    {
+        PhotonNetwork.LocalPlayer.CustomProperties.Remove(PhotonNetwork.LocalPlayer.GetPlayerTeam());
+
+        if (PhotonNetwork.LocalPlayer.SwitchTeam((byte)team))
+        {
+            PhotonNetwork.LocalPlayer.SetPlayerTeam(team);
         }
     }
 }
