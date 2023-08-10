@@ -7,14 +7,19 @@ public class LeftTrapUI : GameSceneUI
     private TMP_Text[] texts;
     private Coroutine trollerDataCoroutine;
 
-    private void Awake()
+    protected override void Awake()
     {
         texts = GetComponentsInChildren<TMP_Text>();
     }
     // Start is called before the first frame update
     private void Start()
     {
-        trollerDataCoroutine = StartCoroutine(SetTrollerDataCoroutine());
+        if (GameManager.Team.GetTeam() == PlayerTeam.Troller)
+        {
+            trollerDataCoroutine = StartCoroutine(SetTrollerDataCoroutine());
+        }
+        else
+            Destroy(gameObject);
     }
 
     IEnumerator SetTrollerDataCoroutine()

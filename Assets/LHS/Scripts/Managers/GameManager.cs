@@ -11,7 +11,6 @@ public class GameManager : MonoBehaviour
     private static DataManager data;
     private static TrollerDataManager trollerData;
     private static TeamManager team;
-    private static RoundManager round;
 
     public static GameManager Instance { get { return instance; } }
     public static PoolManager Pool { get { return pool; } }
@@ -22,7 +21,6 @@ public class GameManager : MonoBehaviour
     public static DataManager Data { get { return data; } }
     public static TrollerDataManager TrollerData { get { return trollerData; } }
     public static TeamManager Team { get { return team; } }
-    public static RoundManager Round { get { return round; } }
 
     private void Awake()
     {
@@ -84,10 +82,5 @@ public class GameManager : MonoBehaviour
         teamObj.name = "TeamManager";
         teamObj.transform.parent = transform;
         team = teamObj.AddComponent<TeamManager>();
-
-        GameObject roundObj = new GameObject();
-        roundObj.name = "RoundManager";
-        roundObj.transform.parent = transform;
-        round = roundObj.AddComponent<RoundManager>();
     }
 }

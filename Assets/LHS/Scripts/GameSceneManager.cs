@@ -14,6 +14,7 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
     [SerializeField] float countDownTimer;
     [SerializeField] float gameCountDown;
     [SerializeField] List<GameObject> playerSpawnPoints;
+    [SerializeField] RoundManager round;
 
     private void Start()
     {
@@ -125,7 +126,8 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
 
     private void GameStart()
     {
-        Debug.Log("Game Start");
+        if (round.GetRound() == Round.ROUND1)
+            round.SetRound(round.GetRound());
 
         GameManager.TrollerData.Init();
 
@@ -139,7 +141,10 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
                 }
                 else if (player.GetPlayerTeam() == PlayerTeam.Climber)
                 {
-                    PhotonNetwork.Instantiate("Climber/PlayerBoy", playerSpawnPoints[player.GetPlayerNumber()].transform.position, playerSpawnPoints[player.GetPlayerNumber()].transform.rotation);
+                    if (player.GetClimber() == Climber.Boy)
+                        PhotonNetwork.Instantiate("Climber/PlayerBoy", playerSpawnPoints[player.GetPlayerNumber()].transform.position, playerSpawnPoints[player.GetPlayerNumber()].transform.rotation);
+                    else if (player.GetClimber() == Climber.Girl)
+                        PhotonNetwork.Instantiate("Climber/PlayerGirl", playerSpawnPoints[player.GetPlayerNumber()].transform.position, playerSpawnPoints[player.GetPlayerNumber()].transform.rotation);
                 }
             }
         }

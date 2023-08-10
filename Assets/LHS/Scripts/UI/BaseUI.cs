@@ -1,9 +1,10 @@
+using Photon.Pun;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BaseUI : MonoBehaviour
+public class BaseUI : MonoBehaviourPun
 {
     protected Dictionary<string, RectTransform> transforms;
     protected Dictionary<string, Button> buttons;

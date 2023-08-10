@@ -19,7 +19,6 @@ public class PlayerController : MonoBehaviourPun
     private GameObject debuffList;
     private PlayerInput inputAction;
     private CinemachineVirtualCamera playerCamera;
-    private CinemachineVirtualCamera trollerCamera;
 	private Vector3 prevPlayerPosition;
 	private Vector3 curPlayerPosition;
 	private Animator animator;
@@ -29,12 +28,14 @@ public class PlayerController : MonoBehaviourPun
 
     private void Awake()
 	{
-		prevPlayerPosition = transform.position;
+        if (GameManager.Team.GetTeam() != PlayerTeam.Climber)
+            Destroy(gameObject.GetComponent<PlayerController>());
+
+        prevPlayerPosition = transform.position;
 		
 		animator = GetComponent<Animator>();
         inputAction = GetComponent<PlayerInput>();
-        playerCamera = GameObject.Find("Climber_Cam").GetComponent<CinemachineVirtualCamera>();
-        trollerCamera = GameObject.Find("Troller_Cam").GetComponent<CinemachineVirtualCamera>();
+        playerCamera = GameObject.Find("PlayerCam").GetComponent<CinemachineVirtualCamera>();
 
         if (!photonView.IsMine)
             Destroy(inputAction);
@@ -53,7 +54,6 @@ public class PlayerController : MonoBehaviourPun
         if (GameManager.Team.GetTeam() == PlayerTeam.Climber)
         {
             Destroy(debuffList);
-            Destroy(trollerCamera.gameObject);
         }
     }
 
@@ -69,7 +69,8 @@ public class PlayerController : MonoBehaviourPun
 
 	private void FixedUpdate()
 	{
-        GroundCheck();        
+        if (GameManager.Team.GetTeam() == PlayerTeam.Climber)
+            GroundCheck();        
     }
 
 	private void GroundCheck()

@@ -5,6 +5,13 @@ public class FootTrigger : MonoBehaviourPun
 {
     [SerializeField] LayerMask platformLayer;
 
+    RoundManager round;
+
+    private void Awake()
+    {
+        round = GameObject.Find("RoundManager").GetComponent<RoundManager>();
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (photonView.IsMine)
@@ -19,6 +26,6 @@ public class FootTrigger : MonoBehaviourPun
     [PunRPC]
     public void StepEndPoint()
     {
-        GameManager.Round.NextRound();
+        round.NextRound();
     }
 }
