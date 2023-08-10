@@ -42,5 +42,19 @@ public class TrapListUI : GameSceneUI
             debuffIcons[i].sprite = GameManager.Resource.Load<Sprite>($"UI/{debuffs[i].state.ToString()}");
         }
     }
+    public void ShowCoolTimeUI()
+    {
+        debuffIcons[debuffIcons.Length - 1].enabled = true;
+    }
 
+    public void HideCoolTimeUI()
+    {
+        debuffText.text = "";
+        debuffIcons[debuffIcons.Length - 1].enabled = false;
+    }
+
+    public void SetCoolTimeText(int coolTime)
+    {
+        debuffText.text = coolTime.ToString();
+    }
 }
