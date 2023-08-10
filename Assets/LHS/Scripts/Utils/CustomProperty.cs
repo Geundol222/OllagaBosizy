@@ -65,7 +65,7 @@ public static class CustomProperty
         if (property.ContainsKey(CLIMBER))
             return (Climber)property[CLIMBER];
         else
-            return Climber.Length;
+            return Climber.None;
     }
 
     public static void SetClimber(this Player player, Climber climber)

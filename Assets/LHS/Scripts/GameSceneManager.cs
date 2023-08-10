@@ -126,11 +126,15 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
 
     private void GameStart()
     {
-        if (round.GetRound() == Round.ROUND1)
-            round.SetRound(round.GetRound());
+        round.SetRound(round.GetRound());
 
         GameManager.TrollerData.Init();
 
+        GameManager.Pool.InitPool();
+        GameManager.UI.InitUI();
+        GameManager.Sound.InitSound();
+        GameManager.Sound.FadeInAudio();
+        
         foreach (Player player in PhotonNetwork.PlayerList)
         {
             if (player == PhotonNetwork.LocalPlayer)

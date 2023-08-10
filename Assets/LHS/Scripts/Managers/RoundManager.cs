@@ -1,19 +1,42 @@
 using Photon.Pun;
 using Photon.Realtime;
+using Unity.VisualScripting;
 
-public enum Round { ROUND1, ROUND2, END };
+public enum Round { ROUND1, ROUND2, END }
+
+public enum Climber { None, Boy, Girl }
 
 public class RoundManager : MonoBehaviourPun
 {
-    private int roundIndex = 0;
+    private int roundIndex;
+    private int count;
+
+    private void Awake()
+    {
+        roundIndex = 0;
+        count = 0;
+    }
+
+    private void Start()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+            {
+                if (PhotonNetwork.PlayerList[i].GetPlayerTeam() == PlayerTeam.Climber)
+                {
+                    photonView.RPC("SetClimber", RpcTarget.AllBuffered, PhotonNetwork.PlayerList[i], count++);
+                }
+                else
+                    PhotonNetwork.PlayerList[i].SetClimber(Climber.None);
+            }
+        }
+    }
 
     public void SetRound(Round round)
     {
         switch (round)
         {
-            case Round.ROUND1:
-                RoundOne();
-                break;
             case Round.ROUND2:
                 RoundTwo();
                 break;
@@ -23,37 +46,11 @@ public class RoundManager : MonoBehaviourPun
         }
     }
 
-    private void RoundOne()
-    {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
-            {
-                int count = 0;
-                if (PhotonNetwork.PlayerList[i].GetPlayerTeam() == PlayerTeam.Climber)
-                {
-                    photonView.RPC("SetClimber", RpcTarget.AllBufferedViaServer, PhotonNetwork.PlayerList[i], count++);
-                }
-            }
-        }
-    }
-
     private void RoundTwo()
     {
         PhotonNetwork.LocalPlayer.SetLoad(false);
         PhotonNetwork.LocalPlayer.CustomProperties.Remove(PhotonNetwork.LocalPlayer.GetClimber());
         PhotonNetwork.CurrentRoom.CustomProperties.Clear();
-
-        if (PhotonNetwork.IsMasterClient)
-        {
-            for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
-            {
-                if (PhotonNetwork.PlayerList[i].GetPlayerTeam() == PlayerTeam.Climber)
-                {
-                    photonView.RPC("SetClimber", RpcTarget.AllBufferedViaServer, PhotonNetwork.PlayerList[i]);
-                }
-            }
-        }
 
         GameManager.Scene.LoadScene(Scene.GAME);
     }
@@ -93,10 +90,12 @@ public class RoundManager : MonoBehaviourPun
             {
                 player.SetClimber(Climber.Boy);
             }
-            else
+            else if (count == 1)
             {
                 player.SetClimber(Climber.Girl);
             }
+            else
+                return;
         }
         
         //foreach (Player other in PhotonNetwork.PlayerList)
