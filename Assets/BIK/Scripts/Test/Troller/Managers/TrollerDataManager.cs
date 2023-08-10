@@ -23,6 +23,7 @@ public class TrollerDataManager : MonoBehaviour
     public int maxSetTrapPlatforms = 5;
 
     public LeftTrapUI leftTrapUI;
+    public TrapListUI trapListUI;
     public DebuffManager debuffManager;
 
     private void Awake()
@@ -35,15 +36,24 @@ public class TrollerDataManager : MonoBehaviour
         InitPhysicsList();
     }
 
-    private void Start()
-    {
-    }
-
     public void Init()
     {
-        leftTrapUI = GameObject.Find("LeftTrap").GetComponent<LeftTrapUI>();
+        if (GameManager.Team.GetTeam() == PlayerTeam.Troller)
+            StartCoroutine(FindTrapRoutine());
+
         debuffManager = GameObject.Find("DebuffManager").GetComponent<DebuffManager>();
     }
+
+    IEnumerator FindTrapRoutine()
+    {
+        yield return new WaitUntil(() => { return GameObject.Find("TrollerController(Clone)"); });
+
+        leftTrapUI = GameObject.Find("LeftTrap(Clone)").GetComponent<LeftTrapUI>();
+        trapListUI = GameObject.Find("TrapList(Clone)").GetComponent<TrapListUI>();
+
+        yield break;
+    }
+
     public void InitPhysicsList()
     {
         debuff_PhysicsMaterials[(int)Debuff_State.Ice] = GameManager.Resource.Load<PhysicsMaterial2D>("Debuff/Ice");
