@@ -9,6 +9,9 @@ public class SceneManager : MonoBehaviour
 {
     // private LoadingUI loadingUI;
 
+    private Scene currentScene;
+    public Scene CurrentScene { get { return currentScene; } }
+
     private BaseScene curScene;
     public BaseScene CurScene
     {
@@ -31,6 +34,8 @@ public class SceneManager : MonoBehaviour
     public void LoadScene(Scene scene)
     {
         PhotonNetwork.AutomaticallySyncScene = true;
+
+        currentScene = scene;
 
         StartCoroutine(LoadingRoutine(scene));
     }

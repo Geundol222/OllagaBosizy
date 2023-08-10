@@ -35,7 +35,6 @@ public class PlayerController : MonoBehaviourPun
         inputAction = GetComponent<PlayerInput>();
         playerCamera = GameObject.Find("Climber_Cam").GetComponent<CinemachineVirtualCamera>();
         trollerCamera = GameObject.Find("Troller_Cam").GetComponent<CinemachineVirtualCamera>();
-        debuffList = GameObject.Find("TrapList");
 
         if (!photonView.IsMine)
             Destroy(inputAction);
@@ -51,8 +50,11 @@ public class PlayerController : MonoBehaviourPun
     {
 		StartCoroutine(NetworkConnectChecker());
 
-        Destroy(debuffList);
-        Destroy(trollerCamera.gameObject);
+        if (GameManager.Team.GetTeam() == PlayerTeam.Climber)
+        {
+            Destroy(debuffList);
+            Destroy(trollerCamera.gameObject);
+        }
     }
 
 	IEnumerator NetworkConnectChecker()
