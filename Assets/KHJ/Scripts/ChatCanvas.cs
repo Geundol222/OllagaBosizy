@@ -18,13 +18,16 @@ public class ChatCanvas : MonoBehaviour
     [SerializeField] BaseEventData eventdata;
     public PhotonView PV;
 
-
-    private void OnEnter(InputValue value)
+    private void Update()
     {
-        Send();
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            OnEnter();
+        }
     }
 
-    public void Send()
+
+    private void OnEnter()
     {
         string mes = chatInputField.text.Trim();
         Debug.Log(mes);
