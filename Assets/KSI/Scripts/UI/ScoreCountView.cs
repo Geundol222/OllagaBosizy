@@ -1,11 +1,7 @@
 using Photon.Pun;
-using Photon.Pun.UtilityScripts;
-using Photon.Realtime;
-using TMPro;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using Unity.VisualScripting;
 
 public class ScoreCountView : MonoBehaviourPunCallbacks, IPunObservable
 {
@@ -43,7 +39,7 @@ public class ScoreCountView : MonoBehaviourPunCallbacks, IPunObservable
 
 	IEnumerator PlayerFindRoutine()
 	{
-		yield return new WaitUntil(() => { return gameObject.name == "ScoreSliderBoy" ? GameObject.Find("PlayerBoy(Clone)") : GameObject.Find("PlayerBoy(Clone)"); });
+		yield return new WaitUntil(() => { return gameObject.name == "ScoreSliderBoy" ? GameObject.Find("PlayerBoy(Clone)") : GameObject.Find("PlayerGirl(Clone)"); });
 
 		if (gameObject.name == "ScoreSliderBoy")
 		{
@@ -51,7 +47,7 @@ public class ScoreCountView : MonoBehaviourPunCallbacks, IPunObservable
 		}
 		else if (gameObject.name == "ScoreSliderGirl")
 		{
-			player = GameObject.Find("PlayerBoy(Clone)").transform;
+			player = GameObject.Find("PlayerGirl(Clone)").transform;
 		}
 
 		yield break;

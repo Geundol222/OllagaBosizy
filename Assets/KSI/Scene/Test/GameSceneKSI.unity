@@ -2183,6 +2183,11 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4532369180442398314, guid: 682fcfd656a42c1449e4d77a18a542ab,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4532369180442398315, guid: 682fcfd656a42c1449e4d77a18a542ab,
         type: 3}
       propertyPath: endPoint
@@ -2193,6 +2198,11 @@ PrefabInstance:
       propertyPath: startPoint
       value: 
       objectReference: {fileID: 97487240}
+    - target: {fileID: 4532369180527030320, guid: 682fcfd656a42c1449e4d77a18a542ab,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4532369180527030321, guid: 682fcfd656a42c1449e4d77a18a542ab,
         type: 3}
       propertyPath: endPoint
