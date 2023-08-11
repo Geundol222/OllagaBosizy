@@ -1,13 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Photon.Pun;
-using UnityEngine.InputSystem;
 using Cinemachine;
-using UnityEngine.Video;
+using Photon.Pun;
+using System.Collections;
+using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class TrollerCameraController : MonoBehaviourPunCallbacks
-{ 
+{
     [SerializeField] Texture2D cursor;
     [SerializeField] float cameraMoveSpeed;
     [SerializeField] float padding;
@@ -27,8 +25,9 @@ public class TrollerCameraController : MonoBehaviourPunCallbacks
 
     IEnumerator FindCameraCoroutine()
     {
-        yield return new WaitUntil(() => { return vcam = GameObject.Find("Troller_Cam").GetComponent<CinemachineVirtualCamera>(); });
+        yield return new WaitUntil(() => { return vcam = GameObject.Find("PlayerCam").GetComponent<CinemachineVirtualCamera>(); });
         foundCamera = true;
+        vcam.transform.position = new Vector3(transform.position.x, transform.position.y, vcam.transform.position.z);
         yield break;
     }
 
@@ -42,13 +41,13 @@ public class TrollerCameraController : MonoBehaviourPunCallbacks
 
     private void LateUpdate()
     {
-        if(foundCamera)
+        if (foundCamera && photonView.IsMine)
             CameraMove();
     }
 
     private void FixedUpdate()
     {
-        if (foundCamera)
+        if (foundCamera && photonView.IsMine)
             CheckCameraInCamZone();
     }
 
@@ -72,7 +71,7 @@ public class TrollerCameraController : MonoBehaviourPunCallbacks
     private void CameraMove()
     {
         vcam.transform.Translate(Vector3.right * cameraMoveDir.x * cameraMoveSpeed * Time.deltaTime, Space.World);
-        vcam.transform.Translate(Vector3.up * cameraMoveDir.y * cameraMoveSpeed * Time.deltaTime, Space.World);    
+        vcam.transform.Translate(Vector3.up * cameraMoveDir.y * cameraMoveSpeed * Time.deltaTime, Space.World);
     }
 
     private void OnMove(InputValue value) // 방향키 입력 감지
@@ -83,7 +82,8 @@ public class TrollerCameraController : MonoBehaviourPunCallbacks
         if (keyboardPos.x != 0 || keyboardPos.y != 0) // 방향키 입력 감지
         {
             pressArrows = true;
-        } else
+        }
+        else
         {
             pressArrows = false;
         }
@@ -99,10 +99,11 @@ public class TrollerCameraController : MonoBehaviourPunCallbacks
 
         Vector2 mousePos = value.Get<Vector2>();
 
-        if( -10 < mousePos.x && mousePos.x <= 0 + padding)
+        if (-10 < mousePos.x && mousePos.x <= 0 + padding)
         {
             cameraMoveDir.x = -1;
-        } else if(mousePos.x >= Screen.width - padding && mousePos.x <= Screen.width + 10)
+        }
+        else if (mousePos.x >= Screen.width - padding && mousePos.x <= Screen.width + 10)
         {
             cameraMoveDir.x = 1;
         }
@@ -111,16 +112,18 @@ public class TrollerCameraController : MonoBehaviourPunCallbacks
             cameraMoveDir.x = 0;
         }
 
-        if( -10 < mousePos.y && mousePos.y <= 0 + padding) // 마우스의 y 위치 값이 패딩 값보다 같거나 작다.
+        if (-10 < mousePos.y && mousePos.y <= 0 + padding) // 마우스의 y 위치 값이 패딩 값보다 같거나 작다.
         {
             cameraMoveDir.y = -1;
-        } else if(mousePos.y >= Screen.height - padding && mousePos.y <= Screen.height + 10) // 마우스의 y 위치 값이 최상단의 패딩 값에 해당하는 구간이다.
+        }
+        else if (mousePos.y >= Screen.height - padding && mousePos.y <= Screen.height + 10) // 마우스의 y 위치 값이 최상단의 패딩 값에 해당하는 구간이다.
         {
             cameraMoveDir.y = 1;
-        } else
+        }
+        else
         {
             cameraMoveDir.y = 0;
-        }    
+        }
     }
 
 

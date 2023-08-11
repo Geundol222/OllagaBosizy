@@ -14,17 +14,19 @@ public class TrollerPlayerController : MonoBehaviourPun
 
     private void Awake()
     {
-        GameManager.Resource.Instantiate<Canvas>("Troller/TrapList");
-
         if (GameManager.Team.GetTeam() == PlayerTeam.Troller)
         {
-            debuffManager.DebuffQueueInit();
-        }
-
-        if (!photonView.IsMine)
-        {
-            Destroy(inputAction);
-            //Destroy(gameObject);
+            if (photonView.IsMine)
+            {
+                GameManager.Resource.Instantiate<Canvas>("Troller/TrapList");
+                GameManager.Resource.Instantiate<Canvas>("Troller/LeftTrap");
+                debuffManager.DebuffQueueInit();
+            }
+            else
+            {
+                Destroy(inputAction);
+                //Destroy(gameObject);
+            }
         }
     }
 
@@ -32,6 +34,7 @@ public class TrollerPlayerController : MonoBehaviourPun
     {
         if (!photonView.IsMine)
             return;
+
         allPlatformList = GameObject.FindGameObjectsWithTag("Platform");
         foreach (GameObject go in allPlatformList)
         {

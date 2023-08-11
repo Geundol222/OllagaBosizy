@@ -10,13 +10,11 @@ public class DebuffManager : MonoBehaviour
 
     int debuffQueueLength { get { return GameManager.TrollerData.debuffQueueLength; } set { GameManager.TrollerData.debuffQueueLength = value; } } // 디버프 큐 길이
                                                                                                                                                    //int debuffCount { get { return GameManager.TrollerData.debuffCount; } }
-
     Queue<IDebuff> debuffQueue { get { return GameManager.TrollerData.debuffQueue; } set { GameManager.TrollerData.debuffQueue = value; } } // 디버프 큐
 
     public PhysicsMaterial2D[] debuff_PhysicsMaterials { get { return GameManager.TrollerData.debuff_PhysicsMaterials; } } // 디버프 물리머테리얼 배열
 
-    //[SerializeField] public TMP_Text[] TrapListTexts;
-    TrapListUI trapListUI;
+    public TrapListUI trapListUI { get { return GameManager.TrollerData.trapListUI; } set { GameManager.TrollerData.trapListUI = value; } }
 
     public void UpdateTrapList()
     {
@@ -32,7 +30,6 @@ public class DebuffManager : MonoBehaviour
         if (GameManager.Team.GetTeam() != PlayerTeam.Troller)
             return;
         debuffQueue = new Queue<IDebuff>();
-        trapListUI = GameObject.Find("TrapList(Clone)").GetComponent<TrapListUI>();
 
         debuffQueueLength = 4;
 
@@ -62,8 +59,6 @@ public class DebuffManager : MonoBehaviour
 
     public Debuff CreateNoneStateDebuff()
     {
-        if (GameManager.Team.GetTeam() != PlayerTeam.Troller)
-            return null;
         Debuff debuff = (Debuff)Original_Debuff.clone();
         debuff.SetState((int)Debuff_State.None);
 
@@ -72,9 +67,6 @@ public class DebuffManager : MonoBehaviour
 
     public void SetTrap(Debuff debuff, Platform platform)
     {
-        if (GameManager.Team.GetTeam() != PlayerTeam.Troller)
-            return;
-
         Collider2D platformCollider2D = platform.GetComponent<Collider2D>();
         SurfaceEffector2D surfaceEffector2D = platform.GetComponent<SurfaceEffector2D>();
 
@@ -96,6 +88,21 @@ public class DebuffManager : MonoBehaviour
             default: Debug.Log($"{debuff.state}는 현재 구현예정"); break;
                 // 3번(플레이어 속도 순식간에 0으로 만들기)인 경우
         }
+    }
+
+    public void ShowCoolTimeUI()
+    {
+        trapListUI.ShowCoolTimeUI();
+    }
+
+    public void HideCoolTimeUI()
+    {
+        trapListUI.HideCoolTimeUI();
+    }
+
+    public void SetCoolTimeText(int coolTime)
+    {
+        trapListUI.SetCoolTimeText(coolTime);
     }
 
     public void DisableTrap(Debuff debuff)

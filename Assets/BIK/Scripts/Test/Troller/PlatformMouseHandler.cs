@@ -53,6 +53,9 @@ public class PlatformMouseHandler : MonoBehaviour, IPointerClickHandler, IPointe
     /// <param name="eventData"></param>
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (GameManager.Team.GetTeam() != PlayerTeam.Troller)
+            return;
+
         if (!canMouseAction)
             return;
         if (platform.IsClickable)
@@ -67,11 +70,17 @@ public class PlatformMouseHandler : MonoBehaviour, IPointerClickHandler, IPointe
     /// <param name="eventData"></param>
     public void OnPointerExit(PointerEventData eventData)
     {
+        if (GameManager.Team.GetTeam() != PlayerTeam.Troller)
+            return;
+
         platform.SwitchRenderColorExit();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if (GameManager.Team.GetTeam() != PlayerTeam.Troller)
+            return;
+
         if (!canMouseAction)
             return;
         platform.SwitchRenderColorEnter();

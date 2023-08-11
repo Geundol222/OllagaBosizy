@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -7,13 +8,18 @@ using UnityEngine.UI;
 public class TrapListUI : GameSceneUI
 {
     private Debuff[] debuffs;
-    private TMP_Text[] debuffTexts;
+    private TMP_Text debuffText;
     private Image[] debuffIcons;
 
     private void Start()
     {
-        debuffTexts = GetComponentsInChildren<TMP_Text>();
-        debuffIcons = GetComponentsInChildren<Image>();
+        if (GameManager.Team.GetTeam() == PlayerTeam.Troller)
+        {
+            debuffText = GetComponentInChildren<TMP_Text>();
+            debuffIcons = GetComponentsInChildren<Image>();
+        }
+        else
+            Destroy(gameObject);
     }
 
     public void UpdateList(Debuff[] debuffs)
@@ -31,11 +37,24 @@ public class TrapListUI : GameSceneUI
             debuffIcons = GetComponentsInChildren<Image>();
         }
 
-        Debug.Log($"디버프 아이콘 길이 {debuffIcons.Length}");
-        for (int i = 0; i < debuffIcons.Length; i++)
+        for (int i = 0; i < debuffIcons.Length - 1; i++)
         {
             debuffIcons[i].sprite = GameManager.Resource.Load<Sprite>($"UI/{debuffs[i].state.ToString()}");
         }
     }
+    public void ShowCoolTimeUI()
+    {
+        debuffIcons[debuffIcons.Length - 1].enabled = true;
+    }
 
+    public void HideCoolTimeUI()
+    {
+        debuffText.text = "";
+        debuffIcons[debuffIcons.Length - 1].enabled = false;
+    }
+
+    public void SetCoolTimeText(int coolTime)
+    {
+        debuffText.text = coolTime.ToString();
+    }
 }
