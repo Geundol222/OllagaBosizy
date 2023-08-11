@@ -12,6 +12,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     [SerializeField] LoginCanvas loginCanvas;
     [SerializeField] MenuCanvas menuCanvas;
     [SerializeField] RoomCanvas roomCanvas;
+    [SerializeField] ChatCanvas chatCanvas;
 
     public void Start()
     {
@@ -69,17 +70,20 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("State = LeftRoom");
         PhotonNetwork.LocalPlayer.SetReady(false);
+        chatCanvas.OutRoom();
         PhotonNetwork.JoinLobby();
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         roomCanvas.PlayerEnterRoom();
+        chatCanvas.InOutRPC(newPlayer.NickName + "¥‘¿Ã ¬¸∞°«œºÃΩ¿¥œ¥Ÿ.");
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         roomCanvas.PlayerLeftRoom(otherPlayer);
+        chatCanvas.InOutRPC(otherPlayer.NickName + "¥‘¿Ã ≈¿Â«œºÃΩ¿¥œ¥Ÿ.");
     }
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, PhotonHashtable changedProps)

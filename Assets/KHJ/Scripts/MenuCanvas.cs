@@ -12,6 +12,7 @@ public class MenuCanvas : MonoBehaviour
     [SerializeField] GameObject createRoomPanel;
     [SerializeField] TMP_InputField roomNameInputField;
     [SerializeField] TMP_Text maxPlayerText;
+    public Animator createRoomAnim;
     private Animator anim;
     //[SerializeField] GameObject peopleScrollView;
     //[SerializeField] Animator peopleAnimator;
@@ -40,12 +41,12 @@ public class MenuCanvas : MonoBehaviour
     public void OpenCreateRoomMenu()
     {
         createRoomPanel.SetActive(true);
+        createRoomAnim.SetTrigger("IsOpen");
     }
 
     public void CloseCreateRoomMenu()
     {
-        roomNameInputField.text = "";
-        createRoomPanel.SetActive(false);
+        StartCoroutine(CloseCreateRoomMenuRoutine());
     }
 
     public void CreateRoomConfirm()
@@ -73,11 +74,6 @@ public class MenuCanvas : MonoBehaviour
 
         RoomOptions options = new RoomOptions { MaxPlayers = maxPlayer };
         PhotonNetwork.CreateRoom(roomName, options);
-    }
-
-    public void CreateRoomCancel()
-    {
-        createRoomPanel.SetActive(false);
     }
 
     public void Logout()
@@ -161,4 +157,13 @@ public class MenuCanvas : MonoBehaviour
     {
         Debug.Log(maxPlayerText.text);
     }*/
+
+    IEnumerator CloseCreateRoomMenuRoutine()
+    {
+        createRoomAnim.SetTrigger("IsClose");
+        yield return new WaitForSeconds(0.5f);
+        roomNameInputField.text = "";
+        createRoomPanel.SetActive(false);
+        yield break;
+    }
 }
