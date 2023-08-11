@@ -42,6 +42,7 @@ public class TimerView : MonoBehaviourPunCallbacks
 			int seconds = Mathf.FloorToInt(remainLimitTime % 60);
 			timerText.text = $"{minutes:00} : {seconds:00}";
 
+			timerText.color = Color.white;
 			remainLimitTime--;
 			yield return new WaitForSeconds(1f);
 		}

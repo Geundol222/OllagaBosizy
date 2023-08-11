@@ -146,6 +146,7 @@ public class TimerViewTest : MonoBehaviourPunCallbacks
 			int minutes = Mathf.FloorToInt(remainLimitTime / 60);
 			int seconds = Mathf.FloorToInt(remainLimitTime % 60);
 			timerText.text = $"{minutes:00} : {seconds:00}";
+			timerText.color = Color.white;
 
 			yield return new WaitForEndOfFrame();
 		}
