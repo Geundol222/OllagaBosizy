@@ -16,6 +16,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     public void Start()
     {
+        PhotonNetwork.LocalPlayer.CustomProperties.Clear();
+
         if (PhotonNetwork.IsConnected)
             OnConnectedToMaster();
         else if (PhotonNetwork.InRoom)

@@ -33,6 +33,9 @@ public class RoomCanvas : MonoBehaviour
 
     private void OnEnable()
     {
+        if (PhotonNetwork.IsMasterClient)
+            PhotonNetwork.CurrentRoom.SetCurrentRound(Round.NONE);
+
         int AteamCount = 0;
         foreach (Player player in PhotonNetwork.PlayerList)
         {
