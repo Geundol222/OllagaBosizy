@@ -1,3 +1,4 @@
+using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
@@ -10,6 +11,7 @@ public static class CustomProperty
     public const string NUMBER = "Number";
     public const string LOADTIME = "LoadTime";
     public const string COUNTDOWNTIME = "CountDownTime";
+    public const string ROUND = "Round";
 
     public static bool GetReady(this Player player)
     {
@@ -104,6 +106,22 @@ public static class CustomProperty
     {
         PhotonHashtable property = new PhotonHashtable();
         property[COUNTDOWNTIME] = countDownTime;
+        room.SetCustomProperties(property);
+    }
+
+    public static Round GetCurrentRound(this Room room)
+    {
+        PhotonHashtable property = room.CustomProperties;
+        if (property.ContainsKey(ROUND))
+            return (Round)property[ROUND];
+        else
+            return Round.ROUND1;
+    }
+
+    public static void SetCurrentRound(this Room room, Round round)
+    {
+        PhotonHashtable property = new PhotonHashtable();
+        property[ROUND] = round;
         room.SetCustomProperties(property);
     }
 }

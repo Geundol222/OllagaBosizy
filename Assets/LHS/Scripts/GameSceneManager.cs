@@ -18,8 +18,6 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        PhotonNetwork.AutomaticallySyncScene = false;
-
         if (PhotonNetwork.InRoom)
         {
             PhotonNetwork.LocalPlayer.SetLoad(true);
@@ -30,6 +28,8 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
             PhotonNetwork.LocalPlayer.NickName = $"DebugPlayer {Random.Range(1000, 10000)}";
             PhotonNetwork.ConnectUsingSettings();
         }
+
+        StopAllCoroutines();
     }
 
     public override void OnConnectedToMaster()
@@ -126,15 +126,16 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
 
     private void GameStart()
     {
-        round.SetRound(round.GetRound());
-
-        GameManager.TrollerData.Init();
+        if (round.GetRound() == Round.NONE && PhotonNetwork.IsMasterClient)
+            round.SetRound(round.GetRound());
 
         GameManager.Pool.InitPool();
         GameManager.UI.InitUI();
         GameManager.Sound.InitSound();
         GameManager.Sound.FadeInAudio();
-        
+
+        GameManager.TrollerData.Init();
+
         foreach (Player player in PhotonNetwork.PlayerList)
         {
             if (player == PhotonNetwork.LocalPlayer)
@@ -197,6 +198,8 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
 
         while (gameCountDown > (PhotonNetwork.ServerTimestamp - loadTime) / 1000f)
         {
+            timerText.color = Color.white;
+
             int remainLimitTime = (int)(gameCountDown - (PhotonNetwork.ServerTimestamp - loadTime) / 1000f);
 
             int minutes = Mathf.FloorToInt(remainLimitTime / 60);
@@ -213,6 +216,28 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
     {
         timerText.text = "TIME OUT";
         timerText.color = Color.red;
+
+        if (PhotonNetwork.IsMasterClient)
+            StartCoroutine(RoundChangeRoutine());
     }
 
+    IEnumerator RoundChangeRoutine()
+    {
+        yield return new WaitForSeconds(5f);
+
+        round.NextRound();
+
+        yield break;
+    }
+
+    public void PlayerStepEndPoint()
+    {
+        photonView.RPC("StepEndPoint", RpcTarget.AllBuffered);
+    }
+
+    [PunRPC]
+    public void StepEndPoint()
+    {
+        StartCoroutine(RoundChangeRoutine());
+    }
 }

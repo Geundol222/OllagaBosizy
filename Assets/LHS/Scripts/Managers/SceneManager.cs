@@ -33,7 +33,7 @@ public class SceneManager : MonoBehaviour
 
     public void LoadScene(Scene scene)
     {
-        PhotonNetwork.AutomaticallySyncScene = true;
+        
 
         currentScene = scene;
 
@@ -49,7 +49,10 @@ public class SceneManager : MonoBehaviour
         Time.timeScale = 0f;
 
         //AsyncOperation oper = UnitySceneManager.LoadSceneAsync(index);
-        PhotonNetwork.LoadLevel((int)scene);
+        PhotonNetwork.AutomaticallySyncScene = true;
+
+        if (PhotonNetwork.IsMasterClient)
+            PhotonNetwork.LoadLevel((int)scene);
 
         while (PhotonNetwork.LevelLoadingProgress < 1f)
         {
@@ -66,6 +69,7 @@ public class SceneManager : MonoBehaviour
 
         Time.timeScale = 1f;
         // loadingUI.FadeIn();
+        PhotonNetwork.AutomaticallySyncScene = false;
         yield return new WaitWhile(() => { return GameManager.Sound.IsMuted(); });
     }
 }

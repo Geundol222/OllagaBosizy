@@ -96,11 +96,11 @@ public class PlayerController : MonoBehaviourPun
 	{
 		if (isGround && prevPlayerPosition.y > curPlayerPosition.y)
 		{
-			if (curPlayerPosition.y > 0 && (prevPlayerPosition.y - curPlayerPosition.y) > 15)
+			if (curPlayerPosition.y > 0 && (prevPlayerPosition.y - curPlayerPosition.y) > 10)
 			{
                 animator.SetBool("IsFall", true);
             }
-			else if (curPlayerPosition.y <= 0 && (prevPlayerPosition.y + Mathf.Abs(curPlayerPosition.y)) > 15)
+			else if (curPlayerPosition.y <= 0 && (prevPlayerPosition.y + Mathf.Abs(curPlayerPosition.y)) > 10)
 			{
                 animator.SetBool("IsFall", true);
             }
