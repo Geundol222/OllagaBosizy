@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 441580748240282952}
   - component: {fileID: 7516109043730566429}
   - component: {fileID: 7850651383108181029}
-  - component: {fileID: -1550289925367221531}
+  - component: {fileID: 6126393430515830099}
   m_Layer: 5
   m_Name: LeftTrap
   m_TagString: Untagged
@@ -103,7 +103,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &-1550289925367221531
+--- !u!114 &6126393430515830099
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -115,6 +115,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8a2bea185766e141b7db817066271b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  countText: {fileID: 6432432601750807017}
 --- !u!1 &4462830870537456141
 GameObject:
   m_ObjectHideFlags: 0
@@ -317,7 +318,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 1 / 3
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9a341bb386aceaf44a04c3e09dc85dcc, type: 2}
   m_sharedMaterial: {fileID: 5228137567944881379, guid: 9a341bb386aceaf44a04c3e09dc85dcc,

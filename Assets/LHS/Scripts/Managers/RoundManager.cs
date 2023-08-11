@@ -1,19 +1,17 @@
 using Photon.Pun;
 using Photon.Realtime;
-using Unity.VisualScripting;
+using UnityEngine;
 
-public enum Round { ROUND1, ROUND2, END }
+public enum Round { NONE, ROUND1, ROUND2 }
 
 public enum Climber { None, Boy, Girl }
 
 public class RoundManager : MonoBehaviourPun
 {
-    private int roundIndex;
     private int count;
 
     private void Awake()
     {
-        roundIndex = 0;
         count = 0;
     }
 
@@ -37,29 +35,49 @@ public class RoundManager : MonoBehaviourPun
     {
         switch (round)
         {
-            case Round.ROUND2:
+            case Round.NONE:
+                RoundOne();
+                break;
+            case Round.ROUND1:                
                 RoundTwo();
                 break;
-            case Round.END:
+            case Round.ROUND2:                
                 EndGame();
+                break;
+            default:
+                PhotonNetwork.CurrentRoom.SetCurrentRound(Round.NONE);
                 break;
         }
     }
 
+    private void RoundOne()
+    {
+        Debug.Log("Round1");
+
+        PhotonNetwork.CurrentRoom.SetCurrentRound(Round.ROUND1);
+    }
+
     private void RoundTwo()
     {
+        Debug.Log("Round2");
+
         PhotonNetwork.LocalPlayer.SetLoad(false);
-        PhotonNetwork.LocalPlayer.CustomProperties.Remove(PhotonNetwork.LocalPlayer.GetClimber());
+        PhotonNetwork.LocalPlayer.CustomProperties.Remove("Climber");
         PhotonNetwork.CurrentRoom.CustomProperties.Clear();
+
+        PhotonNetwork.CurrentRoom.SetCurrentRound(Round.ROUND2);
 
         GameManager.Scene.LoadScene(Scene.GAME);
     }
 
     private void EndGame()
     {
-        roundIndex = 0;
-        PhotonNetwork.LocalPlayer.CustomProperties.Clear();
+        Debug.Log("EndGame");
+
         PhotonNetwork.CurrentRoom.CustomProperties.Clear();
+
+        PhotonNetwork.CurrentRoom.SetCurrentRound(Round.NONE);
+
         GameManager.Scene.LoadScene(Scene.LOBBY);
     }
 
@@ -70,14 +88,13 @@ public class RoundManager : MonoBehaviourPun
 
     public Round GetRound()
     {
-        return (Round)roundIndex;
+        return PhotonNetwork.CurrentRoom.GetCurrentRound();
     }
 
     public void NextRound()
     {
-        roundIndex++;
-
         SwitchTeam();
+
         SetRound(GetRound());
     }
 
