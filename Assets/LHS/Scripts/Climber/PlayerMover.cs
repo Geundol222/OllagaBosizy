@@ -29,7 +29,8 @@ public class PlayerMover : MonoBehaviourPun
 
     private void FixedUpdate()
     {
-        Move();
+        if (GameManager.Team.GetTeam() == PlayerTeam.Climber)
+            Move();
     }
 
     public void Move()

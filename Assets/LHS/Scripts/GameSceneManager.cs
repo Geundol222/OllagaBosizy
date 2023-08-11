@@ -14,6 +14,7 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
     [SerializeField] float countDownTimer;
     [SerializeField] float gameCountDown;
     [SerializeField] List<GameObject> playerSpawnPoints;
+    [SerializeField] RoundManager round;
 
     private void Start()
     {
@@ -125,10 +126,15 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
 
     private void GameStart()
     {
-        Debug.Log("Game Start");
+        round.SetRound(round.GetRound());
 
         GameManager.TrollerData.Init();
 
+        GameManager.Pool.InitPool();
+        GameManager.UI.InitUI();
+        GameManager.Sound.InitSound();
+        GameManager.Sound.FadeInAudio();
+        
         foreach (Player player in PhotonNetwork.PlayerList)
         {
             if (player == PhotonNetwork.LocalPlayer)
@@ -139,7 +145,10 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
                 }
                 else if (player.GetPlayerTeam() == PlayerTeam.Climber)
                 {
-                    PhotonNetwork.Instantiate("Climber/PlayerBoy", playerSpawnPoints[player.GetPlayerNumber()].transform.position, playerSpawnPoints[player.GetPlayerNumber()].transform.rotation);
+                    if (player.GetClimber() == Climber.Boy)
+                        PhotonNetwork.Instantiate("Climber/PlayerBoy", playerSpawnPoints[player.GetPlayerNumber()].transform.position, playerSpawnPoints[player.GetPlayerNumber()].transform.rotation);
+                    else if (player.GetClimber() == Climber.Girl)
+                        PhotonNetwork.Instantiate("Climber/PlayerGirl", playerSpawnPoints[player.GetPlayerNumber()].transform.position, playerSpawnPoints[player.GetPlayerNumber()].transform.rotation);
                 }
             }
         }

@@ -57,12 +57,6 @@ public class SceneManager : MonoBehaviour
             yield return null;
         }
 
-        GameManager.Pool.InitPool();
-
-        GameManager.UI.InitUI();
-        GameManager.Sound.InitSound();
-        GameManager.Sound.FadeInAudio();
-
         // CurScene.LoadAsync();
         // while (CurScene.progress < 1f)
         // {

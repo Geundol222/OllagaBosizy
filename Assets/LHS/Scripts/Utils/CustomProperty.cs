@@ -6,6 +6,7 @@ public static class CustomProperty
     public const string READY = "Ready";
     public const string LOAD = "Load";
     public const string TEAM = "Team";
+    public const string CLIMBER = "Climber";
     public const string NUMBER = "Number";
     public const string LOADTIME = "LoadTime";
     public const string COUNTDOWNTIME = "CountDownTime";
@@ -55,6 +56,22 @@ public static class CustomProperty
     {
         PhotonHashtable property = new PhotonHashtable();
         property[TEAM] = team;
+        player.SetCustomProperties(property);
+    }
+
+    public static Climber GetClimber(this Player player)
+    {
+        PhotonHashtable property = player.CustomProperties;
+        if (property.ContainsKey(CLIMBER))
+            return (Climber)property[CLIMBER];
+        else
+            return Climber.None;
+    }
+
+    public static void SetClimber(this Player player, Climber climber)
+    {
+        PhotonHashtable property = new PhotonHashtable();
+        property[CLIMBER] = climber;
         player.SetCustomProperties(property);
     }
 
