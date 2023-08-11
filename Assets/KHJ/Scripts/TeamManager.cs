@@ -14,28 +14,39 @@ public class TeamManager : MonoBehaviour
 
     public void LeaveTeam()
     {
+        PhotonNetwork.LocalPlayer.CustomProperties.Remove("Team");
         PhotonNetwork.LocalPlayer.LeaveCurrentTeam();
-        PhotonNetwork.LocalPlayer.CustomProperties.Remove(PhotonNetwork.LocalPlayer.GetPlayerTeam());
     }
 
-    public void SetTeam(PlayerTeam team)
+    public bool SetTeam(PlayerTeam team)
     {
         if (PhotonNetwork.LocalPlayer.GetPlayerTeam() == PlayerTeam.None)
         {
             if (PhotonNetwork.LocalPlayer.JoinTeam((byte)team))
             {
                 PhotonNetwork.LocalPlayer.SetPlayerTeam(team);
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
+        return false;
     }
 
-    public void SwitchTeam(PlayerTeam team)
+    public bool SwitchTeam(PlayerTeam team)
     {
-        PhotonNetwork.LocalPlayer.CustomProperties.Remove(PhotonNetwork.LocalPlayer.GetPlayerTeam());
+        PhotonNetwork.LocalPlayer.CustomProperties.Remove("Team");
 
         if (PhotonNetwork.LocalPlayer.SwitchTeam((byte)team))
         {
             PhotonNetwork.LocalPlayer.SetPlayerTeam(team);
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 }

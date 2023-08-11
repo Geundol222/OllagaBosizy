@@ -29,6 +29,10 @@ public class ChatCanvas : MonoBehaviour
 
     private void OnEnter()
     {
+        if (chatInputField.text == "")
+        {
+            return;
+        }
         string mes = chatInputField.text.Trim();
         Debug.Log(mes);
         PV.RPC("ChatRPC", RpcTarget.All, PhotonNetwork.NickName + " : " + mes);

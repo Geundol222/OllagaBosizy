@@ -23,12 +23,14 @@ public class PlayerEntry : MonoBehaviour
 
     public void SetPlayerTrollerTeam()
     {
-        GameManager.Team.SetTeam(PlayerTeam.Troller);
+        if(!GameManager.Team.SetTeam(PlayerTeam.Troller))
+            GameManager.Team.SwitchTeam(PlayerTeam.Troller);
     }
 
     public void SetPlayerClimberTeam()
     {
-        GameManager.Team.SetTeam(PlayerTeam.Climber);
+        if(!GameManager.Team.SetTeam(PlayerTeam.Climber))
+            GameManager.Team.SwitchTeam(PlayerTeam.Climber);
     }
 
     public void ChangeCustomProperty(PhotonHashtable property)

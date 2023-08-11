@@ -18,7 +18,9 @@ public class RoomCanvas : MonoBehaviour
     [SerializeField] Button startButton;
     [SerializeField] PlayerEntry playerEntryPrefab;
     [SerializeField] LogImage logImage;
+    [SerializeField] LobbyManager lobbyManager;
     public int ActorNum;
+    PhotonView PV;
     PlayerEntry entry;
 
     private void Awake()
@@ -26,32 +28,57 @@ public class RoomCanvas : MonoBehaviour
         playerDictionary = new Dictionary<int, PlayerEntry>();
         aTeamDictionary = new Dictionary<int, PlayerEntry>();
         bTeamDictionary = new Dictionary<int, PlayerEntry>();
+        PV = GetComponent<PhotonView>();
     }
 
     private void OnEnable()
     {
+        int AteamCount = 0;
         foreach (Player player in PhotonNetwork.PlayerList)
         {
-            if (playerContent1.childCount < 2)
+            if (player != PhotonNetwork.LocalPlayer)
             {
-                entry = Instantiate(playerEntryPrefab, playerContent1);
-                entry.SetPlayer(player);
-                aTeamDictionary.Add(player.ActorNumber, entry);
+                if (player.GetPlayerTeam() == global::PlayerTeam.Troller)
+                {
+                    entry = Instantiate(playerEntryPrefab, playerContent1);
+                    entry.SetPlayer(player);
+                    AteamCount++;
+                }
+                else
+                {
+                    entry = Instantiate(playerEntryPrefab, playerContent2);
+                    entry.SetPlayer(player);
+                }
             }
             else
             {
-                entry = Instantiate(playerEntryPrefab, playerContent2);
-                entry.SetPlayer(player);
-                bTeamDictionary.Add(player.ActorNumber, entry);
+                if (AteamCount < 2)
+                {
+                    entry = Instantiate(playerEntryPrefab, playerContent1);
+                    entry.SetPlayer(player);
+                    aTeamDictionary.Add(player.ActorNumber, entry);
+                    entry.SetPlayerTrollerTeam();
+                    //PV.RPC("ATeamAdd", RpcTarget.AllBuffered, player.ActorNumber, entry);
+                }
+                else
+                {
+                    entry = Instantiate(playerEntryPrefab, playerContent2);
+                    entry.SetPlayer(player);
+                    bTeamDictionary.Add(player.ActorNumber, entry);
+                    entry.SetPlayerClimberTeam();
+                    //PV.RPC("BTeamAdd", RpcTarget.AllBuffered, player.ActorNumber, entry);
+                }
             }
-            entry.SetPlayer(player);
+            if (player == PhotonNetwork.LocalPlayer)
+            {
+                entry?.Sprite();
+            }
             playerDictionary.Add(player.ActorNumber, entry);
             PhotonNetwork.LocalPlayer.SetReady(false);
             PhotonNetwork.LocalPlayer.SetLoad(false);
             AllPlayerReadyCheck();
             PhotonNetwork.AutomaticallySyncScene = true;
         }
-        entry?.Sprite();
     }
 
     private void OnDisable()
@@ -67,52 +94,12 @@ public class RoomCanvas : MonoBehaviour
         PhotonNetwork.AutomaticallySyncScene = false;
     }
 
-    public void PlayerEnterRoom()
-    {
-        for (int i = 0; i < playerContent1.childCount; i++)
-        {
-            Destroy(playerContent1.GetChild(i).gameObject);
-        }
-        for (int i = 0; i < playerContent2.childCount; i++)
-        {
-            Destroy(playerContent2.GetChild(i).gameObject);
-        }
-        playerDictionary.Clear();
-        aTeamDictionary.Clear();
-        bTeamDictionary.Clear();
-
-        foreach (Player player in PhotonNetwork.PlayerList)
-        {
-            PlayerEntry entry1;
-            if (playerDictionary.Count < 2)
-            {
-                entry1 = Instantiate(playerEntryPrefab, playerContent1);
-                entry.SetPlayer(player);
-                aTeamDictionary.Add(player.ActorNumber, entry);
-            }
-            else
-            {
-                entry1 = Instantiate(playerEntryPrefab, playerContent2);
-                entry.SetPlayer(player);
-                bTeamDictionary.Add(player.ActorNumber, entry);
-            }
-            if (PhotonNetwork.LocalPlayer == player)
-            {
-                entry1.Sprite();
-            }
-            entry1.SetPlayer(player);
-            playerDictionary.Add(player.ActorNumber, entry1);
-            PhotonNetwork.LocalPlayer.SetReady(false);
-            PhotonNetwork.LocalPlayer.SetLoad(false);
-            AllPlayerReadyCheck();
-        }
-    }
-
     public void PlayerLeftRoom(Player otherPlayer)
     {
         Destroy(playerDictionary[otherPlayer.ActorNumber].gameObject);
         playerDictionary.Remove(otherPlayer.ActorNumber);
-        PlayerEnterRoom();
+        if(!aTeamDictionary.Remove(otherPlayer.ActorNumber))
+            bTeamDictionary.Remove(otherPlayer.ActorNumber);
         AllPlayerReadyCheck();
     }
 
@@ -137,7 +124,9 @@ public class RoomCanvas : MonoBehaviour
 
     public void LeaveRoom()
     {
-        entry.LeaveRoom();
+        PlayerEntry playerEntry = playerDictionary[PhotonNetwork.LocalPlayer.ActorNumber];
+        playerEntry.LeaveRoom();
+        //PV.RPC("TeamRemove", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.ActorNumber, entry);
         PhotonNetwork.LeaveRoom();
     }
 
@@ -152,8 +141,8 @@ public class RoomCanvas : MonoBehaviour
             PhotonNetwork.LocalPlayer.SetReady(true);
         }
     }
-
-    public void PlayerTeamJoin()
+    
+    /*public void PlayerTeamJoin()
     {
         PlayerEntry playerEntry;
         if (aTeamDictionary.TryGetValue(PhotonNetwork.LocalPlayer.ActorNumber, out playerEntry))
@@ -165,7 +154,7 @@ public class RoomCanvas : MonoBehaviour
             bTeamDictionary.TryGetValue(PhotonNetwork.LocalPlayer.ActorNumber, out playerEntry);
             playerEntry.SetPlayerClimberTeam();
         }
-    }
+    }*/
 
     private void AllPlayerReadyCheck()
     {
@@ -182,7 +171,7 @@ public class RoomCanvas : MonoBehaviour
                 readyCount++;
         }
 
-        if (readyCount == PhotonNetwork.PlayerList.Length)
+        if (readyCount == PhotonNetwork.PlayerList.Length && aTeamDictionary.Count == 2 && bTeamDictionary.Count == 2)
             startButton.gameObject.SetActive(true);
         else
             startButton.gameObject.SetActive(false);
@@ -190,6 +179,133 @@ public class RoomCanvas : MonoBehaviour
     public void PlayerTeam()
     {
         logImage.gameObject.SetActive(true);
-        logImage.SetText(entry.GetTeam());        
+        logImage.SetText(entry.GetTeam());
     }
+
+    public void SwitchTeamA()
+    {
+        PV.RPC("PlayerRoomUpdate", RpcTarget.All, PhotonNetwork.LocalPlayer, true, true);
+    }
+    public void SwitchTeamB()
+    {
+        PV.RPC("PlayerRoomUpdate", RpcTarget.All, PhotonNetwork.LocalPlayer, true, false);
+    }
+    [PunRPC]
+    public void PlayerRoomUpdate(Player newPlayer, bool isSwitch, bool isAteamSwitch)
+    {
+        if (!isSwitch)
+        {
+            /*for (int i = 0; i < playerContent1.childCount; i++)
+            {
+                Destroy(playerContent1.GetChild(i).gameObject);
+            }
+            for (int i = 0; i < playerContent2.childCount; i++)
+            {
+                Destroy(playerContent2.GetChild(i).gameObject);
+            }
+            playerDictionary.Clear();
+            aTeamDictionary.Clear();
+            bTeamDictionary.Clear();
+
+            foreach (Player player in PhotonNetwork.PlayerList)
+            {
+                PlayerEntry entry1;
+                if (playerDictionary.Count < 2)
+                {
+                    entry1 = Instantiate(playerEntryPrefab, playerContent1);
+                    entry.SetPlayer(player);
+                    aTeamDictionary.Add(player.ActorNumber, entry);
+                }
+                else
+                {
+                    entry1 = Instantiate(playerEntryPrefab, playerContent2);
+                    entry.SetPlayer(player);
+                    bTeamDictionary.Add(player.ActorNumber, entry);
+                }
+                if (PhotonNetwork.LocalPlayer == player)
+                {
+                    entry1.Sprite();
+                }
+                entry1.SetPlayer(player);
+                playerDictionary.Add(player.ActorNumber, entry1);
+                PhotonNetwork.LocalPlayer.SetReady(false);
+                PhotonNetwork.LocalPlayer.SetLoad(false);
+                AllPlayerReadyCheck();
+            }*/
+            PlayerEntry entry;
+            if (aTeamDictionary.Count < 2)
+            {
+                entry = Instantiate(playerEntryPrefab, playerContent1);
+                entry.SetPlayer(newPlayer);
+                playerDictionary.Add(newPlayer.ActorNumber, entry);
+                aTeamDictionary.Add(newPlayer.ActorNumber, entry);
+            }
+            else
+            {
+                entry = Instantiate(playerEntryPrefab, playerContent2);
+                entry.SetPlayer(newPlayer);
+                playerDictionary.Add(newPlayer.ActorNumber, entry);
+                bTeamDictionary.Add(newPlayer.ActorNumber, entry);
+            }
+            PhotonNetwork.LocalPlayer.SetReady(false);
+            PhotonNetwork.LocalPlayer.SetLoad(false);
+            AllPlayerReadyCheck();
+        }
+        else
+        {
+            Destroy(playerDictionary[newPlayer.ActorNumber].gameObject);
+            playerDictionary.Remove(newPlayer.ActorNumber);
+            if (!aTeamDictionary.Remove(newPlayer.ActorNumber))
+                bTeamDictionary.Remove(newPlayer.ActorNumber);
+            //PV.RPC("TeamRemove", RpcTarget.AllBuffered, newPlayer.ActorNumber);
+            if (isAteamSwitch)
+            {
+                PlayerEntry entry2;
+                entry2 = Instantiate(playerEntryPrefab, playerContent1);
+                entry2.SetPlayer(newPlayer);
+                playerDictionary.Add(newPlayer.ActorNumber, entry2);
+                aTeamDictionary.Add(newPlayer.ActorNumber, entry2);
+                if (newPlayer == PhotonNetwork.LocalPlayer)
+                {
+                    entry.SetPlayerTrollerTeam();
+                    entry2?.Sprite();
+                }
+                //PV.RPC("ATeamAdd", RpcTarget.AllBuffered, newPlayer.ActorNumber, entry);
+            }
+            else
+            {
+                PlayerEntry entry2;
+                entry2 = Instantiate(playerEntryPrefab, playerContent2);
+                entry2.SetPlayer(newPlayer);
+                playerDictionary.Add(newPlayer.ActorNumber, entry2);
+                bTeamDictionary.Add(newPlayer.ActorNumber, entry2);
+                if (newPlayer == PhotonNetwork.LocalPlayer)
+                {
+                    entry.SetPlayerClimberTeam();
+                    entry2?.Sprite();
+                }
+                //PV.RPC("BTeamAdd", RpcTarget.AllBuffered, newPlayer.ActorNumber, entry);
+            }
+            PhotonNetwork.LocalPlayer.SetReady(false);
+            PhotonNetwork.LocalPlayer.SetLoad(false);
+            AllPlayerReadyCheck();
+        }
+    }
+
+    /*[PunRPC]
+    private void ATeamAdd(int PlayerNum, PlayerEntry entry)
+    {
+        aTeamDictionary.Add(PlayerNum, entry);
+    }
+    [PunRPC]
+    private void BTeamAdd(int PlayerNum, PlayerEntry entry)
+    {
+        bTeamDictionary.Add(PlayerNum, entry);
+    }
+    [PunRPC]
+    private void TeamRemove(int PlayerNum)
+    {
+        if(!aTeamDictionary.Remove(PlayerNum))
+            bTeamDictionary.Remove(PlayerNum);
+    }*/
 }
