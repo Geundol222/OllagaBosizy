@@ -16,6 +16,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     public void Start()
     {
+        PhotonNetwork.LocalPlayer.CustomProperties.Clear();
+
         if (PhotonNetwork.IsConnected)
             OnConnectedToMaster();
         else if (PhotonNetwork.InRoom)
@@ -76,7 +78,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        roomCanvas.PlayerEnterRoom();
+        roomCanvas.PlayerRoomUpdate(newPlayer, false, false);
         chatCanvas.InOutRPC(newPlayer.NickName + "´ÔÀÌ Âü°¡ÇÏ¼Ì½À´Ï´Ù.");
     }
 
