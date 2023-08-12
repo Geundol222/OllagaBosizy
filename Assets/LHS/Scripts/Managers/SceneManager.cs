@@ -33,8 +33,6 @@ public class SceneManager : MonoBehaviour
 
     public void LoadScene(Scene scene)
     {
-        
-
         currentScene = scene;
 
         StartCoroutine(LoadingRoutine(scene));
@@ -48,11 +46,10 @@ public class SceneManager : MonoBehaviour
         yield return new WaitUntil(() => { return GameManager.Sound.IsMuted(); });
         Time.timeScale = 0f;
 
-        //AsyncOperation oper = UnitySceneManager.LoadSceneAsync(index);
         PhotonNetwork.AutomaticallySyncScene = true;
 
-        if (PhotonNetwork.IsMasterClient)
-            PhotonNetwork.LoadLevel((int)scene);
+        //AsyncOperation oper = UnitySceneManager.LoadSceneAsync(index);
+        PhotonNetwork.LoadLevel((int)scene);
 
         while (PhotonNetwork.LevelLoadingProgress < 1f)
         {
@@ -67,9 +64,10 @@ public class SceneManager : MonoBehaviour
         //     yield return null;
         // }
 
+        PhotonNetwork.AutomaticallySyncScene = false;
+
         Time.timeScale = 1f;
         // loadingUI.FadeIn();
-        PhotonNetwork.AutomaticallySyncScene = false;
         yield return new WaitWhile(() => { return GameManager.Sound.IsMuted(); });
     }
 }

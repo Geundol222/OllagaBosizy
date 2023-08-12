@@ -11,11 +11,11 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] float jumpForce;
 
     Vector3 moveDir;
-    Rigidbody2D rigidbody;
+    Rigidbody2D rigid;
 
     private void Awake()
     {
-        rigidbody = GetComponent<Rigidbody2D>();
+        rigid = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -26,10 +26,10 @@ public class PlayerMove : MonoBehaviour
 
     private void Move()
     {
-        rigidbody.AddForce(moveDir.x * moveForce * transform.right, ForceMode2D.Force);
-        if(rigidbody.velocity.magnitude > moveMaxForce)
+        rigid.AddForce(moveDir.x * moveForce * transform.right, ForceMode2D.Force);
+        if(rigid.velocity.magnitude > moveMaxForce)
         {
-            rigidbody.velocity = rigidbody.velocity.normalized * moveMaxForce;
+            rigid.velocity = rigid.velocity.normalized * moveMaxForce;
         }
     }
 

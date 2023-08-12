@@ -10,7 +10,7 @@ public class SetTrapUI : InGameUI, IPointerClickHandler
     Coroutine buttonCloseCoroutine;
     private UICloseArea closeArea;
 
-    private void Awake()
+    protected override void Awake()
     {
         animator = GetComponentInChildren<Animator>();
         closeArea = GameObject.Find("UICloseArea").GetComponent<UICloseArea>();

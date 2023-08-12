@@ -26,7 +26,6 @@ public class ChatCanvas : MonoBehaviour
         }
     }
 
-
     private void OnEnter()
     {
         if (chatInputField.text == "")

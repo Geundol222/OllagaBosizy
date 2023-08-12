@@ -1,11 +1,8 @@
 using Photon.Pun;
-using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEngine.EventSystems.EventTrigger;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
 public class RoomCanvas : MonoBehaviour
@@ -33,35 +30,31 @@ public class RoomCanvas : MonoBehaviour
 
     private void OnEnable()
     {
-        if (PhotonNetwork.IsMasterClient)
-            PhotonNetwork.CurrentRoom.SetCurrentRound(Round.NONE);
-
-        int AteamCount = 0;
         foreach (Player player in PhotonNetwork.PlayerList)
         {
             if (player != PhotonNetwork.LocalPlayer)
             {
-                if (player.GetPlayerTeam() == global::PlayerTeam.Troller)
+                if (player.GetPlayerTeam() == PlayerTeam.Troller)
                 {
                     entry = Instantiate(playerEntryPrefab, playerContent1);
                     entry.SetPlayer(player);
-                    AteamCount++;
+                    aTeamDictionary.Add(player.ActorNumber, entry);
                 }
                 else
                 {
                     entry = Instantiate(playerEntryPrefab, playerContent2);
                     entry.SetPlayer(player);
+                    bTeamDictionary.Add(player.ActorNumber, entry);
                 }
             }
             else
             {
-                if (AteamCount < 2)
+                if (aTeamDictionary.Count < 2)
                 {
                     entry = Instantiate(playerEntryPrefab, playerContent1);
                     entry.SetPlayer(player);
                     aTeamDictionary.Add(player.ActorNumber, entry);
                     entry.SetPlayerTrollerTeam();
-                    //PV.RPC("ATeamAdd", RpcTarget.AllBuffered, player.ActorNumber, entry);
                 }
                 else
                 {
@@ -69,7 +62,6 @@ public class RoomCanvas : MonoBehaviour
                     entry.SetPlayer(player);
                     bTeamDictionary.Add(player.ActorNumber, entry);
                     entry.SetPlayerClimberTeam();
-                    //PV.RPC("BTeamAdd", RpcTarget.AllBuffered, player.ActorNumber, entry);
                 }
             }
             if (player == PhotonNetwork.LocalPlayer)
@@ -119,6 +111,9 @@ public class RoomCanvas : MonoBehaviour
 
     public void StartGame()
     {
+        if (PhotonNetwork.IsMasterClient)
+            PhotonNetwork.CurrentRoom.SetCurrentRound(Round.NONE);
+
         PhotonNetwork.CurrentRoom.IsOpen = false;
         PhotonNetwork.CurrentRoom.IsVisible = false;
 
@@ -129,7 +124,6 @@ public class RoomCanvas : MonoBehaviour
     {
         PlayerEntry playerEntry = playerDictionary[PhotonNetwork.LocalPlayer.ActorNumber];
         playerEntry.LeaveRoom();
-        //PV.RPC("TeamRemove", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.ActorNumber, entry);
         PhotonNetwork.LeaveRoom();
     }
 
@@ -144,20 +138,6 @@ public class RoomCanvas : MonoBehaviour
             PhotonNetwork.LocalPlayer.SetReady(true);
         }
     }
-    
-    /*public void PlayerTeamJoin()
-    {
-        PlayerEntry playerEntry;
-        if (aTeamDictionary.TryGetValue(PhotonNetwork.LocalPlayer.ActorNumber, out playerEntry))
-        {
-            playerEntry.SetPlayerTrollerTeam();
-        }
-        else
-        {
-            bTeamDictionary.TryGetValue(PhotonNetwork.LocalPlayer.ActorNumber, out playerEntry);
-            playerEntry.SetPlayerClimberTeam();
-        }
-    }*/
 
     private void AllPlayerReadyCheck()
     {
@@ -179,7 +159,8 @@ public class RoomCanvas : MonoBehaviour
         else
             startButton.gameObject.SetActive(false);
     }
-    public void PlayerTeam()
+
+    public void ShowPlayerTeam()
     {
         logImage.gameObject.SetActive(true);
         logImage.SetText(entry.GetTeam());
@@ -189,52 +170,17 @@ public class RoomCanvas : MonoBehaviour
     {
         PV.RPC("PlayerRoomUpdate", RpcTarget.All, PhotonNetwork.LocalPlayer, true, true);
     }
+
     public void SwitchTeamB()
     {
         PV.RPC("PlayerRoomUpdate", RpcTarget.All, PhotonNetwork.LocalPlayer, true, false);
     }
+
     [PunRPC]
     public void PlayerRoomUpdate(Player newPlayer, bool isSwitch, bool isAteamSwitch)
     {
         if (!isSwitch)
         {
-            /*for (int i = 0; i < playerContent1.childCount; i++)
-            {
-                Destroy(playerContent1.GetChild(i).gameObject);
-            }
-            for (int i = 0; i < playerContent2.childCount; i++)
-            {
-                Destroy(playerContent2.GetChild(i).gameObject);
-            }
-            playerDictionary.Clear();
-            aTeamDictionary.Clear();
-            bTeamDictionary.Clear();
-
-            foreach (Player player in PhotonNetwork.PlayerList)
-            {
-                PlayerEntry entry1;
-                if (playerDictionary.Count < 2)
-                {
-                    entry1 = Instantiate(playerEntryPrefab, playerContent1);
-                    entry.SetPlayer(player);
-                    aTeamDictionary.Add(player.ActorNumber, entry);
-                }
-                else
-                {
-                    entry1 = Instantiate(playerEntryPrefab, playerContent2);
-                    entry.SetPlayer(player);
-                    bTeamDictionary.Add(player.ActorNumber, entry);
-                }
-                if (PhotonNetwork.LocalPlayer == player)
-                {
-                    entry1.Sprite();
-                }
-                entry1.SetPlayer(player);
-                playerDictionary.Add(player.ActorNumber, entry1);
-                PhotonNetwork.LocalPlayer.SetReady(false);
-                PhotonNetwork.LocalPlayer.SetLoad(false);
-                AllPlayerReadyCheck();
-            }*/
             PlayerEntry entry;
             if (aTeamDictionary.Count < 2)
             {
@@ -273,7 +219,6 @@ public class RoomCanvas : MonoBehaviour
                     entry.SetPlayerTrollerTeam();
                     entry2?.Sprite();
                 }
-                //PV.RPC("ATeamAdd", RpcTarget.AllBuffered, newPlayer.ActorNumber, entry);
             }
             else
             {
@@ -287,28 +232,10 @@ public class RoomCanvas : MonoBehaviour
                     entry.SetPlayerClimberTeam();
                     entry2?.Sprite();
                 }
-                //PV.RPC("BTeamAdd", RpcTarget.AllBuffered, newPlayer.ActorNumber, entry);
             }
             PhotonNetwork.LocalPlayer.SetReady(false);
             PhotonNetwork.LocalPlayer.SetLoad(false);
             AllPlayerReadyCheck();
         }
     }
-
-    /*[PunRPC]
-    private void ATeamAdd(int PlayerNum, PlayerEntry entry)
-    {
-        aTeamDictionary.Add(PlayerNum, entry);
-    }
-    [PunRPC]
-    private void BTeamAdd(int PlayerNum, PlayerEntry entry)
-    {
-        bTeamDictionary.Add(PlayerNum, entry);
-    }
-    [PunRPC]
-    private void TeamRemove(int PlayerNum)
-    {
-        if(!aTeamDictionary.Remove(PlayerNum))
-            bTeamDictionary.Remove(PlayerNum);
-    }*/
 }

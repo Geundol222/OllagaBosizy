@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LeftTrapUI : GameSceneUI
 {
-    private TMP_Text[] texts;
+    [SerializeField] private TMP_Text countText;
     private Coroutine trollerDataCoroutine;
     private Coroutine textUICoroutine;
 
@@ -15,16 +15,9 @@ public class LeftTrapUI : GameSceneUI
         if (GameManager.Team.GetTeam() == PlayerTeam.Troller)
         {
             trollerDataCoroutine = StartCoroutine(SetTrollerDataCoroutine());
-            textUICoroutine = StartCoroutine(FindUITexts());
         }
         else
             Destroy(gameObject);
-    }
-    IEnumerator FindUITexts()
-    {
-        yield return new WaitUntil(() => { return gameObject.GetComponentsInChildren<TMP_Text>() != null; });
-        texts = GetComponentsInChildren<TMP_Text>();
-        yield break;
     }
 
     IEnumerator SetTrollerDataCoroutine()
@@ -36,6 +29,6 @@ public class LeftTrapUI : GameSceneUI
 
     public void SetCurrentTrapCountInfo()
     {
-        texts[1].text = $"{GameManager.TrollerData._setTrapPlatforms.Count} / {GameManager.TrollerData.maxSetTrapPlatforms}";
+        countText.text = $"{GameManager.TrollerData._setTrapPlatforms.Count} / {GameManager.TrollerData.maxSetTrapPlatforms}";
     }
 }

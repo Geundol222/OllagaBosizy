@@ -14,6 +14,8 @@ public class TrollerPlayerController : MonoBehaviourPun
 
     private void Awake()
     {
+        inputAction = GetComponent<PlayerInput>();
+
         if (GameManager.Team.GetTeam() == PlayerTeam.Troller)
         {
             if (photonView.IsMine)
