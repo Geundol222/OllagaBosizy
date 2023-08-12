@@ -9,55 +9,62 @@ using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
 public class GameSceneManager : MonoBehaviourPunCallbacks
 {
+    [SerializeField] TMP_Text propsInfo;
     [SerializeField] TMP_Text infoText;
     [SerializeField] TMP_Text timerText;
     [SerializeField] float countDownTimer;
     [SerializeField] float gameCountDown;
-    [SerializeField] List<GameObject> playerSpawnPoints;
+    [SerializeField] List<GameObject> climberSpawnPoints;
+    [SerializeField] GameObject trollerSpawnPoint;
     [SerializeField] RoundManager round;
+
+    string load = PhotonNetwork.LocalPlayer.GetLoad().ToString();
+    string ready = PhotonNetwork.LocalPlayer.GetReady().ToString();
+    string team = PhotonNetwork.LocalPlayer.GetPlayerTeam().ToString();
+    string climber = PhotonNetwork.LocalPlayer.GetClimber().ToString();
 
     private void Start()
     {
-        if (PhotonNetwork.InRoom)
-        {
-            PhotonNetwork.LocalPlayer.SetLoad(true);
-        }
-        else
-        {
-            infoText.text = "Debug Mode";
-            PhotonNetwork.LocalPlayer.NickName = $"DebugPlayer {Random.Range(1000, 10000)}";
-            PhotonNetwork.ConnectUsingSettings();
-        }
+        PhotonNetwork.LocalPlayer.SetLoad(true);
 
-        StopAllCoroutines();
+        //if (PhotonNetwork.InRoom)
+        //{
+        //    PhotonNetwork.LocalPlayer.SetLoad(true);
+        //}
+        //else
+        //{
+        //    infoText.text = "Debug Mode";
+        //    PhotonNetwork.LocalPlayer.NickName = $"DebugPlayer {Random.Range(1000, 10000)}";
+        //    PhotonNetwork.ConnectUsingSettings();
+        //}
     }
 
-    public override void OnConnectedToMaster()
-    {
-        RoomOptions options = new RoomOptions() { IsVisible = false };
-        PhotonNetwork.JoinOrCreateRoom("DebugRoom123", options, TypedLobby.Default);
-    }
+    //public override void OnConnectedToMaster()
+    //{
+    //    RoomOptions options = new RoomOptions() { IsVisible = false };
+    //    PhotonNetwork.JoinOrCreateRoom("DebugRoom123", options, TypedLobby.Default);
+    //}
 
-    public override void OnCreateRoomFailed(short returnCode, string message)
-    {
-        Debug.Log(message);
-    }
+    //public override void OnCreateRoomFailed(short returnCode, string message)
+    //{
+    //    Debug.Log(message);
+    //}
 
-    public override void OnJoinRoomFailed(short returnCode, string message)
-    {
-        Debug.Log(message);
-    }
+    //public override void OnJoinRoomFailed(short returnCode, string message)
+    //{
+    //    Debug.Log(message);
+    //}
 
-    public override void OnJoinedRoom()
-    {
-        StartCoroutine(DebugGameSetupDelay());
-    }
+    //public override void OnJoinedRoom()
+    //{
+    //    StartCoroutine(DebugGameSetupDelay());
+    //}
 
-    IEnumerator DebugGameSetupDelay()
-    {
-        yield return new WaitForSeconds(1f);
-        DebugGameStart();
-    }
+    //IEnumerator DebugGameSetupDelay()
+    //{
+    //    yield return new WaitForSeconds(1f);
+    //    DebugGameStart();
+    //}
 
     public override void OnDisconnected(DisconnectCause cause)
     {
@@ -122,12 +129,18 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
 
         yield return new WaitForSeconds(1f);
         infoText.text = "";
+        yield break;
     }
 
     private void GameStart()
     {
-        if (round.GetRound() == Round.NONE && PhotonNetwork.IsMasterClient)
-            round.SetRound(round.GetRound());
+        if (PhotonNetwork.CurrentRoom.GetCurrentRound() == Round.NONE)
+        {
+            if (PhotonNetwork.IsMasterClient)
+                PhotonNetwork.CurrentRoom.SetCurrentRound(Round.ROUND1);
+        }
+
+        propsInfo.text = $"Ready : {ready}\nLoad : {load}\nTeam : {team}\nClimber : {climber}";
 
         GameManager.Pool.InitPool();
         GameManager.UI.InitUI();
@@ -142,43 +155,20 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
             {
                 if (player.GetPlayerTeam() == PlayerTeam.Troller)
                 {
-                    PhotonNetwork.Instantiate("Troller/TrollerController", playerSpawnPoints[player.GetPlayerNumber()].transform.position, playerSpawnPoints[player.GetPlayerNumber()].transform.rotation);
+                    PhotonNetwork.Instantiate("Troller/TrollerController", trollerSpawnPoint.transform.position, trollerSpawnPoint.transform.rotation);
                 }
                 else if (player.GetPlayerTeam() == PlayerTeam.Climber)
                 {
                     if (player.GetClimber() == Climber.Boy)
-                        PhotonNetwork.Instantiate("Climber/PlayerBoy", playerSpawnPoints[player.GetPlayerNumber()].transform.position, playerSpawnPoints[player.GetPlayerNumber()].transform.rotation);
+                        PhotonNetwork.Instantiate("Climber/PlayerBoy", climberSpawnPoints[0].transform.position, climberSpawnPoints[0].transform.rotation);
                     else if (player.GetClimber() == Climber.Girl)
-                        PhotonNetwork.Instantiate("Climber/PlayerGirl", playerSpawnPoints[player.GetPlayerNumber()].transform.position, playerSpawnPoints[player.GetPlayerNumber()].transform.rotation);
+                        PhotonNetwork.Instantiate("Climber/PlayerGirl", climberSpawnPoints[1].transform.position, climberSpawnPoints[1].transform.rotation);
                 }
             }
         }
 
         if (PhotonNetwork.IsMasterClient)
             PhotonNetwork.CurrentRoom.SetCountDownTime(PhotonNetwork.ServerTimestamp);
-        else
-            StartCoroutine(UpdateTimerRoutine());
-    }
-
-    private void DebugGameStart()
-    {
-        Debug.Log("Debug Start");
-
-        int playerIndex = PhotonNetwork.LocalPlayer.GetPlayerNumber();
-
-        if (GameManager.Team.GetTeam() == PlayerTeam.Troller)
-        {
-            PhotonNetwork.Instantiate("Player/TrollerController", playerSpawnPoints[playerIndex].transform.position, playerSpawnPoints[playerIndex].transform.rotation);
-        }
-        else if (GameManager.Team.GetTeam() == PlayerTeam.Climber)
-        {
-            PhotonNetwork.Instantiate("PlayerBoy", playerSpawnPoints[playerIndex].transform.position, playerSpawnPoints[playerIndex].transform.rotation);
-        }
-
-        if (PhotonNetwork.IsMasterClient)
-            PhotonNetwork.CurrentRoom.SetCountDownTime(PhotonNetwork.ServerTimestamp);
-        else
-            StartCoroutine(UpdateTimerRoutine());
     }
 
     private int PlayerLoadCount()
@@ -210,6 +200,7 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
         }
 
         TimeOut();
+        yield break;
     }
 
     private void TimeOut()
@@ -217,13 +208,12 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
         timerText.text = "TIME OUT";
         timerText.color = Color.red;
 
-        if (PhotonNetwork.IsMasterClient)
-            StartCoroutine(RoundChangeRoutine());
+        StartCoroutine(RoundChangeRoutine());
     }
 
     IEnumerator RoundChangeRoutine()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(1f);
 
         round.NextRound();
 

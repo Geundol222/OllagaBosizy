@@ -9,6 +9,7 @@ public class TrollerDataManager : MonoBehaviour
     public Platform currentPlatform;                                // 현재 선택된 플랫폼
     public Platform prevPlatform;                                   // 이전에 선택한 플랫폼
     public bool canSetTrap;                                         // 함정 설치여부에 따라 클릭 가능한지 확인하는 변수
+    public bool FindComplete { get; private set; }
 
     public Debuff Original_Debuff;                                  // clone 시킬 Debuff 클래스
     public Queue<IDebuff> debuffQueue;                              // Debuff들을 담을 Queue
@@ -38,6 +39,8 @@ public class TrollerDataManager : MonoBehaviour
 
     public void Init()
     {
+        FindComplete = false;
+
         if (GameManager.Team.GetTeam() == PlayerTeam.Troller)
             StartCoroutine(FindTrapRoutine());
 
@@ -50,6 +53,8 @@ public class TrollerDataManager : MonoBehaviour
 
         leftTrapUI = GameObject.Find("LeftTrap(Clone)").GetComponent<LeftTrapUI>();
         trapListUI = GameObject.Find("TrapList(Clone)").GetComponent<TrapListUI>();
+
+        FindComplete = true;
 
         yield break;
     }

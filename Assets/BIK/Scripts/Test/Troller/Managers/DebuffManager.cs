@@ -20,9 +20,19 @@ public class DebuffManager : MonoBehaviour
     {
         if (GameManager.Team.GetTeam() != PlayerTeam.Troller)
             return;
+        
+        StartCoroutine(UpdateTrapListProcess());
+    }
+
+    IEnumerator UpdateTrapListProcess()
+    {
+        yield return new WaitUntil(() => { return GameManager.TrollerData.FindComplete; });
+
         Debuff[] debuffArray = new Debuff[debuffQueue.Count];
         debuffQueue.CopyTo(debuffArray, 0);
         trapListUI.UpdateList(debuffArray);
+
+        yield break;
     }
 
     public void DebuffQueueInit()

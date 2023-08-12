@@ -19,6 +19,9 @@ public class RoundManager : MonoBehaviourPun
     {
         if (PhotonNetwork.IsMasterClient)
         {
+            if (GetRound() == Round.NONE)
+                SetRound(GetRound());
+
             for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
             {
                 if (PhotonNetwork.PlayerList[i].GetPlayerTeam() == PlayerTeam.Climber)
@@ -35,9 +38,6 @@ public class RoundManager : MonoBehaviourPun
     {
         switch (round)
         {
-            case Round.NONE:
-                RoundOne();
-                break;
             case Round.ROUND1:                
                 RoundTwo();
                 break;
@@ -50,22 +50,14 @@ public class RoundManager : MonoBehaviourPun
         }
     }
 
-    private void RoundOne()
-    {
-        Debug.Log("Round1");
-
-        PhotonNetwork.CurrentRoom.SetCurrentRound(Round.ROUND1);
-    }
-
     private void RoundTwo()
     {
         Debug.Log("Round2");
 
-        PhotonNetwork.LocalPlayer.SetLoad(false);
-        PhotonNetwork.LocalPlayer.CustomProperties.Remove("Climber");
-        PhotonNetwork.CurrentRoom.CustomProperties.Clear();
+        if (PhotonNetwork.IsMasterClient)
+            PhotonNetwork.CurrentRoom.SetCurrentRound(Round.ROUND2);
 
-        PhotonNetwork.CurrentRoom.SetCurrentRound(Round.ROUND2);
+        PhotonNetwork.LocalPlayer.SetLoad(false);
 
         GameManager.Scene.LoadScene(Scene.GAME);
     }
@@ -74,16 +66,12 @@ public class RoundManager : MonoBehaviourPun
     {
         Debug.Log("EndGame");
 
-        PhotonNetwork.CurrentRoom.CustomProperties.Clear();
+        if (PhotonNetwork.IsMasterClient)
+            PhotonNetwork.CurrentRoom.CustomProperties.Clear();
 
-        PhotonNetwork.CurrentRoom.SetCurrentRound(Round.NONE);
+        PhotonNetwork.LeaveRoom();
 
         GameManager.Scene.LoadScene(Scene.LOBBY);
-    }
-
-    private void SwitchTeam()
-    {
-
     }
 
     public Round GetRound()
@@ -93,9 +81,26 @@ public class RoundManager : MonoBehaviourPun
 
     public void NextRound()
     {
-        SwitchTeam();
+        count = 0;
+
+        RoundChangeProcess();
 
         SetRound(GetRound());
+    }
+
+    private void RoundChangeProcess()
+    {
+        PhotonNetwork.DestroyPlayerObjects(PhotonNetwork.LocalPlayer);
+
+        if (GetRound() == Round.ROUND1)
+        {
+            if (GameManager.Team.GetTeam() == PlayerTeam.Troller)
+                GameManager.Team.SwitchTeam(PlayerTeam.Climber);
+            else if (GameManager.Team.GetTeam() == PlayerTeam.Climber)
+                GameManager.Team.SwitchTeam(PlayerTeam.Troller);
+        }
+        else
+            PhotonNetwork.LocalPlayer.CustomProperties.Remove("Team");
     }
 
     [PunRPC]
@@ -114,18 +119,5 @@ public class RoundManager : MonoBehaviourPun
             else
                 return;
         }
-        
-        //foreach (Player other in PhotonNetwork.PlayerList)
-        //{
-        //    if (other.ActorNumber == player.ActorNumber)
-        //        continue;
-        //    else
-        //    {
-        //        if (player.ActorNumber < other.ActorNumber)
-        //            player.SetClimber(Climber.Boy);
-        //        else
-        //            player.SetClimber(Climber.Girl);
-        //    }
-        //}
     }
 }

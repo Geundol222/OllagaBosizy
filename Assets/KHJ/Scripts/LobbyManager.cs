@@ -16,8 +16,6 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     public void Start()
     {
-        PhotonNetwork.LocalPlayer.CustomProperties.Clear();
-
         if (PhotonNetwork.IsConnected)
             OnConnectedToMaster();
         else if (PhotonNetwork.InRoom)
@@ -60,6 +58,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         SetActivePanel(Panel.Room);
+        chatCanvas.OutRoom();
         PhotonNetwork.LocalPlayer.SetReady(false);
     }
     public void OnLoginCanvas()
@@ -72,7 +71,6 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("State = LeftRoom");
         PhotonNetwork.LocalPlayer.SetReady(false);
-        chatCanvas.OutRoom();
         PhotonNetwork.JoinLobby();
     }
 
