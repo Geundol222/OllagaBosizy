@@ -19,6 +19,7 @@ public class RoomCanvas : MonoBehaviour
     public int ActorNum;
     PhotonView PV;
     PlayerEntry entry;
+    bool isStart;
 
     private void Awake()
     {
@@ -26,6 +27,7 @@ public class RoomCanvas : MonoBehaviour
         aTeamDictionary = new Dictionary<int, PlayerEntry>();
         bTeamDictionary = new Dictionary<int, PlayerEntry>();
         PV = GetComponent<PhotonView>();
+        isStart = false;
     }
 
     private void OnEnable()
@@ -111,6 +113,11 @@ public class RoomCanvas : MonoBehaviour
 
     public void StartGame()
     {
+        if (isStart)
+        {
+            return;
+        }
+        isStart = true;
         if (PhotonNetwork.IsMasterClient)
             PhotonNetwork.CurrentRoom.SetCurrentRound(Round.NONE);
 
