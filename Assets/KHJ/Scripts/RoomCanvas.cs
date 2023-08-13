@@ -168,11 +168,19 @@ public class RoomCanvas : MonoBehaviour
 
     public void SwitchTeamA()
     {
+        if (PhotonNetwork.LocalPlayer.GetReady())
+        {
+            return;
+        }
         PV.RPC("PlayerRoomUpdate", RpcTarget.All, PhotonNetwork.LocalPlayer, true, true);
     }
 
     public void SwitchTeamB()
     {
+        if (PhotonNetwork.LocalPlayer.GetReady())
+        {
+            return;
+        }
         PV.RPC("PlayerRoomUpdate", RpcTarget.All, PhotonNetwork.LocalPlayer, true, false);
     }
 
