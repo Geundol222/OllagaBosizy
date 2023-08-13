@@ -1,6 +1,8 @@
 using Cinemachine;
 using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -15,6 +17,9 @@ public class PlayerController : MonoBehaviourPun
 
     [Header("Collider")]
 	[SerializeField] Collider2D platformTrigger;
+
+	[Header("Other")]
+    [SerializeField] TMP_Text nickNameText;
 
     private GameObject debuffList;
     private PlayerInput inputAction;
@@ -48,14 +53,17 @@ public class PlayerController : MonoBehaviourPun
         }
     }
 
-    private void Start()
-    {
+	private void Start()
+	{
 		StartCoroutine(NetworkConnectChecker());
 
-        if (GameManager.Team.GetTeam() == PlayerTeam.Climber)
-        {
+		if (GameManager.Team.GetTeam() == PlayerTeam.Climber)
+		{
+			if (photonView.IsMine)
+				nickNameText.text = "You";
+
             Destroy(debuffList);
-        }
+		}
     }
 
 	IEnumerator NetworkConnectChecker()

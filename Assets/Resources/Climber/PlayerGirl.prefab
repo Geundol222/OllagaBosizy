@@ -1319,6 +1319,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29ac7bb93396dc840aa4e0234b2a6e0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  nickNameText: {fileID: 3671950401652564121}
 --- !u!1 &4440863246397705928
 GameObject:
   m_ObjectHideFlags: 0
@@ -1439,7 +1440,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5462939478758871713}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1480,7 +1481,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '[2P]'
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9a341bb386aceaf44a04c3e09dc85dcc, type: 2}
   m_sharedMaterial: {fileID: 5228137567944881379, guid: 9a341bb386aceaf44a04c3e09dc85dcc,
@@ -2199,6 +2200,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   platformTrigger: {fileID: 8258851115014319316}
+  nickNameText: {fileID: 3671950401652564121}
 --- !u!61 &8258851115014319316
 BoxCollider2D:
   m_ObjectHideFlags: 0
