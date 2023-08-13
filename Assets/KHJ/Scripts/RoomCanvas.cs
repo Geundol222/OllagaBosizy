@@ -168,7 +168,7 @@ public class RoomCanvas : MonoBehaviour
 
     public void SwitchTeamA()
     {
-        if (PhotonNetwork.LocalPlayer.GetReady())
+        if (PhotonNetwork.LocalPlayer.GetReady() || PhotonNetwork.LocalPlayer.GetPlayerTeam() == PlayerTeam.Troller)
         {
             return;
         }
@@ -177,7 +177,7 @@ public class RoomCanvas : MonoBehaviour
 
     public void SwitchTeamB()
     {
-        if (PhotonNetwork.LocalPlayer.GetReady())
+        if (PhotonNetwork.LocalPlayer.GetReady() || PhotonNetwork.LocalPlayer.GetPlayerTeam() == PlayerTeam.Climber)
         {
             return;
         }
@@ -204,8 +204,6 @@ public class RoomCanvas : MonoBehaviour
                 playerDictionary.Add(newPlayer.ActorNumber, entry);
                 bTeamDictionary.Add(newPlayer.ActorNumber, entry);
             }
-            PhotonNetwork.LocalPlayer.SetReady(false);
-            PhotonNetwork.LocalPlayer.SetLoad(false);
             AllPlayerReadyCheck();
         }
         else
@@ -241,8 +239,6 @@ public class RoomCanvas : MonoBehaviour
                     entry2?.Sprite();
                 }
             }
-            PhotonNetwork.LocalPlayer.SetReady(false);
-            PhotonNetwork.LocalPlayer.SetLoad(false);
             AllPlayerReadyCheck();
         }
     }
