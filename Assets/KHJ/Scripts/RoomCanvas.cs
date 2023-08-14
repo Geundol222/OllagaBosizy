@@ -19,6 +19,7 @@ public class RoomCanvas : MonoBehaviour
     public int ActorNum;
     PhotonView PV;
     PlayerEntry entry;
+    bool isStart;
 
     private void Awake()
     {
@@ -26,6 +27,7 @@ public class RoomCanvas : MonoBehaviour
         aTeamDictionary = new Dictionary<int, PlayerEntry>();
         bTeamDictionary = new Dictionary<int, PlayerEntry>();
         PV = GetComponent<PhotonView>();
+        isStart = false;
     }
 
     private void OnEnable()
@@ -111,6 +113,11 @@ public class RoomCanvas : MonoBehaviour
 
     public void StartGame()
     {
+        if (isStart)
+        {
+            return;
+        }
+        isStart = true;
         if (PhotonNetwork.IsMasterClient)
             PhotonNetwork.CurrentRoom.SetCurrentRound(Round.NONE);
 
@@ -168,11 +175,19 @@ public class RoomCanvas : MonoBehaviour
 
     public void SwitchTeamA()
     {
+        if (PhotonNetwork.LocalPlayer.GetReady() || PhotonNetwork.LocalPlayer.GetPlayerTeam() == PlayerTeam.Troller)
+        {
+            return;
+        }
         PV.RPC("PlayerRoomUpdate", RpcTarget.All, PhotonNetwork.LocalPlayer, true, true);
     }
 
     public void SwitchTeamB()
     {
+        if (PhotonNetwork.LocalPlayer.GetReady() || PhotonNetwork.LocalPlayer.GetPlayerTeam() == PlayerTeam.Climber)
+        {
+            return;
+        }
         PV.RPC("PlayerRoomUpdate", RpcTarget.All, PhotonNetwork.LocalPlayer, true, false);
     }
 
@@ -196,8 +211,6 @@ public class RoomCanvas : MonoBehaviour
                 playerDictionary.Add(newPlayer.ActorNumber, entry);
                 bTeamDictionary.Add(newPlayer.ActorNumber, entry);
             }
-            PhotonNetwork.LocalPlayer.SetReady(false);
-            PhotonNetwork.LocalPlayer.SetLoad(false);
             AllPlayerReadyCheck();
         }
         else
@@ -233,8 +246,6 @@ public class RoomCanvas : MonoBehaviour
                     entry2?.Sprite();
                 }
             }
-            PhotonNetwork.LocalPlayer.SetReady(false);
-            PhotonNetwork.LocalPlayer.SetLoad(false);
             AllPlayerReadyCheck();
         }
     }

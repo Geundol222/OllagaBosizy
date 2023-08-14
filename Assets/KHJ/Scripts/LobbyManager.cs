@@ -17,11 +17,19 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public void Start()
     {
         if (PhotonNetwork.IsConnected)
+        {
+            if (PhotonNetwork.InRoom)
+            {
+                OnJoinedRoom();
+                return;
+            }
+            else if (PhotonNetwork.InLobby)
+            {
+                OnJoinedLobby();
+                return;
+            }
             OnConnectedToMaster();
-        else if (PhotonNetwork.InRoom)
-            OnJoinedRoom();
-        else if (PhotonNetwork.InLobby)
-            OnJoinedLobby();
+        }
         else
             OnDisconnected(DisconnectCause.None);
     }
