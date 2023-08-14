@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviourPun
 	[Header("Other")]
     [SerializeField] TMP_Text nickNameText;
 
+	private PlayerMover playerMover;
     private GameObject debuffList;
     private PlayerInput inputAction;
     private CinemachineVirtualCamera playerCamera;
@@ -41,7 +42,8 @@ public class PlayerController : MonoBehaviourPun
 		animator = GetComponent<Animator>();
         inputAction = GetComponent<PlayerInput>();
         playerCamera = GameObject.Find("PlayerCam").GetComponent<CinemachineVirtualCamera>();
-		debuffList = GameObject.Find("TrapList");
+        playerMover = GetComponent<PlayerMover>();
+        debuffList = GameObject.Find("TrapList");
 
         if (!photonView.IsMine)
             Destroy(inputAction);
@@ -107,10 +109,12 @@ public class PlayerController : MonoBehaviourPun
 			if (curPlayerPosition.y > 0 && (prevPlayerPosition.y - curPlayerPosition.y) > 10)
 			{
                 animator.SetBool("IsFall", true);
+				playerMover.PlayScreamSoundStart();
             }
 			else if (curPlayerPosition.y <= 0 && (prevPlayerPosition.y + Mathf.Abs(curPlayerPosition.y)) > 10)
 			{
                 animator.SetBool("IsFall", true);
+                playerMover.PlayScreamSoundStart();
             }
             else
 			{

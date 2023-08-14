@@ -19,12 +19,21 @@ public class PlayerMover : MonoBehaviourPun
     private Animator animator;
     private Rigidbody2D rigid;
     private Vector2 inputDirection;
-
+    private string climberType;             // 점프(boy girl)에 대한 효과음 로드를 위하여 .. 
     private void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         controller = GetComponent<PlayerController>();
+        InitClimberType();
+    }
+
+    private void InitClimberType()
+    {
+        if (PhotonNetwork.IsConnectedAndReady)
+        {
+            climberType = PhotonNetwork.LocalPlayer.GetClimber().ToString();
+        }
     }
 
     private void FixedUpdate()
@@ -50,6 +59,7 @@ public class PlayerMover : MonoBehaviourPun
 
     public void Jump()
     {
+        GameManager.Sound.PlaySound("");
         rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
     }
 
@@ -62,6 +72,44 @@ public class PlayerMover : MonoBehaviourPun
     private void OnJump(InputValue value)
     {
         if (value.isPressed && controller.IsGround)
+        {
+            animator.SetTrigger("Jump");
             Jump();
+        }
+    }
+
+    public void PlayJumpSound()
+    {
+        if (climberType == "")
+        {
+            InitClimberType();
+        }
+
+        GameManager.Sound.PlaySound($"Player/Jump/{climberType}-Jump-{Random.Range(1,3)}");
+    }
+
+    public void PlayScreamSoundStart()
+    {
+        if (climberType == "")
+        {
+            InitClimberType();
+        }
+        GameManager.Sound.PlaySound($"Player/Fall/{climberType}-Fall-1");
+
+        GameManager.Sound.PlaySound($"Player/Fall/{climberType}-Fall-2",Audio.SFX,1,1,true);
+    }
+
+    public void PlayScreamSoundEnd()
+    {
+        if (climberType == "")
+        {
+            InitClimberType();
+        }        
+        GameManager.Sound.PlaySound($"Player/Fall/{climberType}-Fall-3");
+    }
+
+    public void PlayRunningSound()
+    {
+        GameManager.Sound.PlaySound($"Player/Run/run_{Random.Range(1, 5)}");
     }
 }

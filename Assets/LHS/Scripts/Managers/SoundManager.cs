@@ -1,10 +1,12 @@
+using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public enum Audio { BGM, SFX, Size }
 
-public class SoundManager : MonoBehaviour
+public class SoundManager : MonoBehaviourPun
 {
     GameObject bgmObj;
     AudioSource bgmSource;
@@ -84,6 +86,7 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    
     public void PlaySound(AudioClip audioClip, Audio type = Audio.SFX, float volume = 1.0f, float pitch = 1.0f, bool loop = false)
     {
         StopCoroutine(FadeInRoutine());
@@ -153,9 +156,16 @@ public class SoundManager : MonoBehaviour
         yield break;
     }
 
+    /*
+    public void PlaySoundRPC(string path, Audio type = Audio.SFX, float volume = 1.0f, float pitch = 1.0f, bool loop = false)
+    {
+        photonView.RPC("PlaySound", RpcTarget.AllBufferedViaServer, path, (int)type,volume,pitch,loop);
+    }
+    */
+
     public void PlaySound(string path, Audio type = Audio.SFX, float volume = 1.0f, float pitch = 1.0f, bool loop = false)
     {
-        AudioClip audioClip = GetOrAddAudioClip(path, type);
+        AudioClip audioClip = GetOrAddAudioClip(path, (Audio) type);
         PlaySound(audioClip, type, volume, pitch, loop);
     }
 
