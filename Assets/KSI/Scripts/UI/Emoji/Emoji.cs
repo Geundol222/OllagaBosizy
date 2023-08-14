@@ -31,7 +31,7 @@ public class Emoji : MonoBehaviour
 			}
 			else
 			{
-				Debug.Log("GameTipData 할당되지 않음");
+				Debug.Log("EmojiData 할당되지 않음");
 			}
 
 			yield return new WaitForSeconds(1f);
