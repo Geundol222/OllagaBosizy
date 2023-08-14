@@ -4,6 +4,7 @@ using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
@@ -16,6 +17,7 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
     [SerializeField] float gameCountDown;
     [SerializeField] List<GameObject> climberSpawnPoints;
     [SerializeField] GameObject trollerSpawnPoint;
+    [SerializeField] GameObject UICanvas;
     [SerializeField] RoundManager round;
 
     string load = PhotonNetwork.LocalPlayer.GetLoad().ToString();
@@ -118,6 +120,9 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
     IEnumerator GameStartTimer()
     {
         int loadTime = PhotonNetwork.CurrentRoom.GetLoadTime();
+
+        PhotonNetwork.Instantiate("UI/RoundScene", new Vector3(-200, 0, 0), Quaternion.identity);
+
         while (countDownTimer > (PhotonNetwork.ServerTimestamp - loadTime) / 1000f)
         {
             int remainTime = (int)(countDownTimer - (PhotonNetwork.ServerTimestamp - loadTime) / 1000f);
@@ -125,6 +130,7 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
             yield return new WaitForEndOfFrame();
         }
         infoText.text = "Game Start!";
+        UICanvas.SetActive(true);
         GameStart();
 
         yield return new WaitForSeconds(1f);
@@ -215,6 +221,7 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
     {
         yield return new WaitForSeconds(1f);
 
+        UICanvas.SetActive(false);
         round.NextRound();
 
         yield break;
