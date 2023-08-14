@@ -1,5 +1,6 @@
 using MySql.Data.MySqlClient;
 using Photon.Pun;
+using Photon.Realtime;
 using System;
 using TMPro;
 using UnityEngine;
@@ -11,6 +12,7 @@ public class LoginCanvas : MonoBehaviour
     [SerializeField] LogImage logImage;
     public MySqlConnection con;
     public MySqlDataReader reader;
+    bool IsLoginButtonPush;
 
     private void Start()
     {
@@ -18,11 +20,16 @@ public class LoginCanvas : MonoBehaviour
         logImage.gameObject.SetActive(false);
     }
 
+    private void OnEnable()
+    {
+        IsLoginButtonPush = false;
+    }
+
     private void ConnectDataBase()
     {
         try
         {
-            string serverInfo = "Server=43.202.3.31; Database=userdata; Uid=root; PWD=1234; Port=3306; CharSet=utf8mb4_general_ci;";
+            string serverInfo = "Server=3.34.182.2; Database=user_data; Uid=root; PWD=dhffkrkwh; Port=3306; CharSet=utf8;";
             con = new MySqlConnection(serverInfo);
             con.Open();
 
@@ -38,6 +45,11 @@ public class LoginCanvas : MonoBehaviour
     {
         try
         {
+            if (IsLoginButtonPush)
+            {
+                return;
+            }
+            IsLoginButtonPush = true;
             string id = idInputField.text;
             string pass = PasswordInputField.text;
 
