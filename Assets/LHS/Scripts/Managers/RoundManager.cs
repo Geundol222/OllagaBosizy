@@ -4,15 +4,17 @@ using UnityEngine;
 
 public enum Round { NONE, ROUND1, ROUND2 }
 
-public enum Climber { None, Boy, Girl }
+public enum Climber { None, Goblin, Ghost, Boy, Girl }
 
 public class RoundManager : MonoBehaviourPun
 {
-    private int count;
+    private int climberCount;
+    private int trollerCount;
 
     private void Awake()
     {
-        count = 0;
+        climberCount = 0;
+        trollerCount = 0;
     }
 
     private void Start()
@@ -26,7 +28,11 @@ public class RoundManager : MonoBehaviourPun
             {
                 if (PhotonNetwork.PlayerList[i].GetPlayerTeam() == PlayerTeam.Climber)
                 {
-                    photonView.RPC("SetClimber", RpcTarget.AllBuffered, PhotonNetwork.PlayerList[i], count++);
+                    photonView.RPC("SetClimber", RpcTarget.AllBuffered, PhotonNetwork.PlayerList[i], climberCount++);
+                }
+                else if ((PhotonNetwork.PlayerList[i].GetPlayerTeam() == PlayerTeam.Troller))
+                {
+                    photonView.RPC("SetTroller", RpcTarget.AllBuffered, PhotonNetwork.PlayerList[i], trollerCount++);
                 }
                 else
                     PhotonNetwork.PlayerList[i].SetClimber(Climber.None);
@@ -81,7 +87,8 @@ public class RoundManager : MonoBehaviourPun
 
     public void NextRound()
     {
-        count = 0;
+        climberCount = 0;
+        trollerCount = 0;
 
         RoundChangeProcess();
 
@@ -115,6 +122,24 @@ public class RoundManager : MonoBehaviourPun
             else if (count == 1)
             {
                 player.SetClimber(Climber.Girl);
+            }
+            else
+                return;
+        }
+    }
+
+    [PunRPC]
+    public void SetTroller(Player player, int count)
+    {
+        if (player.ActorNumber == PhotonNetwork.LocalPlayer.ActorNumber)
+        {
+            if (count == 0)
+            {
+                player.SetClimber(Climber.Goblin);
+            }
+            else if (count == 1)
+            {
+                player.SetClimber(Climber.Ghost);
             }
             else
                 return;
