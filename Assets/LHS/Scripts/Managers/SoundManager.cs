@@ -181,18 +181,4 @@ public class SoundManager : MonoBehaviour
 
         return audioClip;
     }
-
-    public bool isPlaying(Audio type = Audio.SFX)
-    {
-        AudioSource audioSource;
-        if(type == Audio.BGM)
-        {
-            audioSource = bgmObj.GetComponent<AudioSource>();
-        } else
-        {
-            audioSource = loopSFX.GetComponent<AudioSource>();
-        }
-
-        return audioSource.isPlaying;
-    }
 }
