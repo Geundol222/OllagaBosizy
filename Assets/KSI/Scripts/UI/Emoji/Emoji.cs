@@ -13,9 +13,14 @@ public class Emoji : MonoBehaviour
 	private int randomIndex;
 	private string emojiText;
 
-	private void Awake()
+	private void OnEnable()
 	{
 		StartCoroutine(DisplayRandomEmojiRoutine());
+	}
+
+	private void OnDisable()
+	{
+		StopAllCoroutines();
 	}
 
 	private IEnumerator DisplayRandomEmojiRoutine()
