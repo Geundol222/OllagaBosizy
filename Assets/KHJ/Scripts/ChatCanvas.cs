@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -30,12 +31,14 @@ public class ChatCanvas : MonoBehaviour
     {
         if (chatInputField.text == "")
         {
+            chatInputField.ActivateInputField();
             return;
         }
         string mes = chatInputField.text.Trim();
         Debug.Log(mes);
-        PV.RPC("ChatRPC", RpcTarget.All, PhotonNetwork.NickName + " : " + mes);
+        PV.RPC("ChatRPC", RpcTarget.All, PhotonNetwork.NickName + " : " + mes, PhotonNetwork.LocalPlayer);
         chatInputField.text = "";
+        chatInputField.ActivateInputField();
     }
 
     public void OutRoom()
@@ -46,7 +49,12 @@ public class ChatCanvas : MonoBehaviour
         }
     }
 
-    [PunRPC]
+    public void GameStart()
+    {
+        PV.RPC("ChatRPC", RpcTarget.All, "게임을 시작합니다.");
+        chatInputField.text = "";
+    }
+
     public void InOutRPC(string chat)
     {
         TMP_Text text;
@@ -57,15 +65,23 @@ public class ChatCanvas : MonoBehaviour
     }
 
     [PunRPC]
-    void ChatRPC(string chat)
+    void ChatRPC(string chat, Player player)
     {
-        if (chat == PhotonNetwork.NickName + " : ")
-        {
-            return;
-        }
         TMP_Text text;
         text = Instantiate(chatMessage, chatObjectParent.transform);
         text.text = chat;
+        if (player.GetPlayerTeam() == PlayerTeam.Troller)
+        {
+            text.color = Color.blue;
+        }
+        else if (player.GetPlayerTeam() == PlayerTeam.Climber)
+        {
+            text.color = Color.red;
+        }
+        else
+        {
+            text.color = Color.black;
+        }
         scrollbar.value = 0;
     }
 }

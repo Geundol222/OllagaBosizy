@@ -27,11 +27,11 @@ public class RoomCanvas : MonoBehaviour
         aTeamDictionary = new Dictionary<int, PlayerEntry>();
         bTeamDictionary = new Dictionary<int, PlayerEntry>();
         PV = GetComponent<PhotonView>();
-        isStart = false;
     }
 
     private void OnEnable()
     {
+        isStart = false;
         foreach (Player player in PhotonNetwork.PlayerList)
         {
             if (player != PhotonNetwork.LocalPlayer)
