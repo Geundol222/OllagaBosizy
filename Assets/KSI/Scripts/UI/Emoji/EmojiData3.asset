@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e87df4cc3b2c5074582533913e79a16a, type: 3}
-  m_Name: GameTipData 0
+  m_Script: {fileID: 11500000, guid: 5d8f5e532a4ffcd4c9a2676e352e27e8, type: 3}
+  m_Name: EmojiData3
   m_EditorClassIdentifier: 
-  gameTipNumber: 0
-  gameTipDescription: "\uC810\uD504\uB97C \uD558\uC138\uC694"
+  emojiNumber: 3
+  emojiDescription: "\uC808\uB300 \uBABB \uC62C\uB77C\uAC00~~"
