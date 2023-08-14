@@ -10,7 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e87df4cc3b2c5074582533913e79a16a, type: 3}
-  m_Name: GameTipData 2
+  m_Name: GameTipData1
   m_EditorClassIdentifier: 
-  gameTipNumber: 2
-  gameTipDescription: "\uBC29\uD574\uC790\uB294 \uB4F1\uBC18\uC790\uB97C \uBC29\uD574\uD558\uC138\uC694"
+  gameTipNumber: 1
+  gameTipDescription: "\uBC29\uD574\uC790\uB294 \uB4F1\uBC18\uC790\uAC00 \uC624\uB974\uC9C0
+    \uBABB\uD558\uB3C4\uB85D \uBC29\uD574\uD569\uB2C8\uB2E4."
