@@ -45,8 +45,9 @@ public class RoundStartUI : GameSceneUI
         {
             return;
         }
+        canvasOfLetterBox.gameObject.SetActive(true);
         canvasOfLetterBox.renderMode = RenderMode.WorldSpace;
-        canvasOfLetterBox.transform.position = new Vector3(canvasOfLetterBox.transform.position.x, canvasOfLetterBox.transform.position.y, 0);
+        canvasOfLetterBox.transform.position = new Vector3(canvasOfLetterBox.transform.position.x, canvasOfLetterBox.transform.position.y, -3);
         climberAvatar.SetActive(false);
         trollerAvatar.SetActive(false);
         subtitle.text = "";
@@ -65,7 +66,7 @@ public class RoundStartUI : GameSceneUI
         {
             Debug.Log("¿À·ù");
         }
-
+        
         stackCamera.transform.position = new Vector3(0, stackCamera.transform.position.y, stackCamera.transform.position.z);
         letterBox.rectTransform.offsetMin = new Vector2( -1920, letterBox.rectTransform.offsetMin.y);
        
@@ -79,5 +80,13 @@ public class RoundStartUI : GameSceneUI
         }
         Init();
         animator.SetTrigger("Start");
+    }
+
+    public void HideAllObject()
+    {
+        climberAvatar.SetActive(false);
+        trollerAvatar.SetActive(false);
+        canvasOfLetterBox.gameObject.SetActive(false);
+
     }
 }
