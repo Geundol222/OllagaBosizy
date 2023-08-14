@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
+
 public class DataManager : MonoBehaviour
 {
 	public Transform startPoint; // 시작 지점
@@ -35,4 +36,6 @@ public class DataManager : MonoBehaviour
 		}
 	}
 	public event UnityAction<int> OnCurrentScoreChanged;
+
+
 }
