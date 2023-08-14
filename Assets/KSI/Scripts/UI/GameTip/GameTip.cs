@@ -13,9 +13,14 @@ public class GameTip : MonoBehaviour
 	private int randomIndex;
 	private string gameTipText;
 
-	private void Awake()
+	private void OnEnable()
 	{
 		StartCoroutine(DisplayRandomGameTipRoutine());
+	}
+
+	private void OnDisable()
+	{
+		StopAllCoroutines();
 	}
 
 	private IEnumerator DisplayRandomGameTipRoutine()
@@ -34,7 +39,7 @@ public class GameTip : MonoBehaviour
 				Debug.Log("GameTipData 할당되지 않음");
 			}
 
-			yield return new WaitForSeconds(1f);
+			yield return new WaitForSeconds(2f);
 		}		
 	}
 }
