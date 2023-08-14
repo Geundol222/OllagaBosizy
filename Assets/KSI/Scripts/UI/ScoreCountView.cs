@@ -1,4 +1,6 @@
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,6 +23,7 @@ public class ScoreCountView : MonoBehaviourPunCallbacks, IPunObservable
 
 	private void Start()
 	{
+		
 		StartCoroutine(NetworkConnectCheckRoutine());
 		StartCoroutine(PlayerFindRoutine());
 	}
@@ -77,9 +80,9 @@ public class ScoreCountView : MonoBehaviourPunCallbacks, IPunObservable
 		if (score > bestScore)
 		{
 			bestScore = score;
-			// PlayerPrefs.SetInt("BestScore", bestScore);
+			//PlayerPrefs.SetInt("BestScore", bestScore);
 			
-			scoreSlider.value = score;
+			scoreSlider.value = bestScore;
 			Debug.Log("New Best Score: " + bestScore);
 		}
 	}
