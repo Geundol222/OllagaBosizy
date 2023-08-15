@@ -1157,6 +1157,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 530014076918399330, guid: 080d932283388e54e8214dafdbfc20f1,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 992206483982852289, guid: 080d932283388e54e8214dafdbfc20f1,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2085755533069302755, guid: 080d932283388e54e8214dafdbfc20f1,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -1276,6 +1286,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2544757223243273541, guid: 080d932283388e54e8214dafdbfc20f1,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5360584538095926477, guid: 080d932283388e54e8214dafdbfc20f1,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 080d932283388e54e8214dafdbfc20f1, type: 3}

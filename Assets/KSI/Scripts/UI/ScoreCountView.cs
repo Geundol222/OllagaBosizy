@@ -14,7 +14,9 @@ public class ScoreCountView : MonoBehaviourPunCallbacks, IPunObservable
 	[Header("ScoreUI")]
 	[SerializeField] private Slider scoreSlider;
 
+	[Header("Player")]
 	[SerializeField] Transform player;
+	
 	private float totalYDistance; //  시작 지점과 마지막 지점 사이의 y 거리
 	private float playerYDistance; // 시작 지점과 플레이어 사이의 y 거리
 	private float percentage; // 시작 지점부터 플레이어까지의 y 거리 백분율
@@ -61,7 +63,14 @@ public class ScoreCountView : MonoBehaviourPunCallbacks, IPunObservable
 		if (player != null)
 		{
 			ScoreCalculate();
+			photonView.RPC("UpdateSliderValue", RpcTarget.OthersBuffered, score);
 		}			
+	}
+
+	[PunRPC]
+	private void UpdateSliderValue(int newScore)
+	{
+		scoreSlider.value = newScore;
 	}
 
 	private void ScoreCalculate()
