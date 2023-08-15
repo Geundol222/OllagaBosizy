@@ -57,6 +57,10 @@ public class Platform : MonoBehaviourPun, IPunObservable
     public void UpdateCurrentStateText()
     {
         string text = "";
+
+        if (GameManager.Team.GetTeam() != PlayerTeam.Troller)
+            return;
+
         Debug.Log($"ÇöÀç CurrentPlatformState´Â {currentDebuffState.ToString()}");
         if (currentDebuffState != Debuff_State.None)
         {

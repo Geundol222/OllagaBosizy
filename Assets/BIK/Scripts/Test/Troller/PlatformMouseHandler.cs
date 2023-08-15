@@ -56,10 +56,14 @@ public class PlatformMouseHandler : MonoBehaviour, IPointerClickHandler, IPointe
         if (GameManager.Team.GetTeam() != PlayerTeam.Troller)
             return;
 
+        if (!canMouseAction)
+        {
+            // 클릭 불가 효과음 추가 23.08.14
+            GameManager.Sound.PlaySound("Stage/Blocked");
+            return;
+        }
         // 마우스 오버 효과음 추가 23.08.14
         GameManager.Sound.PlaySound("Stage/MouseOver");
-        if (!canMouseAction)
-            return;
         if (platform.IsClickable)
         {
             platform.ShowSetTrapButton();

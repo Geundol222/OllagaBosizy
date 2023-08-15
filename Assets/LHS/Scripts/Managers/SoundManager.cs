@@ -1,10 +1,12 @@
+using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public enum Audio { BGM, SFX, Size }
 
-public class SoundManager : MonoBehaviour
+public class SoundManager : MonoBehaviourPun
 {
     GameObject bgmObj;
     AudioSource bgmSource;
@@ -17,6 +19,7 @@ public class SoundManager : MonoBehaviour
     private void Awake()
     {
         InitSound();
+        gameObject.AddComponent<PhotonView>();
     }
 
     public void InitSound()
@@ -84,7 +87,8 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    public void PlaySound(AudioClip audioClip, Audio type = Audio.SFX, float volume = 1.0f, float pitch = 1.0f, bool loop = false)
+    
+    public void PlaySound(AudioClip audioClip, Audio type = Audio.SFX, Vector3 pos = new Vector3(), float volume = 1.0f, float pitch = 1.0f, bool loop = false)
     {
         StopCoroutine(FadeInRoutine());
         StopCoroutine(ClearRoutine());
@@ -113,7 +117,7 @@ public class SoundManager : MonoBehaviour
             {
                 loopSFX = GameManager.Resource.Instantiate<GameObject>("Prefabs/SFX");
                 addSource = loopSFX.GetComponent<AudioSource>();
-
+                addSource.transform.position = pos;
                 addSource.transform.parent = transform;
                 addSource.volume = volume;
                 addSource.pitch = pitch;
@@ -130,7 +134,7 @@ public class SoundManager : MonoBehaviour
 
                 addObj.transform.parent = transform;
                 addSource = addObj.GetComponent<AudioSource>();
-
+                addSource.transform.position = pos;
                 addSource.transform.parent = transform;
                 addSource.volume = volume;
                 addSource.pitch = pitch;
@@ -153,10 +157,10 @@ public class SoundManager : MonoBehaviour
         yield break;
     }
 
-    public void PlaySound(string path, Audio type = Audio.SFX, float volume = 1.0f, float pitch = 1.0f, bool loop = false)
+    public void PlaySound(string path, Audio type = Audio.SFX, Vector3 pos = new Vector3(), float volume = 1.0f, float pitch = 1.0f, bool loop = false)
     {
         AudioClip audioClip = GetOrAddAudioClip(path, type);
-        PlaySound(audioClip, type, volume, pitch, loop);
+        PlaySound(audioClip, type, pos, volume, pitch, loop);
     }
 
     public AudioClip GetOrAddAudioClip(string path, Audio type = Audio.SFX)

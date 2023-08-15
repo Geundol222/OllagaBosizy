@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviourPun
 	[Header("Other")]
     [SerializeField] TMP_Text nickNameText;
 
+	private PlayerMover playerMover;
     private GameObject debuffList;
     private PlayerInput inputAction;
     private CinemachineVirtualCamera playerCamera;
@@ -41,7 +42,8 @@ public class PlayerController : MonoBehaviourPun
 		animator = GetComponent<Animator>();
         inputAction = GetComponent<PlayerInput>();
         playerCamera = GameObject.Find("PlayerCam").GetComponent<CinemachineVirtualCamera>();
-		debuffList = GameObject.Find("TrapList");
+        playerMover = GetComponent<PlayerMover>();
+        debuffList = GameObject.Find("TrapList");
 
         if (!photonView.IsMine)
             Destroy(inputAction);
