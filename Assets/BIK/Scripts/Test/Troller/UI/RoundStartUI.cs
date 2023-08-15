@@ -89,4 +89,14 @@ public class RoundStartUI : GameSceneUI
         canvasOfLetterBox.gameObject.SetActive(false);
 
     }
+
+    public void PlaySlideSound()
+    {
+        GameManager.Sound.PlaySound("inGame/RoundStartSlide");
+    }
+
+    public void PlayRoundStartSound()
+    {
+        GameManager.Sound.PlaySound("inGame/RoundStart");
+    }
 }
