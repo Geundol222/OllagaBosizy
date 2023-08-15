@@ -19,6 +19,7 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
     [SerializeField] GameObject trollerSpawnPoint;
     [SerializeField] GameObject UICanvas;
     [SerializeField] RoundManager round;
+    [SerializeField] GameSceneFadeUI gameSceneFadeUI;
 
     string load = PhotonNetwork.LocalPlayer.GetLoad().ToString();
     string ready = PhotonNetwork.LocalPlayer.GetReady().ToString();
@@ -148,6 +149,7 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
 
         propsInfo.text = $"Ready : {ready}\nLoad : {load}\nTeam : {team}\nClimber : {climber}";
 
+        //GameManager.Sound.PlaySound("inGame/bgm", Audio.BGM);
         GameManager.Pool.InitPool();
         GameManager.UI.InitUI();
         GameManager.Sound.InitSound();
@@ -220,6 +222,8 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
     IEnumerator RoundChangeRoutine()
     {
         yield return new WaitForSeconds(1f);
+
+        gameSceneFadeUI.FadeOut();
 
         UICanvas.SetActive(false);
         round.NextRound();
