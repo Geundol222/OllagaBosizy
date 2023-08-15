@@ -19,6 +19,7 @@ public class SoundManager : MonoBehaviourPun
     private void Awake()
     {
         InitSound();
+        gameObject.AddComponent<PhotonView>();
     }
 
     public void InitSound()
@@ -87,7 +88,7 @@ public class SoundManager : MonoBehaviourPun
     }
 
     
-    public void PlaySound(AudioClip audioClip, Audio type = Audio.SFX, float volume = 1.0f, float pitch = 1.0f, bool loop = false)
+    public void PlaySound(AudioClip audioClip, Audio type = Audio.SFX, Vector3 pos = new Vector3(), float volume = 1.0f, float pitch = 1.0f, bool loop = false)
     {
         StopCoroutine(FadeInRoutine());
         StopCoroutine(ClearRoutine());
@@ -116,7 +117,7 @@ public class SoundManager : MonoBehaviourPun
             {
                 loopSFX = GameManager.Resource.Instantiate<GameObject>("Prefabs/SFX");
                 addSource = loopSFX.GetComponent<AudioSource>();
-
+                addSource.transform.position = pos;
                 addSource.transform.parent = transform;
                 addSource.volume = volume;
                 addSource.pitch = pitch;
@@ -133,7 +134,7 @@ public class SoundManager : MonoBehaviourPun
 
                 addObj.transform.parent = transform;
                 addSource = addObj.GetComponent<AudioSource>();
-
+                addSource.transform.position = pos;
                 addSource.transform.parent = transform;
                 addSource.volume = volume;
                 addSource.pitch = pitch;
@@ -156,17 +157,10 @@ public class SoundManager : MonoBehaviourPun
         yield break;
     }
 
-    /*
-    public void PlaySoundRPC(string path, Audio type = Audio.SFX, float volume = 1.0f, float pitch = 1.0f, bool loop = false)
+    public void PlaySound(string path, Audio type = Audio.SFX, Vector3 pos = new Vector3(), float volume = 1.0f, float pitch = 1.0f, bool loop = false)
     {
-        photonView.RPC("PlaySound", RpcTarget.AllBufferedViaServer, path, (int)type,volume,pitch,loop);
-    }
-    */
-
-    public void PlaySound(string path, Audio type = Audio.SFX, float volume = 1.0f, float pitch = 1.0f, bool loop = false)
-    {
-        AudioClip audioClip = GetOrAddAudioClip(path, (Audio) type);
-        PlaySound(audioClip, type, volume, pitch, loop);
+        AudioClip audioClip = GetOrAddAudioClip(path, type);
+        PlaySound(audioClip, type, pos, volume, pitch, loop);
     }
 
     public AudioClip GetOrAddAudioClip(string path, Audio type = Audio.SFX)

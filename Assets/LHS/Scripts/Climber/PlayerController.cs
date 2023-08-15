@@ -109,12 +109,10 @@ public class PlayerController : MonoBehaviourPun
 			if (curPlayerPosition.y > 0 && (prevPlayerPosition.y - curPlayerPosition.y) > 10)
 			{
                 animator.SetBool("IsFall", true);
-				playerMover.PlayScreamSoundStart();
             }
 			else if (curPlayerPosition.y <= 0 && (prevPlayerPosition.y + Mathf.Abs(curPlayerPosition.y)) > 10)
 			{
                 animator.SetBool("IsFall", true);
-                playerMover.PlayScreamSoundStart();
             }
             else
 			{

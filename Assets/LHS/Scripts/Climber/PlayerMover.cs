@@ -1,8 +1,10 @@
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMover : MonoBehaviourPun
@@ -59,7 +61,6 @@ public class PlayerMover : MonoBehaviourPun
 
     public void Jump()
     {
-        GameManager.Sound.PlaySound("");
         rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
     }
 
@@ -73,6 +74,7 @@ public class PlayerMover : MonoBehaviourPun
     {
         if (value.isPressed && controller.IsGround)
         {
+            PlayJumpSound();
             animator.SetTrigger("Jump");
             Jump();
         }
@@ -84,19 +86,14 @@ public class PlayerMover : MonoBehaviourPun
         {
             InitClimberType();
         }
-
-        GameManager.Sound.PlaySound($"Player/Jump/{climberType}-Jump-{Random.Range(1,3)}");
+        string path = $"Player/Jump/{climberType}-Jump-{Random.Range(1, 3)}";
+        photonView.RPC("PlaySound", RpcTarget.AllBufferedViaServer, path);
     }
-
-    public void PlayScreamSoundStart()
+    
+    [PunRPC]
+    public void PlaySound(string path)
     {
-        if (climberType == "")
-        {
-            InitClimberType();
-        }
-        GameManager.Sound.PlaySound($"Player/Fall/{climberType}-Fall-1");
-
-        GameManager.Sound.PlaySound($"Player/Fall/{climberType}-Fall-2",Audio.SFX,1,1,true);
+        GameManager.Sound.PlaySound(path, Audio.SFX,gameObject.transform.position);
     }
 
     public void PlayScreamSoundEnd()
@@ -104,12 +101,14 @@ public class PlayerMover : MonoBehaviourPun
         if (climberType == "")
         {
             InitClimberType();
-        }        
-        GameManager.Sound.PlaySound($"Player/Fall/{climberType}-Fall-3");
+        }
+        string path = $"Player/Fall/{climberType}-Fall-3";
+        photonView.RPC("PlaySound", RpcTarget.AllBufferedViaServer, path);
     }
 
     public void PlayRunningSound()
     {
-        GameManager.Sound.PlaySound($"Player/Run/run_{Random.Range(1, 5)}");
+        string path = $"Player/Run/run_{Random.Range(1, 5)}";
+        photonView.RPC("PlaySound", RpcTarget.AllBufferedViaServer, path);
     }
 }
