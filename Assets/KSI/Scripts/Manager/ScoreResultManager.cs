@@ -7,8 +7,11 @@ using UnityEngine.UI;
 
 public class ScoreResultManager :MonoBehaviourPunCallbacks
 {
-	[SerializeField] private TMP_Text scoreText;
-	[SerializeField] private TMP_Text resultText;
+	[SerializeField] private TMP_Text teamAScoreText;
+	[SerializeField] private TMP_Text teamBScoreText;
+	[SerializeField] private TMP_Text resultTextTeamA;
+	[SerializeField] private TMP_Text resultTextTeamB;
+
 	private int teamAScore = 0;
 	private int teamBScore = 0;
 	private int currentRound = 1;
@@ -27,7 +30,8 @@ public class ScoreResultManager :MonoBehaviourPunCallbacks
 	[System.Obsolete]
 	private void UpdateScore()
 	{
-		myScore = (int)photonView.Owner.CustomProperties["ScoreRound" + currentRound.ToString()]; // 현재 라운드의 플레이어의 스코어
+		// 현재 라운드의 플레이어의 스코어
+		myScore = (int)photonView.Owner.CustomProperties["ScoreRound" + currentRound.ToString()]; 
 
 		if (photonView.IsMine)
 		{
@@ -47,7 +51,8 @@ public class ScoreResultManager :MonoBehaviourPunCallbacks
 		if (PhotonNetwork.IsMasterClient)
 		{
 			// 마스터 클라이언트에서 라운드 종료 후 승패를 판정하고 결과를 모든 플레이어에게 알림
-			if (currentRound == 2 && teamAScore + teamBScore >= 2) // 총 라운드 수에 따라 조정
+			// 총 라운드 수에 따라 조정
+			if (currentRound == 2 && teamAScore + teamBScore >= 2)
 			{
 				if (teamAScore > teamBScore)
 				{
@@ -69,13 +74,23 @@ public class ScoreResultManager :MonoBehaviourPunCallbacks
 	[PunRPC]
 	private void DeclareWinner(string winner)
 	{
-		resultText.text = winner + " wins!"; // 승자 팀을 UI에 표시
-		Debug.Log("Winner: " + winner);
+		if ((string)photonView.Owner.CustomProperties["Team"] == "blue")
+		{
+			resultTextTeamA.text = winner;
+			resultTextTeamB.text = "패배!";
+		}
+		else if ((string)photonView.Owner.CustomProperties["Team"] == "red")
+		{
+			resultTextTeamA.text = "패배!";
+			resultTextTeamB.text = winner;
+		}
+
+		Debug.Log("승자: " + winner);
 	}
 
 	private void UpdateScoreText()
 	{
-		scoreText.text = "Team A: " + teamAScore + " | Team B: " + teamBScore;
-		Debug.Log("Team A: " + teamAScore + " | Team B: " + teamBScore);
+		teamAScoreText.text = "Team A: " + teamAScore;
+		teamBScoreText.text = "Team B: " + teamBScore;
 	}
 }
