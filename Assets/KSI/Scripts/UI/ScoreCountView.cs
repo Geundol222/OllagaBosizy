@@ -14,7 +14,9 @@ public class ScoreCountView : MonoBehaviourPunCallbacks, IPunObservable
 	[Header("ScoreUI")]
 	[SerializeField] private Slider scoreSlider;
 
+	[Header("Player")]
 	[SerializeField] Transform player;
+	
 	private float totalYDistance; //  시작 지점과 마지막 지점 사이의 y 거리
 	private float playerYDistance; // 시작 지점과 플레이어 사이의 y 거리
 	private float percentage; // 시작 지점부터 플레이어까지의 y 거리 백분율
@@ -26,6 +28,13 @@ public class ScoreCountView : MonoBehaviourPunCallbacks, IPunObservable
 		
 		StartCoroutine(NetworkConnectCheckRoutine());
 		StartCoroutine(PlayerFindRoutine());
+
+		// 초기화 시에 bestScore 값을 플레이어 Properties에 설정
+		bestScore = 0;
+		if (PhotonNetwork.IsConnectedAndReady)
+		{
+			PhotonNetwork.LocalPlayer.SetScore(bestScore);
+		}
 	}
 
 	IEnumerator NetworkConnectCheckRoutine()
@@ -61,29 +70,32 @@ public class ScoreCountView : MonoBehaviourPunCallbacks, IPunObservable
 		if (player != null)
 		{
 			ScoreCalculate();
+			photonView.RPC("UpdateSliderValue", RpcTarget.OthersBuffered, score);
 		}			
 	}
 
-	private void ScoreCalculate()
+	[PunRPC]
+	private void UpdateSliderValue(int newScore)
 	{
-		
+		scoreSlider.value = newScore;
+	}
+
+	private void ScoreCalculate()
+	{		
 		totalYDistance = Mathf.Abs(endPoint.position.y - startPoint.position.y);
-
 		playerYDistance = Mathf.Abs(player.position.y - startPoint.position.y);
-
 		percentage = Mathf.Clamp((playerYDistance / totalYDistance) * 100f, 0f, 100f);
-
-		// 백분율 값을 정수로 변환
 		score = Mathf.RoundToInt(percentage);
 
-		// 현재 점수가 최고 점수를 초과하면 최고 점수를 업데이트하고 PlayerPrefs에 저장
+		// 점수가 기존 bestScore를 초과할 경우, 플레이어의 Properties 업데이트
+		int bestScore = PhotonNetwork.LocalPlayer.GetScore();
 		if (score > bestScore)
 		{
 			bestScore = score;
-			//PlayerPrefs.SetInt("BestScore", bestScore);
-			
+			PhotonNetwork.LocalPlayer.SetScore(bestScore);
+
 			scoreSlider.value = bestScore;
-			Debug.Log("New Best Score: " + bestScore);
+			Debug.Log("New Best Score : " + bestScore);
 		}
 	}
 
