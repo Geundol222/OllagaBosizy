@@ -18,6 +18,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     //처음 시작할 때 상태에 따라 다른 canvas가 열리도록 실행
     public void Start()
     {
+        GameManager.Sound.PlaySound("MainLobbyRoom/bgm", Audio.BGM);
         if (PhotonNetwork.IsConnected)
         {
             if (PhotonNetwork.InRoom)
