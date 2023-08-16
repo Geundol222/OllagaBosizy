@@ -2,6 +2,7 @@ using MySql.Data.MySqlClient;
 using Photon.Pun;
 using Photon.Realtime;
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -13,11 +14,13 @@ public class LoginCanvas : MonoBehaviour
     public MySqlConnection con;
     public MySqlDataReader reader;
     bool IsLoginButtonPush;
+    Animator anim;
 
     private void Start()
     {
         ConnectDataBase();
         logImage.gameObject.SetActive(false);
+        anim = GetComponent<Animator>();
     }
 
     private void OnEnable()
@@ -71,7 +74,7 @@ public class LoginCanvas : MonoBehaviour
                     if (pass == readPass)
                     {
                         PhotonNetwork.LocalPlayer.NickName = readnick;
-                        PhotonNetwork.ConnectUsingSettings();
+                        StartCoroutine(CloseLoginCanvasRoutine());
                     }
                     else
                     {
@@ -92,5 +95,13 @@ public class LoginCanvas : MonoBehaviour
         {
             Debug.Log(e.Message);
         }
+    }
+    
+    IEnumerator CloseLoginCanvasRoutine()
+    {
+        anim.SetTrigger("IsClose");
+        yield return new WaitForSeconds(1.0f);
+        PhotonNetwork.ConnectUsingSettings();
+        yield break;
     }
 }
