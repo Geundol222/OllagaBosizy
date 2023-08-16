@@ -1,5 +1,6 @@
 using Cinemachine;
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using System.Collections;
 using TMPro;
@@ -21,6 +22,7 @@ public class PlayerController : MonoBehaviourPun
 	[Header("Other")]
     [SerializeField] TMP_Text nickNameText;
 
+	private ScoreCountView scoreSlider;
 	private PlayerMover playerMover;
     private GameObject debuffList;
     private PlayerInput inputAction;
@@ -44,6 +46,11 @@ public class PlayerController : MonoBehaviourPun
         playerCamera = GameObject.Find("PlayerCam").GetComponent<CinemachineVirtualCamera>();
         playerMover = GetComponent<PlayerMover>();
         debuffList = GameObject.Find("TrapList");
+
+        if (PhotonNetwork.LocalPlayer.GetClimber() == Climber.Boy)
+            scoreSlider = GameObject.Find("ScoreSliderBoy").GetComponent<ScoreCountView>();
+        else if (PhotonNetwork.LocalPlayer.GetClimber() == Climber.Girl)
+            scoreSlider = GameObject.Find("ScoreSliderGirl").GetComponent<ScoreCountView>();
 
         if (!photonView.IsMine)
             Destroy(inputAction);
@@ -141,5 +148,11 @@ public class PlayerController : MonoBehaviourPun
             return;
 
         inputAction.enabled = false;
+	}
+
+	public void SetPlayerScore()
+	{
+		PhotonNetwork.LocalPlayer.SetScore(scoreSlider.BestScore);
+		Debug.Log($"Player Score : {scoreSlider.BestScore}");
 	}
 }

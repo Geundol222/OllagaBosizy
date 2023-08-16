@@ -1,6 +1,4 @@
 using Photon.Pun;
-using Photon.Realtime;
-using System.Collections;
 using UnityEngine;
 
 public enum Round { NONE, ROUND1, ROUND2 }
@@ -45,7 +43,6 @@ public class RoundManager : MonoBehaviourPun
             PhotonNetwork.CurrentRoom.CustomProperties.Clear();
 
         GameManager.TrollerData._setTrapPlatforms.Clear();
-        PhotonNetwork.LocalPlayer.CustomProperties.Clear();
         PhotonNetwork.LeaveRoom();
         GameManager.Scene.LoadScene(Scene.LOBBY);
     }
