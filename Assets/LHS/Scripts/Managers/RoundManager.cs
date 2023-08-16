@@ -43,8 +43,7 @@ public class RoundManager : MonoBehaviourPun
             PhotonNetwork.CurrentRoom.CustomProperties.Clear();
 
         GameManager.TrollerData._setTrapPlatforms.Clear();
-        PhotonNetwork.LeaveRoom();
-        GameManager.Scene.LoadScene(Scene.LOBBY);
+        GameManager.Scene.LoadScene(Scene.SCORE);
     }
 
     public Round GetRound()

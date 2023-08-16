@@ -13,7 +13,7 @@ public class LogImage : MonoBehaviour
     private void Awake()
     {
         anim = GetComponent<Animator>();
-        manager = GameObject.FindWithTag("EditorOnly").GetComponent<LobbyManager>();
+        manager = GameObject.Find("LobbyManager").GetComponent<LobbyManager>();
     }
 
     private void OnEnable()

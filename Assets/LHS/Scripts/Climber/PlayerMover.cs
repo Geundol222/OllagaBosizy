@@ -98,8 +98,11 @@ public class PlayerMover : MonoBehaviourPun
 
     public void PlayScreamSoundEnd()
     {
-        if (!photonView.IsMine)
-            return;
+        // if (!photonView.IsMine)
+        //     return;
+
+        Debug.Log("비명 발생");
+
         if (climberType == "")
         {
             InitClimberType();
@@ -110,8 +113,11 @@ public class PlayerMover : MonoBehaviourPun
 
     public void PlayRunningSound()
     {
-        if (!photonView.IsMine)
-            return;
+        // if (!photonView.IsMine)
+        //     return;
+
+        Debug.Log("발소리 발생");
+
         string path = $"Player/Run/run_{Random.Range(1, 5)}";
         photonView.RPC("PlaySound", RpcTarget.AllBufferedViaServer, path);
     }

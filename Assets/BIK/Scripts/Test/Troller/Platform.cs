@@ -258,11 +258,11 @@ public class Platform : MonoBehaviourPun, IPunObservable
     {
         Debug.Log("Set Trap 버튼 누름");
         // 함정설치한 플레이어 Number 넣기
-        photonPlayerNumber = PhotonNetwork.LocalPlayer.GetPlayerNumber();
+        photonPlayerNumber = PhotonNetwork.LocalPlayer.ActorNumber;
         // 함정설치 또는 마우스 Over Exit 액션 못하게 처리
         SetCanMouseAction(false);
         // setTrapPlatform에 현재 플랫폼 추가,
-        if (photonPlayerNumber == PhotonNetwork.LocalPlayer.GetPlayerNumber())
+        if (photonPlayerNumber == PhotonNetwork.LocalPlayer.ActorNumber)
         {
             SetTrapListUpdate(true);
         }
@@ -311,7 +311,7 @@ public class Platform : MonoBehaviourPun, IPunObservable
     [PunRPC]
     public void ClearTrap()
     {
-        if (photonPlayerNumber == PhotonNetwork.LocalPlayer.GetPlayerNumber())
+        if (photonPlayerNumber == PhotonNetwork.LocalPlayer.ActorNumber)
         {
             SetTrapListUpdate(false);
         }

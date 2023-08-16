@@ -36,9 +36,6 @@ public class PlayerController : MonoBehaviourPun
 
     private void Awake()
 	{
-        if (GameManager.Team.GetTeam() != PlayerTeam.Climber)
-            Destroy(gameObject.GetComponent<PlayerController>());
-
         prevPlayerPosition = transform.position;
 		
 		animator = GetComponent<Animator>();
