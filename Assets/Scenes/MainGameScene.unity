@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.11155796, g: 0.10710037, b: 0.30689597, a: 1}
+  m_IndirectSpecularColor: {r: 0.11178141, g: 0.107318774, b: 0.3071141, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1752,7 +1752,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -13978,7 +13978,7 @@ MonoBehaviour:
   infoText: {fileID: 2133235828}
   timerText: {fileID: 4701893713771292279}
   countDownTimer: 5
-  gameCountDown: 10
+  gameCountDown: 90
   climberSpawnPoints:
   - {fileID: 23394144}
   - {fileID: 505437726}
@@ -13986,7 +13986,7 @@ MonoBehaviour:
   UICanvas: {fileID: 4701893712876069397}
   round: {fileID: 819227729}
   gameSceneFadeUI: {fileID: 547497446}
-  UIcanvas: {fileID: 0}
+  UIcanvas: {fileID: 4701893712876069394}
 --- !u!4 &8201432330447733027
 Transform:
   m_ObjectHideFlags: 0

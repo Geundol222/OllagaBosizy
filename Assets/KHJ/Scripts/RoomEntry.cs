@@ -9,7 +9,7 @@ public class RoomEntry : MonoBehaviour
     [SerializeField] TMP_Text roomName;
     [SerializeField] TMP_Text currentPlayer;
     [SerializeField] Button joinRoomButton;
-
+    bool joinroom;
     private RoomInfo info;
 
     //방의 이름을 보여주는 함수
@@ -20,9 +20,12 @@ public class RoomEntry : MonoBehaviour
         currentPlayer.text = $"{roomInfo.PlayerCount} / {roomInfo.MaxPlayers}";
         joinRoomButton.interactable = roomInfo.PlayerCount < roomInfo.MaxPlayers;
     }
-    
+
     public void JoinRoom()
     {
-        PhotonNetwork.JoinRoom(info.Name);
+        if (!joinroom)
+            PhotonNetwork.JoinRoom(info.Name);
+        else
+            return;
     }
 }

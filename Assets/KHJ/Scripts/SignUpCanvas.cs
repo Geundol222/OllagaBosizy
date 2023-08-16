@@ -153,7 +153,7 @@ public class SignUpCanvas : MonoBehaviour
         string name = NickNameInputField.text;
         string answerstring = answerInputField.text;
 
-        string sqlCommand = string.Format("INSERT INTO `userdata`.`user_info` (`ID`, `PWD`, `NICKNAME`, `PWDANSWER`) VALUES ('{0}','{1}','{2}','{3}');", id, pwd, name, answerstring);
+        string sqlCommand = string.Format("INSERT INTO `user_data`.`user_info` (`ID`, `PWD`, `NICKNAME`, `PWDANSWER`) VALUES ('{0}','{1}','{2}','{3}');", id, pwd, name, answerstring);
         Debug.Log(sqlCommand);
         MySqlCommand cmd = new MySqlCommand(sqlCommand, con);
         reader = cmd.ExecuteReader();

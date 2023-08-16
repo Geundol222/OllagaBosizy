@@ -10,7 +10,6 @@ public class GameManager : MonoBehaviour
     private static UIManager ui;
     private static SoundManager sound;
     private static SceneManager scene;
-    private static DataManager data;
     private static TrollerDataManager trollerData;
     private static TeamManager team;
 
@@ -20,7 +19,6 @@ public class GameManager : MonoBehaviour
     public static UIManager UI { get { return ui; } }
     public static SoundManager Sound { get { return sound; } }
     public static SceneManager Scene { get { return scene; } }
-    public static DataManager Data { get { return data; } }
     public static TrollerDataManager TrollerData { get { return trollerData; } }
     public static TeamManager Team { get { return team; } }
 
@@ -71,11 +69,6 @@ public class GameManager : MonoBehaviour
         sceneObj.name = "SceneManager";
         sceneObj.transform.parent = transform;
         scene = sceneObj.AddComponent<SceneManager>();
-
-        GameObject dataObj = new GameObject();
-        dataObj.name = "DataManager";
-        dataObj.transform.parent = transform;
-        data = dataObj.AddComponent<DataManager>();
 
         GameObject trollerDataObj = new GameObject();
         trollerDataObj.name = "TrollerDataManager";

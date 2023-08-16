@@ -2,7 +2,7 @@ using Photon.Pun;
 using System.Collections;
 using UnityEngine;
 
-public enum Scene { LOBBY, LOADING, GAME, TEMP };
+public enum Scene { LOBBY, LOADING, GAME, TEMP, SCORE };
 
 public class SceneManager : MonoBehaviour
 {

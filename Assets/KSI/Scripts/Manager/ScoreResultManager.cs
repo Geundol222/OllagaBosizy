@@ -1,5 +1,7 @@
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -19,6 +21,18 @@ public class ScoreResultManager : MonoBehaviourPunCallbacks
 		teamBScore = 0;
 
 		UpdateScore();
+
+		StartCoroutine(EndRoutine());
+	}
+
+	IEnumerator EndRoutine()
+	{
+		yield return new WaitForSeconds(10f);
+
+		PhotonNetwork.LocalPlayer.CustomProperties.Clear();
+		PhotonNetwork.LeaveRoom();
+		
+		GameManager.Scene.LoadScene(Scene.LOBBY);
 	}
 
 	// 플레이어의 점수를 업데이트하고 승패를 확인
@@ -49,13 +63,18 @@ public class ScoreResultManager : MonoBehaviourPunCallbacks
 		if (aScore > bScore)
 		{
 			resultTextTeamA.text = "WIN !";
-			resultTextTeamB.text = "DEFEAT !";
+			resultTextTeamB.text = "LOSE !";
 		}
 		else if (bScore > aScore)
 		{
 			resultTextTeamB.text = "WIN !";
-			resultTextTeamA.text = "DEFEAT !";
+			resultTextTeamA.text = "LOSE !";
 		}
+		else if (aScore == bScore)
+		{
+            resultTextTeamB.text = "DRAW !";
+            resultTextTeamA.text = "DRAW !";
+        }
 
 		UpdateScoreText(aScore, bScore);
 	}

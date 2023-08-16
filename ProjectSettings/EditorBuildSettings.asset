@@ -7,7 +7,7 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/Scenes/MainLobbyScene.unity
-    guid: 60d982c005b59ed4da6e9e9063df08c1
+    guid: 243745c6448c21544a923cf9fd8028a3
   - enabled: 1
     path: Assets/Scenes/MainLoadingScene.unity
     guid: a701bf88239455546801d228a8b2c638
@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MainTempScene.unity
     guid: 4ce3afa967ffbe845a4d149336b2bde0
+  - enabled: 1
+    path: Assets/Scenes/MainScoreResultScene.unity
+    guid: 9adc038e2eb1d3343855d232fc1021b4
   m_configObjects: {}
