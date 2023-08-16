@@ -51,6 +51,8 @@ public class RoundManager : MonoBehaviourPun
         if (PhotonNetwork.IsMasterClient)
             PhotonNetwork.CurrentRoom.CustomProperties.Clear();
 
+        GameManager.TrollerData._setTrapPlatforms.Clear();
+        PhotonNetwork.LocalPlayer.CustomProperties.Clear();
         PhotonNetwork.LeaveRoom();
         Destroy(splitManager.gameObject);
         GameManager.Scene.LoadScene(Scene.LOBBY);

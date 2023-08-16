@@ -72,17 +72,17 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
     public override void OnDisconnected(DisconnectCause cause)
     {
         Debug.Log($"Disconnected : {cause}");
-        // SceneManager.LoadScene("LobbyScene");
+        GameManager.Scene.LoadScene(Scene.LOBBY);
     }
 
     public override void OnLeftRoom()
     {
-        // PhotonNetwork.LoadLevel("LobbyScene");
+        PhotonNetwork.AutomaticallySyncScene = false;
+        GameManager.Scene.LoadScene(Scene.LOBBY);
     }
 
     public override void OnMasterClientSwitched(Player newMasterClient)
-    {
-        if (PhotonNetwork.IsMasterClient) { }
+    {        
         // TODO : 방장이 바꼈을 때
     }
 
