@@ -22,6 +22,7 @@ public class SignUpCanvas : MonoBehaviour
     private bool isCheckID;
     private bool isCheckNickName;
 
+    //enable되엇을 때 로그인canvas에서 접속한 데이터베이스를 들고와 사용하게 함.
     private void OnEnable()
     {
         con = LC.con;
@@ -32,8 +33,11 @@ public class SignUpCanvas : MonoBehaviour
         anim.SetTrigger("IsOpen");
     }
 
+    //중복된 아이디로 만들어 지는 것을 막기 위한 함수
     public void CheckID()
     {
+        if (!LC.isConnected)
+            LC.ConnectDataBase();
         try
         {
             string id = idInputField.text;
@@ -42,6 +46,7 @@ public class SignUpCanvas : MonoBehaviour
 
             MySqlCommand cmd = new MySqlCommand(sqlCommand, con);
             reader = cmd.ExecuteReader();
+            //받은 아이디 값이 데이터베이스에 존재 한다면
             if (reader.HasRows)
             {
                 logImage.gameObject.SetActive(true);
@@ -58,20 +63,24 @@ public class SignUpCanvas : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.Log(e.Message);
+            return;
         }
     }
 
+    //중복된 닉네임으로 만들어 지는 것을 방지하기 위한 함수
     public void CheckNickName()
     {
         try
         {
+            if (!LC.isConnected)
+                LC.ConnectDataBase();
             string name = NickNameInputField.text;
 
             string sqlCommand = string.Format("SELECT NICKNAME FROM user_info WHERE NICKNAME='{0}';", name);
 
             MySqlCommand cmd = new MySqlCommand(sqlCommand, con);
             reader = cmd.ExecuteReader();
+            //받은 닉네임 값이 데이터베이스에 존재 한다면
             if (reader.HasRows)
             {
                 logImage.gameObject.SetActive(true);
@@ -88,10 +97,11 @@ public class SignUpCanvas : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.Log(e.Message);
+            return;
         }
     }
 
+    //중복여부 검사를 진행하였는지 확인하고 아이디를 만드는 창을 띄워주는 함수
     public void OKButton()
     {
         try
@@ -129,12 +139,15 @@ public class SignUpCanvas : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.Log(e.Message);
+            return;
         }
     }
 
+    //유저가 아이디, 비번을 잊어먹을 경우를 생각하여 PWDANSWER를 따로 받아 저장하면서 아이디를 만드는 함수
     public void CreateID()
     {
+        if (!LC.isConnected)
+            LC.ConnectDataBase();
         string id = idInputField.text;
         string pwd = PasswordInputField.text;
         string name = NickNameInputField.text;
@@ -153,6 +166,7 @@ public class SignUpCanvas : MonoBehaviour
         StartCoroutine(CloseCanvasRoutine());
     }
 
+    //전에 입력하였던 값들을 지워주는 것을 실행
     IEnumerator CloseCanvasRoutine()
     {
         idInputField.text = "";

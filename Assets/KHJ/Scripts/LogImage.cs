@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+//여러가지 유저에게 알려줄 것이 있다면 알려주는 image
 public class LogImage : MonoBehaviour
 {
     private Animator anim;

@@ -16,38 +16,44 @@ public class LoginCanvas : MonoBehaviour
     public MySqlConnection con;
     public MySqlDataReader reader;
     Animator anim;
+    public bool isConnected = false;
 
-    private void Start()
+    private void Awake()
     {
-        ConnectDataBase();
-        logImage.gameObject.SetActive(false);
         anim = GetComponent<Animator>();
     }
 
+    //데이터베이스에 연결되어있지 않으면 연결하고 logImage나 SignUpCanvas, FoundCanvas가 켜져있다면 꺼주는 함수
     private void OnEnable()
     {
+        if (!isConnected)
+            ConnectDataBase();
+        logImage.gameObject.SetActive(false);
         SignUpCanvas.SetActive(false);
         FoundCanvas.SetActive(false);
     }
 
-    private void ConnectDataBase()
+    //데이터 베이스에 연결해주는 함수
+    public void ConnectDataBase()
     {
         try
         {
             string serverInfo = "Server=3.34.182.2; Database=user_data; Uid=root; PWD=dhffkrkwh; Port=3306; CharSet=utf8;";
             con = new MySqlConnection(serverInfo);
             con.Open();
-
-            Debug.Log("데이터베이스 접속 성공");
+            isConnected = true;
         }
         catch (Exception e)
         {
-            Debug.Log(e.Message);
+            return; ;
         }
     }
 
+    //유저가 입력한 id와 pwd를 받아 데이터베이스에서 조회하여 있으면 해당 아이디의 닉네임을 받아 서버에 들어가게 해주는 함수
     public void Login()
     {
+        if(!isConnected)
+            ConnectDataBase();
         try
         {
             string id = idInputField.text;
@@ -65,8 +71,6 @@ public class LoginCanvas : MonoBehaviour
                     string readPass = reader["PWD"].ToString();
                     string readnick = reader["NICKNAME"].ToString();
                     string readPassANS = reader["PWDANSWER"].ToString();
-
-                    Debug.Log($"ID : {readID}, Pass : {readPass}, PassANS : {readPassANS}");
 
                     if (pass == readPass)
                     {
@@ -90,7 +94,7 @@ public class LoginCanvas : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.Log(e.Message);
+            return;
         }
     }
     

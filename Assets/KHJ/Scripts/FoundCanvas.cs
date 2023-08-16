@@ -17,15 +17,19 @@ public class FoundCanvas : MonoBehaviour
 
     private void OnEnable()
     {
+        //시작할 때 로그인켄버스에서 서버를 받아옴
         con = LC.con;
         anim.SetTrigger("IsOpen");
         answer.gameObject.SetActive(false);
     }
 
+    //받아온 서버에서 유저가 입력한 PWDANSWER를 채크한 후 있으면 ID를 반환해주는 함수
     public void FoundID()
     {
         try
         {
+            if (!LC.isConnected)
+                LC.ConnectDataBase();
             string id = answerInputField.text;
 
             string sqlCommand = string.Format("SELECT ID FROM user_info WHERE PWDANSWER='{0}';", id);
@@ -53,14 +57,17 @@ public class FoundCanvas : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.Log(e.Message);
+            return;
         }
     }
 
+    //받아온 서버에서 유저가 입력한 PWDANSWER를 채크한 후 있으면 PASSWORD를 반환해주는 함수
     public void FoundPW()
     {
         try
         {
+            if (!LC.isConnected)
+                LC.ConnectDataBase();
             string id = answerInputField.text;
 
             string sqlCommand = string.Format("SELECT PWD FROM user_info WHERE PWDANSWER='{0}';", id);
@@ -88,7 +95,7 @@ public class FoundCanvas : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.Log(e.Message);
+            return;
         }
     }
 
