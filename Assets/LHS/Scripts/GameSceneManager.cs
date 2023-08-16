@@ -19,11 +19,14 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
     [SerializeField] GameObject UICanvas;
     [SerializeField] RoundManager round;
     [SerializeField] GameSceneFadeUI gameSceneFadeUI;
+    [SerializeField] Canvas UIcanvas;
 
     string load = PhotonNetwork.LocalPlayer.GetLoad().ToString();
     string ready = PhotonNetwork.LocalPlayer.GetReady().ToString();
     string team = PhotonNetwork.LocalPlayer.GetPlayerTeam().ToString();
     string climber = PhotonNetwork.LocalPlayer.GetClimber().ToString();
+
+    private PlayerController playerController;
 
     private void Start()
     {
@@ -146,7 +149,7 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
                 PhotonNetwork.CurrentRoom.SetCurrentRound(Round.ROUND1);
         }
 
-        //GameManager.Sound.PlaySound("inGame/bgm", Audio.BGM);
+        GameManager.Sound.PlaySound("inGame/bgm", Audio.BGM);
         GameManager.Pool.InitPool();
         GameManager.UI.InitUI();
         GameManager.Sound.InitSound();
@@ -165,9 +168,9 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
                 else if (player.GetPlayerTeam() == PlayerTeam.Climber)
                 {
                     if (player.GetClimber() == Climber.Boy)
-                        PhotonNetwork.Instantiate("Climber/PlayerBoy", climberSpawnPoints[0].transform.position, climberSpawnPoints[0].transform.rotation);
+                        playerController = PhotonNetwork.Instantiate("Climber/PlayerBoy", climberSpawnPoints[0].transform.position, climberSpawnPoints[0].transform.rotation).GetComponent<PlayerController>();
                     else if (player.GetClimber() == Climber.Girl)
-                        PhotonNetwork.Instantiate("Climber/PlayerGirl", climberSpawnPoints[1].transform.position, climberSpawnPoints[1].transform.rotation);
+                        playerController = PhotonNetwork.Instantiate("Climber/PlayerGirl", climberSpawnPoints[1].transform.position, climberSpawnPoints[1].transform.rotation).GetComponent<PlayerController>();
                 }
             }
         }
@@ -232,6 +235,9 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
 
     IEnumerator RoundEndRoutine()
     {
+        if (GameManager.Team.GetTeam() == PlayerTeam.Climber)
+            playerController.SetPlayerScore();
+
         Time.timeScale = 0.01f;
         infoText.enabled = true;
         infoText.text = "Time Out!!";

@@ -15238,6 +15238,8 @@ MonoBehaviour:
   idInputField: {fileID: 204308991}
   PasswordInputField: {fileID: 176447573}
   logImage: {fileID: 1252729447}
+  SignUpCanvas: {fileID: 1146532112}
+  FoundCanvas: {fileID: 1274301115}
 --- !u!95 &1530674915
 Animator:
   serializedVersion: 5

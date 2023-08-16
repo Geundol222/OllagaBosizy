@@ -78,22 +78,6 @@ public static class CustomProperty
         player.SetCustomProperties(property);
     }
 
-    public static int GetScore(this Player player)
-    {
-        PhotonHashtable property = player.CustomProperties;
-        if (property.ContainsKey(SCORE))
-            return (int)property[SCORE];
-        else
-            return -1;
-    }
-
-    public static void SetScore(this Player player, int score)
-    {
-        PhotonHashtable property = new PhotonHashtable();
-        property[SCORE] = score;
-        player.SetCustomProperties(property);
-    }
-
     public static int GetLoadTime(this Room room)
     {
         PhotonHashtable property = room.CustomProperties;
