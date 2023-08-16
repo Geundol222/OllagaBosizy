@@ -8,13 +8,13 @@ using UnityEngine;
 
 public class LoginCanvas : MonoBehaviour
 {
-    [SerializeField] TMP_InputField idInputField;
-    [SerializeField] TMP_InputField PasswordInputField;
-    [SerializeField] LogImage logImage;
-    public GameObject SignUpCanvas;
-    public GameObject FoundCanvas;
-    public MySqlConnection con;
-    public MySqlDataReader reader;
+    [SerializeField] TMP_InputField idInputField;               //유저가 적은 id inputfield
+    [SerializeField] TMP_InputField PasswordInputField;         //유저가 적은 pwd를 받아오는 inputfield
+    [SerializeField] LogImage logImage;                         //유저에게 이것저것 알려주기 위한 오브잭트
+    public GameObject SignUpCanvas;                             //회원가입 창
+    public GameObject FoundCanvas;                              //id&pwd찾는 창
+    public MySqlConnection con;                                 //회원가입창이나 id&pwd찾는 창에서 데이터베이스를 받아가게 하기 위해 제작
+    public MySqlDataReader reader;                              //
     Animator anim;
     public bool isConnected = false;
 

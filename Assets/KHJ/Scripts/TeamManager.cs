@@ -6,8 +6,8 @@ public enum PlayerTeam { None, Troller, Climber }
 
 public class TeamManager : MonoBehaviourPun
 {
-    private int climberCount;
-    private int trollerCount;
+    private int climberCount;               //등반자 인원수를 새기 위해 만듦
+    private int trollerCount;               //방해자 인원수를 새기 위해 만듦
 
     private void Awake()
     {

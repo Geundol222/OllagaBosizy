@@ -7,10 +7,9 @@ using Unity.VisualScripting;
 
 public class ChangeInput : MonoBehaviour
 {
-    EventSystem system;
-    public Selectable IDInput;
-    public Selectable PWDInput;
-    public Button submitButton;
+    EventSystem system;                 //이벤트 시스템 
+    public Selectable IDInput;          //idInputField
+    public Selectable PWDInput;         //pwdInputField
 
 
     void OnEnable()

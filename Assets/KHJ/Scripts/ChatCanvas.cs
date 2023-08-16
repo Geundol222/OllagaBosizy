@@ -11,12 +11,11 @@ using UnityEngine.UIElements;
 
 public class ChatCanvas : MonoBehaviour
 {
-    [SerializeField] TMP_InputField chatInputField;
-    [SerializeField] TMP_Text chatMessage;
-    [SerializeField] RectTransform chatObjectParent;
-    [SerializeField] Scrollbar scrollbar;
-    [SerializeField] BaseEventData eventdata;
-    public PhotonView PV;
+    [SerializeField] TMP_InputField chatInputField;                 //채팅창의 inputField
+    [SerializeField] TMP_Text chatMessage;                          //채팅로그에 들어갈 text
+    [SerializeField] RectTransform chatObjectParent;                //채팅로그에 들어갈 text가 생겨야 될 위치
+    [SerializeField] Scrollbar scrollbar;                           //채팅로그가 계속 맨 아래쪽을 향하게 해야되서 받아옴
+    public PhotonView PV;                                           //포톤뷰
 
 
     private void Update()

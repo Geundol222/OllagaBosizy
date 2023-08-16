@@ -7,10 +7,10 @@ using UnityEngine;
 
 public class FoundCanvas : MonoBehaviour
 {
-    [SerializeField] TMP_InputField answerInputField;
-    [SerializeField] LoginCanvas LC;
-    [SerializeField] LogImage answer;
-    [SerializeField] Animator anim;
+    [SerializeField] TMP_InputField answerInputField;               //유저의 답변이 적힐 inputfield
+    [SerializeField] LoginCanvas LC;                                //LoginCanvas의 데이터베이스를 받아오기 위함
+    [SerializeField] LogImage answer;                               //유저에게 이것저것 알려 줄 것이 담길 image
+    [SerializeField] Animator anim;                                 //FoundCanvas의 animator
 
     private MySqlConnection con;
     private MySqlDataReader reader;

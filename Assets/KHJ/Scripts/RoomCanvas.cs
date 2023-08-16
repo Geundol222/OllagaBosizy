@@ -8,19 +8,17 @@ using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
 public class RoomCanvas : MonoBehaviour
 {
-    public Dictionary<int, PlayerEntry> playerDictionary;  //
-    public Dictionary<int, PlayerEntry> aTeamDictionary;
-    public Dictionary<int, PlayerEntry> bTeamDictionary;
-    [SerializeField] RectTransform playerContent1;
-    [SerializeField] RectTransform playerContent2;
-    [SerializeField] Button startButton;
-    [SerializeField] PlayerEntry playerEntryPrefab;
-    [SerializeField] LogImage logImage;
-    [SerializeField] LobbyManager lobbyManager;
-    PhotonView PV;
-    PlayerEntry entry;
-    Animator anim;
-    bool isStart;
+    public Dictionary<int, PlayerEntry> playerDictionary;   //유저와 playerEntry를 매칭시키기 위한 딕셔너리
+    public Dictionary<int, PlayerEntry> aTeamDictionary;    //ateam에 들어가 있는 유저를 딕셔너리로 제작
+    public Dictionary<int, PlayerEntry> bTeamDictionary;    //bteam에 들어가 있는 유저를 딕셔너리로 제작
+    [SerializeField] RectTransform playerContent1;          //A팀에 들어가는 유저의 playerEntry가 만들어질 곳
+    [SerializeField] RectTransform playerContent2;          //B팀에 들어가는 유저의 playerEntry가 만들어질 곳
+    [SerializeField] Button startButton;                    //특정 조건을 만족하면 방장에게만 보이는 StartButton
+    [SerializeField] PlayerEntry playerEntryPrefab;         //PlayerEntry
+    PhotonView PV;                                          //포톤뷰
+    PlayerEntry entry;                                      //
+    Animator anim;                                          //룸캔버스에 붙어있는 animation
+    bool isStart;                                           //start버튼이 여러번 눌리는 것을 방지하기 위한 bool값
 
     private void Awake()
     {
