@@ -10,13 +10,11 @@ public class LoadingUI : MonoBehaviour
     [SerializeField] Slider slider;
     [SerializeField] List<LoadingPlayer> loadingPlayers;
 
-    private TeamSplitManager splitManager;
     private LoadingPlayer loadingPlayer;
     private Animator anim;
 
     private void Awake()
     {
-        splitManager = FindObjectOfType<TeamSplitManager>();
         anim = GetComponent<Animator>();
         slider.maxValue = 1f;
         slider.minValue = 0f;
@@ -25,7 +23,7 @@ public class LoadingUI : MonoBehaviour
 
     private void Start()
     {
-        splitManager.TeamSplit();
+        GameManager.Team.TeamSplit();
         StartCoroutine(InitRoutine());
     }
 

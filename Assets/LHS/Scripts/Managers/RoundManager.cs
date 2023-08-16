@@ -9,13 +9,6 @@ public enum Climber { None, Goblin, Ghost, Boy, Girl }
 
 public class RoundManager : MonoBehaviourPun
 {
-    TeamSplitManager splitManager;
-
-    private void Awake()
-    {
-        splitManager = FindObjectOfType<TeamSplitManager>();
-    }
-
     public void SetRound(Round round)
     {
         switch (round)
@@ -54,7 +47,6 @@ public class RoundManager : MonoBehaviourPun
         GameManager.TrollerData._setTrapPlatforms.Clear();
         PhotonNetwork.LocalPlayer.CustomProperties.Clear();
         PhotonNetwork.LeaveRoom();
-        Destroy(splitManager.gameObject);
         GameManager.Scene.LoadScene(Scene.LOBBY);
     }
 
@@ -81,7 +73,7 @@ public class RoundManager : MonoBehaviourPun
             else if (GameManager.Team.GetTeam() == PlayerTeam.Climber)
                 GameManager.Team.SwitchTeam(PlayerTeam.Troller);
 
-            splitManager.TeamSplit();
+            GameManager.Team.TeamSplit();
         }
         else
             PhotonNetwork.LocalPlayer.CustomProperties.Remove("Team");
