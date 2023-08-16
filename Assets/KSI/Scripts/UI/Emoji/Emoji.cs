@@ -32,11 +32,10 @@ public class Emoji : MonoBehaviour
 				randomIndex = Random.Range(0, emojidatas.Length);
 				emojiText = emojidatas[randomIndex].emojiDescription;
 				text.text = emojiText;
-				Debug.Log(emojiText);
 			}
 			else
 			{
-				Debug.Log("EmojiData 할당되지 않음");
+			
 			}
 
 			yield return new WaitForSeconds(1f);

@@ -33,24 +33,22 @@ public class TimerViewTest : MonoBehaviourPunCallbacks
 
 	public override void OnConnected()
 	{
-		Debug.Log("OnConnected");
+	
 	}
 
 	public override void OnConnectedToMaster()
 	{
-		Debug.Log("ConnectToMaster");
 		RoomOptions options = new RoomOptions() { IsVisible = false };
 		PhotonNetwork.JoinOrCreateRoom("DebugRoom", options, TypedLobby.Default);
 	}
 
 	public override void OnCreateRoomFailed(short returnCode, string message)
 	{
-		Debug.Log(message);
+
 	}
 
 	public override void OnJoinedRoom()
 	{
-		Debug.Log("OnJoinedRoom");
 		StartCoroutine(DebugGameSetupDelay());
 	}
 
@@ -64,17 +62,15 @@ public class TimerViewTest : MonoBehaviourPunCallbacks
 
 	public override void OnJoinRoomFailed(short returnCode, string message)
 	{
-		Debug.Log(message);
+
 	}
 
 	public override void OnDisconnected(DisconnectCause cause)
 	{
-		Debug.Log($"Disconnected : {cause}");
 	}
 
 	public override void OnLeftRoom()
 	{
-		Debug.Log("Left Room");
 	}
 
 	/* πÊ¿Â(MasterClient) ±««— Ω¬∞Ë(Migration) */
@@ -82,7 +78,7 @@ public class TimerViewTest : MonoBehaviourPunCallbacks
 	{
 		if (PhotonNetwork.IsMasterClient)
 		{
-			Debug.Log("πÊ¿Â πŸ≤Ò");
+	
 		}
 	}
 
@@ -97,7 +93,6 @@ public class TimerViewTest : MonoBehaviourPunCallbacks
 			}
 			else
 			{
-				Debug.Log($"Wait Players {PlayerLoadCount()} / {PhotonNetwork.PlayerList.Length}");
 				infoText.text = $"Wait Players {PlayerLoadCount()} / {PhotonNetwork.PlayerList.Length}";
 			}
 		}
@@ -126,7 +121,6 @@ public class TimerViewTest : MonoBehaviourPunCallbacks
 			yield return new WaitForEndOfFrame();
 		}
 
-		Debug.Log("Game Start!");
 		infoText.text = "Game Start!";
 		GameStart();
 
@@ -162,8 +156,7 @@ public class TimerViewTest : MonoBehaviourPunCallbacks
 
 	private void GameStart()
 	{
-		Debug.Log("Normal Game Mode");
-		// TODO : GameStart
+
 	}
 
 	private void DebugGameStart()
@@ -172,7 +165,6 @@ public class TimerViewTest : MonoBehaviourPunCallbacks
 		if (playerIndex == 0)
 		{
 			PhotonNetwork.Instantiate("PlayerBoy", playerSpawnPoints[playerIndex].transform.position, playerSpawnPoints[playerIndex].transform.rotation);
-			Debug.Log("Player Boy Instantiate");
 		}
 		else if (playerIndex == 1)
 		{
