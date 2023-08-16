@@ -1,3 +1,5 @@
+using Photon.Pun;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -21,6 +23,8 @@ public class GameManager : MonoBehaviour
     public static DataManager Data { get { return data; } }
     public static TrollerDataManager TrollerData { get { return trollerData; } }
     public static TeamManager Team { get { return team; } }
+
+    PhotonView photonview;
 
     private void Awake()
     {
@@ -81,6 +85,7 @@ public class GameManager : MonoBehaviour
         GameObject teamObj = new GameObject();
         teamObj.name = "TeamManager";
         teamObj.transform.parent = transform;
+        photonview = teamObj.AddComponent<PhotonView>();
         team = teamObj.AddComponent<TeamManager>();
     }
 }

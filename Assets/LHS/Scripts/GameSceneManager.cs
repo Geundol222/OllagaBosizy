@@ -10,7 +10,6 @@ using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
 public class GameSceneManager : MonoBehaviourPunCallbacks
 {
-    [SerializeField] TMP_Text propsInfo;
     [SerializeField] TMP_Text infoText;
     [SerializeField] TMP_Text timerText;
     [SerializeField] float countDownTimer;
@@ -135,7 +134,7 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
         GameStart();
 
         yield return new WaitForSeconds(1f);
-        infoText.text = "";
+        infoText.enabled = false;
         yield break;
     }
 
@@ -146,8 +145,6 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
             if (PhotonNetwork.IsMasterClient)
                 PhotonNetwork.CurrentRoom.SetCurrentRound(Round.ROUND1);
         }
-
-        propsInfo.text = $"Ready : {ready}\nLoad : {load}\nTeam : {team}\nClimber : {climber}";
 
         //GameManager.Sound.PlaySound("inGame/bgm", Audio.BGM);
         GameManager.Pool.InitPool();
@@ -221,12 +218,34 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
 
     IEnumerator RoundChangeRoutine()
     {
-        yield return new WaitForSeconds(1f);
+        StartCoroutine(RoundEndRoutine());
+
+        yield return new WaitForSecondsRealtime(5f);
 
         gameSceneFadeUI.FadeOut();
-
+        Time.timeScale = 1f;
         UICanvas.SetActive(false);
         round.NextRound();
+
+        yield break;
+    }
+
+    IEnumerator RoundEndRoutine()
+    {
+        Time.timeScale = 0.01f;
+        infoText.enabled = true;
+        infoText.text = "Time Out!!";
+
+        yield return new WaitForSecondsRealtime(1f);
+
+        if (round.GetRound() == Round.ROUND1)
+        {
+            infoText.text = "Go To Next Round";
+        }
+        else if (round.GetRound() == Round.ROUND2)
+        {
+            // TODO : 점수판 출력
+        }
 
         yield break;
     }
