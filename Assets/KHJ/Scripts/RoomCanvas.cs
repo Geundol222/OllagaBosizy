@@ -16,7 +16,6 @@ public class RoomCanvas : MonoBehaviour
     [SerializeField] PlayerEntry playerEntryPrefab;
     [SerializeField] LogImage logImage;
     [SerializeField] LobbyManager lobbyManager;
-    public int ActorNum;
     PhotonView PV;
     PlayerEntry entry;
     bool isStart;
@@ -88,7 +87,7 @@ public class RoomCanvas : MonoBehaviour
         aTeamDictionary.Clear();
         bTeamDictionary.Clear();
 
-        PhotonNetwork.AutomaticallySyncScene = false;
+        //PhotonNetwork.AutomaticallySyncScene = false;
     }
 
     public void PlayerLeftRoom(Player otherPlayer)

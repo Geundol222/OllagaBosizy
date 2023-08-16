@@ -88,6 +88,11 @@ public class MenuCanvas : MonoBehaviour
         PhotonNetwork.Disconnect();
     }
 
+    public void CreateRoom()
+    {
+        StartCoroutine(CreateRoomRoutine());
+    }
+
     public void UpdateRoomList(List<RoomInfo> roomList)
     {
         for (int i = 0; i < roomContent.childCount; i++)
@@ -171,6 +176,15 @@ public class MenuCanvas : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         roomNameInputField.text = "";
         createRoomPanel.SetActive(false);
+        yield break;
+    }
+
+    IEnumerator CreateRoomRoutine()
+    {
+        CloseCreateRoomMenu();
+        anim.SetTrigger("IsOut");
+        yield return new WaitForSeconds(1.5f);
+        CreateRoomConfirm();
         yield break;
     }
 }
