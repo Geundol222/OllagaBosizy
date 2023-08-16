@@ -26,10 +26,9 @@ public class SetTrapUI : InGameUI, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log("함정설치");
         // 디버프 부여 함수호출
         // 함정설치 효과음 추가 23.08.14
-        GameManager.Sound.PlaySound("Stage/JobsDone",Audio.SFX,gameObject.transform.position,2f);
+        GameManager.Sound.PlaySound("Stage/JobsDone",Audio.SFX,platform.transform.position,2f);
         platform.OnClickSetTrap();
         platform.ClearBothPlatform();
         ExecuteSetTrapButtonClosing();
@@ -39,7 +38,6 @@ public class SetTrapUI : InGameUI, IPointerClickHandler
     {
         if (platform == null)
         {
-            Debug.Log("SetTrapUI Platform is NULL");
             return;
         }
         buttonCloseCoroutine = StartCoroutine(HideSetTrapButton());
