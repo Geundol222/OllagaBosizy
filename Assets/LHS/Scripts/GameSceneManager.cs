@@ -20,6 +20,7 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
     [SerializeField] RoundManager round;
     [SerializeField] GameSceneFadeUI gameSceneFadeUI;
     [SerializeField] Canvas UIcanvas;
+    [SerializeField] Animator infoUIAnimator;
 
     string load = PhotonNetwork.LocalPlayer.GetLoad().ToString();
     string ready = PhotonNetwork.LocalPlayer.GetReady().ToString();
@@ -240,13 +241,15 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
 
         Time.timeScale = 0.01f;
         infoText.enabled = true;
-        infoText.text = "Time Out!!";
-
+        infoText.text = "Time's UP!";
+        infoUIAnimator.SetTrigger("TimesUP");
+        GameManager.Sound.PlaySound("inGame/TimesUP");
         yield return new WaitForSecondsRealtime(1f);
 
         if (round.GetRound() == Round.ROUND1)
         {
-            infoText.text = "Go To Next Round";
+            //infoText.text = "Let's Go To Next Round";
+            //GameManager.Sound.PlaySound("inGame/RoundStartSlide");
         }
         else if (round.GetRound() == Round.ROUND2)
         {
