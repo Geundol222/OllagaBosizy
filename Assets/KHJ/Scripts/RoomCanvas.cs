@@ -8,7 +8,7 @@ using PhotonHashtable = ExitGames.Client.Photon.Hashtable;
 
 public class RoomCanvas : MonoBehaviour
 {
-    public Dictionary<int, PlayerEntry> playerDictionary;
+    public Dictionary<int, PlayerEntry> playerDictionary;  //
     public Dictionary<int, PlayerEntry> aTeamDictionary;
     public Dictionary<int, PlayerEntry> bTeamDictionary;
     [SerializeField] RectTransform playerContent1;
@@ -55,7 +55,7 @@ public class RoomCanvas : MonoBehaviour
             }
             else
             {
-                //ateamdictionary에 2명이상일경우 들어올때 b팀으로 들어가도록 제작
+                //ateamdictionary에 2명 이하면 a팀으로, 2명이상일경우 들어올때 b팀으로 들어가도록 제작
                 if (aTeamDictionary.Count < 2)
                 {
                     entry = Instantiate(playerEntryPrefab, playerContent1);
@@ -71,6 +71,7 @@ public class RoomCanvas : MonoBehaviour
                     entry.SetPlayerClimberTeam();
                 }
             }
+            //본인 playerEntry를 강조하는 함수 실행
             if (player == PhotonNetwork.LocalPlayer)
             {
                 entry?.Sprite();

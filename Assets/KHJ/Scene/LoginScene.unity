@@ -15293,6 +15293,7 @@ MonoBehaviour:
   logImage: {fileID: 1252729447}
   SignUpCanvas: {fileID: 1146532112}
   FoundCanvas: {fileID: 1274301115}
+  isConnected: 0
 --- !u!95 &1530674915
 Animator:
   serializedVersion: 5
