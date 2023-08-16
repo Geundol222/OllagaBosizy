@@ -15,7 +15,6 @@ public class LoginCanvas : MonoBehaviour
     public GameObject FoundCanvas;
     public MySqlConnection con;
     public MySqlDataReader reader;
-    bool IsLoginButtonPush;
     Animator anim;
 
     private void Start()
@@ -27,7 +26,6 @@ public class LoginCanvas : MonoBehaviour
 
     private void OnEnable()
     {
-        IsLoginButtonPush = false;
         SignUpCanvas.SetActive(false);
         FoundCanvas.SetActive(false);
     }
@@ -52,11 +50,6 @@ public class LoginCanvas : MonoBehaviour
     {
         try
         {
-            if (IsLoginButtonPush)
-            {
-                return;
-            }
-            IsLoginButtonPush = true;
             string id = idInputField.text;
             string pass = PasswordInputField.text;
 
