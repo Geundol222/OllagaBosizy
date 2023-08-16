@@ -6,27 +6,31 @@ public enum PlayerTeam { None, Troller, Climber }
 
 public class TeamManager : MonoBehaviourPun
 {
-    private int climberCount;
-    private int trollerCount;
+    private int climberCount;               //등반자 인원수를 새기 위해 만듦
+    private int trollerCount;               //방해자 인원수를 새기 위해 만듦
 
     private void Awake()
     {
         photonView.ViewID = 999;
     }
 
+    //유저의 팀을 알려주는 함수
     public PlayerTeam GetTeam()
     {
         return PhotonNetwork.LocalPlayer.GetPlayerTeam();
     }
 
+    //유저가 팀을 초기화 해주는 함수
     public void LeaveTeam()
     {
         PhotonNetwork.LocalPlayer.CustomProperties.Remove("Team");
         PhotonNetwork.LocalPlayer.LeaveCurrentTeam();
     }
 
+    //유저의 팀을 선정해주는 함수
     public bool SetTeam(PlayerTeam team)
     {
+        //유저의 팀이 없을 때만 실행이 가능하도록 제작
         if (PhotonNetwork.LocalPlayer.GetPlayerTeam() == PlayerTeam.None)
         {
             if (PhotonNetwork.LocalPlayer.JoinTeam((byte)team))
@@ -42,6 +46,7 @@ public class TeamManager : MonoBehaviourPun
         return false;
     }
 
+    //유저의 팀을 바꿔주는 함수
     public bool SwitchTeam(PlayerTeam team)
     {
         PhotonNetwork.LocalPlayer.CustomProperties.Remove("Team");
@@ -57,6 +62,7 @@ public class TeamManager : MonoBehaviourPun
         }
     }
 
+    //
     public void TeamSplit()
     {
         climberCount = 0;
@@ -80,6 +86,7 @@ public class TeamManager : MonoBehaviourPun
         }
     }
 
+    //유저의 팀값을 주는 함수
     [PunRPC]
     public void SetClimber(Player player, int count)
     {

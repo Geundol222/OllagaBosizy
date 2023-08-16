@@ -12,6 +12,7 @@ public class RoomEntry : MonoBehaviour
 
     private RoomInfo info;
 
+    //방의 이름을 보여주는 함수
     public void SetRoomInfo(RoomInfo roomInfo)
     {
         info = roomInfo;

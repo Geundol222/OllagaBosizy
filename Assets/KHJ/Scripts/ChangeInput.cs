@@ -7,14 +7,9 @@ using Unity.VisualScripting;
 
 public class ChangeInput : MonoBehaviour
 {
-    EventSystem system;
-    public Selectable IDInput;
-    public Selectable PWDInput;
-    /*public Selectable IDCreateInput;
-    public Selectable PWDCreateInput;
-    public Selectable PWDAgainInput;
-    public Selectable NICKInput;*/
-    public Button submitButton;
+    EventSystem system;                 //이벤트 시스템 
+    public Selectable IDInput;          //idInputField
+    public Selectable PWDInput;         //pwdInputField
 
 
     void OnEnable()
@@ -23,7 +18,7 @@ public class ChangeInput : MonoBehaviour
         IDInput.Select();
     }
 
-
+    //tap을 누를 당시 inputfield가 선택되어 있다면 다른 inputfield로 넘어가게 해주는 함수
     void Update()
     {
 
@@ -45,21 +40,8 @@ public class ChangeInput : MonoBehaviour
                     next.Select();
                 }
             }
-            /*else if (EventSystem.current.currentSelectedGameObject == IDCreateInput.gameObject || EventSystem.current.currentSelectedGameObject == PWDCreateInput.gameObject || EventSystem.current.currentSelectedGameObject == PWDAgainInput || EventSystem.current.currentSelectedGameObject == NICKInput.gameObject)
-            {
-                Selectable next = system.currentSelectedGameObject.GetComponent<Selectable>().FindSelectableOnDown();
-                if (next != null)
-                {
-                    next.Select();
-                }
-            }*/
             else
                 return;
-        }
-        else if (Input.GetKeyDown(KeyCode.Return))
-        {
-            submitButton.onClick.Invoke();
-            Debug.Log("Button pressed!");
         }
     }
 }

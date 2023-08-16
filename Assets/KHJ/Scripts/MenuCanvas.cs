@@ -32,7 +32,6 @@ public class MenuCanvas : MonoBehaviour
         IsCreateRoom = false;
         createRoomPanel.SetActive(false);
         createRoomPanel.SetActive(false);
-        Debug.Log("인에이블");
         anim.SetTrigger("IsIn");
         IsCreateRoomPanalOpen = false;
     }
@@ -56,6 +55,7 @@ public class MenuCanvas : MonoBehaviour
         StartCoroutine(CloseCreateRoomMenuRoutine());
     }
 
+    //방이름을 받거나 랜덤이름을 부여하며 방을 만드는 함수
     public void CreateRoomConfirm()
     {
         if (IsCreateRoom)
@@ -98,6 +98,7 @@ public class MenuCanvas : MonoBehaviour
         StartCoroutine(CreateRoomRoutine());
     }
 
+    //룸리스트를 업데이트 해주는 함수
     public void UpdateRoomList(List<RoomInfo> roomList)
     {
         for (int i = 0; i < roomContent.childCount; i++)

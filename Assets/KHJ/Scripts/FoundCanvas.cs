@@ -7,25 +7,29 @@ using UnityEngine;
 
 public class FoundCanvas : MonoBehaviour
 {
-    [SerializeField] TMP_InputField answerInputField;
-    [SerializeField] LoginCanvas LC;
-    [SerializeField] LogImage answer;
-    [SerializeField] Animator anim;
+    [SerializeField] TMP_InputField answerInputField;               //유저의 답변이 적힐 inputfield
+    [SerializeField] LoginCanvas LC;                                //LoginCanvas의 데이터베이스를 받아오기 위함
+    [SerializeField] LogImage answer;                               //유저에게 이것저것 알려 줄 것이 담길 image
+    [SerializeField] Animator anim;                                 //FoundCanvas의 animator
 
     private MySqlConnection con;
     private MySqlDataReader reader;
 
     private void OnEnable()
     {
+        //시작할 때 로그인켄버스에서 서버를 받아옴
         con = LC.con;
         anim.SetTrigger("IsOpen");
         answer.gameObject.SetActive(false);
     }
 
+    //받아온 서버에서 유저가 입력한 PWDANSWER를 채크한 후 있으면 ID를 반환해주는 함수
     public void FoundID()
     {
         try
         {
+            if (!LC.isConnected)
+                LC.ConnectDataBase();
             string id = answerInputField.text;
 
             string sqlCommand = string.Format("SELECT ID FROM user_info WHERE PWDANSWER='{0}';", id);
@@ -53,14 +57,17 @@ public class FoundCanvas : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.Log(e.Message);
+            return;
         }
     }
 
+    //받아온 서버에서 유저가 입력한 PWDANSWER를 채크한 후 있으면 PASSWORD를 반환해주는 함수
     public void FoundPW()
     {
         try
         {
+            if (!LC.isConnected)
+                LC.ConnectDataBase();
             string id = answerInputField.text;
 
             string sqlCommand = string.Format("SELECT PWD FROM user_info WHERE PWDANSWER='{0}';", id);
@@ -88,7 +95,7 @@ public class FoundCanvas : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.Log(e.Message);
+            return;
         }
     }
 
