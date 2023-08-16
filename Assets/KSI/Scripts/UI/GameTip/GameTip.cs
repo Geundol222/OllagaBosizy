@@ -32,11 +32,10 @@ public class GameTip : MonoBehaviour
 				randomIndex = Random.Range(0, gameTipdatas.Length);
 				gameTipText = "Game Tip : " + gameTipdatas[randomIndex].gameTipDescription;
 				text.text = gameTipText;
-				Debug.Log(gameTipText);
 			}
 			else
 			{
-				Debug.Log("GameTipData 할당되지 않음");
+
 			}
 
 			yield return new WaitForSeconds(2f);

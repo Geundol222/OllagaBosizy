@@ -12,109 +12,57 @@ public class ScoreResultManager : MonoBehaviourPunCallbacks
 
 	private int teamAScore = 0;
 	private int teamBScore = 0;
-	private int currentRound = 1;
-	private int myScore;
 
 	private void Start()
 	{
 		teamAScore = 0;
 		teamBScore = 0;
-		currentRound = 1;
 
-		UpdateScoreText();
+		UpdateScore();
 	}
 
 	// 플레이어의 점수를 업데이트하고 승패를 확인
 	private void UpdateScore()
 	{
-		
-		if (currentRound == 1)
-		{
-			myScore = teamAScore; // 첫 번째 경기 팀의 점수를 사용
-		}
-		else if (currentRound == 2)
-		{
-			myScore = teamBScore; // 두 번째 경기 팀의 점수를 사용
-		}
-
-		if (photonView.IsMine)
-		{
-			string myTeam = ((PlayerTeam)PhotonNetwork.LocalPlayer.GetPlayerTeam()).ToString();
-			if (myTeam == "TeamA")
-			{
-				teamAScore += myScore;
-			}
-			else if (myTeam == "TeamB")
-			{
-				teamBScore += myScore;
-			}
-		}
-
-		UpdateScoreText();
-
 		if (PhotonNetwork.IsMasterClient)
 		{
-			// 마스터 클라이언트에서 라운드 종료 후 승패를 판정하고 결과를 모든 플레이어에게 알림
-			// 총 라운드 수에 따라 조정
-			if (currentRound == 2)
+			foreach (Player player in PhotonNetwork.PlayerList)
 			{
-				int bestScoreTeamA = GetBestScoreByTeam(PlayerTeam.Troller);
-				int bestScoreTeamB = GetBestScoreByTeam(PlayerTeam.Climber);
-
-				// 팀 A와 팀 B의 점수 합을 비교하여 승패 결정
-				if (bestScoreTeamA > bestScoreTeamB)
+				if (player.GetPlayerTeam() == PlayerTeam.Troller)
 				{
-					photonView.RPC("DeclareWinner", RpcTarget.All, "TeamA");
+					teamBScore += player.GetScore();
 				}
-				else if (bestScoreTeamB > bestScoreTeamA)
+				else if (player.GetPlayerTeam() == PlayerTeam.Climber)
 				{
-					photonView.RPC("DeclareWinner", RpcTarget.All, "TeamB");
-				}
-				else
-				{
-					photonView.RPC("DeclareWinner", RpcTarget.All, "Draw");
+					teamAScore += player.GetScore();
 				}
 			}
-		}
-	}
 
-	private int GetBestScoreByTeam(PlayerTeam team)
-	{
-		int bestScore = 0;
-
-		foreach (Player player in PhotonNetwork.PlayerList)
-		{
-			if (player.GetPlayerTeam() == team)
-			{
-				int playerScore = player.GetScore();
-				if (playerScore > bestScore)
-				{
-					bestScore = playerScore;
-				}
-			}
+			photonView.RPC("DeclareWinner", RpcTarget.All, (teamAScore / 2), (teamBScore / 2));
 		}
-		return bestScore;
 	}
 
 	// 승패를 알리는 RPC 함수
 	[PunRPC]
-	private void DeclareWinner(string winner)
+	private void DeclareWinner(int aScore, int bScore)
 	{
-		if ((string)photonView.Owner.CustomProperties["Team"] == "TeamA")
+		if (aScore > bScore)
 		{
 			resultTextTeamA.text = "WIN !";
 			resultTextTeamB.text = "DEFEAT !";
 		}
-		else if ((string)photonView.Owner.CustomProperties["Team"] == "TeamB")
+		else if (bScore > aScore)
 		{
-			resultTextTeamA.text = "DEFEAT !";
 			resultTextTeamB.text = "WIN !";
+			resultTextTeamA.text = "DEFEAT !";
 		}
+
+		UpdateScoreText(aScore, bScore);
 	}
 
-	private void UpdateScoreText()
+	private void UpdateScoreText(int aScore, int bScore)
 	{
-		teamAScoreText.text = "Team A : " + teamAScore;
-		teamBScoreText.text = "Team B : " + teamBScore;
+		teamAScoreText.text = $"Team A : {aScore}";
+		teamBScoreText.text = $"Team B : {bScore}";
 	}
 }

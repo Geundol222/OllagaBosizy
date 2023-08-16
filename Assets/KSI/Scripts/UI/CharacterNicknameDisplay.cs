@@ -21,7 +21,6 @@ public class CharacterNicknameDisplay : MonoBehaviourPun
 		{
 			string readnick = loginCanvas.reader["NICKNAME"].ToString();
 			nicknameText.text = readnick;
-			Debug.Log("Nickname: " + readnick);
 		}
 	}
 }
