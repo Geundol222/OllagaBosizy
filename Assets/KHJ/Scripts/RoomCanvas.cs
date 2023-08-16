@@ -126,7 +126,7 @@ public class RoomCanvas : MonoBehaviour
         PhotonNetwork.CurrentRoom.IsOpen = false;
         PhotonNetwork.CurrentRoom.IsVisible = false;
 
-        GameManager.Scene.LoadScene(Scene.GAME);
+        GameManager.Scene.LoadScene(Scene.LOADING);
     }
 
     public void LeaveRoom()
