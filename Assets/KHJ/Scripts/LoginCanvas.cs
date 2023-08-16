@@ -11,6 +11,8 @@ public class LoginCanvas : MonoBehaviour
     [SerializeField] TMP_InputField idInputField;
     [SerializeField] TMP_InputField PasswordInputField;
     [SerializeField] LogImage logImage;
+    public GameObject SignUpCanvas;
+    public GameObject FoundCanvas;
     public MySqlConnection con;
     public MySqlDataReader reader;
     bool IsLoginButtonPush;
@@ -26,6 +28,8 @@ public class LoginCanvas : MonoBehaviour
     private void OnEnable()
     {
         IsLoginButtonPush = false;
+        SignUpCanvas.SetActive(false);
+        FoundCanvas.SetActive(false);
     }
 
     private void ConnectDataBase()

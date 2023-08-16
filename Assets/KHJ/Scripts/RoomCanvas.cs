@@ -1,5 +1,6 @@
 using Photon.Pun;
 using Photon.Realtime;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,6 +19,7 @@ public class RoomCanvas : MonoBehaviour
     [SerializeField] LobbyManager lobbyManager;
     PhotonView PV;
     PlayerEntry entry;
+    Animator anim;
     bool isStart;
 
     private void Awake()
@@ -26,6 +28,7 @@ public class RoomCanvas : MonoBehaviour
         aTeamDictionary = new Dictionary<int, PlayerEntry>();
         bTeamDictionary = new Dictionary<int, PlayerEntry>();
         PV = GetComponent<PhotonView>();
+        anim = GetComponent<Animator>();
     }
 
     private void OnEnable()
@@ -123,14 +126,12 @@ public class RoomCanvas : MonoBehaviour
         PhotonNetwork.CurrentRoom.IsOpen = false;
         PhotonNetwork.CurrentRoom.IsVisible = false;
 
-        GameManager.Scene.LoadScene(Scene.GAME);
+        GameManager.Scene.LoadScene(Scene.LOADING);
     }
 
     public void LeaveRoom()
     {
-        PlayerEntry playerEntry = playerDictionary[PhotonNetwork.LocalPlayer.ActorNumber];
-        playerEntry.LeaveRoom();
-        PhotonNetwork.LeaveRoom();
+        StartCoroutine(LeaveRoomRoutine());
     }
 
     public void PlayerReady()
@@ -188,6 +189,16 @@ public class RoomCanvas : MonoBehaviour
             return;
         }
         PV.RPC("PlayerRoomUpdate", RpcTarget.All, PhotonNetwork.LocalPlayer, true, false);
+    }
+
+    IEnumerator LeaveRoomRoutine()
+    {
+        PlayerEntry playerEntry = playerDictionary[PhotonNetwork.LocalPlayer.ActorNumber];
+        playerEntry.LeaveRoom();
+        anim.SetTrigger("OutRoom");
+        yield return new WaitForSeconds(1);
+        PhotonNetwork.LeaveRoom();
+        yield break;
     }
 
     [PunRPC]
