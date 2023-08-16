@@ -17,6 +17,7 @@ public class MenuCanvas : MonoBehaviour
     //[SerializeField] GameObject peopleScrollView;
     //[SerializeField] Animator peopleAnimator;
     bool IsCreateRoom;
+    bool IsCreateRoomPanalOpen;
 
     Dictionary<string, RoomInfo> roomDictionary;
 
@@ -33,6 +34,7 @@ public class MenuCanvas : MonoBehaviour
         createRoomPanel.SetActive(false);
         Debug.Log("인에이블");
         anim.SetTrigger("IsIn");
+        IsCreateRoomPanalOpen = false;
     }
 
     private void OnDisable()
@@ -42,8 +44,11 @@ public class MenuCanvas : MonoBehaviour
 
     public void OpenCreateRoomMenu()
     {
-        createRoomPanel.SetActive(true);
-        createRoomAnim.SetTrigger("IsOpen");
+        if (!IsCreateRoomPanalOpen)
+        {
+            createRoomPanel.SetActive(true);
+            createRoomAnim.SetTrigger("IsOpen");
+        }
     }
 
     public void CloseCreateRoomMenu()
