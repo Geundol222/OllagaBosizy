@@ -98,8 +98,8 @@ public class PlayerMover : MonoBehaviourPun
 
     public void PlayScreamSoundEnd()
     {
-        // if (!photonView.IsMine)
-        //     return;
+         if (!photonView.IsMine)
+             return;
 
         Debug.Log("비명 발생");
 
@@ -113,8 +113,8 @@ public class PlayerMover : MonoBehaviourPun
 
     public void PlayRunningSound()
     {
-        // if (!photonView.IsMine)
-        //     return;
+         if (!photonView.IsMine)
+             return;
 
         Debug.Log("발소리 발생");
 

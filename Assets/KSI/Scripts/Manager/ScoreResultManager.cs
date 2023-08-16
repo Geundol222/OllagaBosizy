@@ -17,6 +17,8 @@ public class ScoreResultManager : MonoBehaviourPunCallbacks
 
 	private void Start()
 	{
+		GameManager.Sound.PlaySound("ScoreScene/bgm",Audio.BGM);
+
 		teamAScore = 0;
 		teamBScore = 0;
 
