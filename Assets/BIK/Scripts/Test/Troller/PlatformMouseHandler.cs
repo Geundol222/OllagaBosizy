@@ -59,11 +59,11 @@ public class PlatformMouseHandler : MonoBehaviour, IPointerClickHandler, IPointe
         if (!canMouseAction)
         {
             // 클릭 불가 효과음 추가 23.08.14
-            GameManager.Sound.PlaySound("Stage/Blocked");
+            GameManager.Sound.PlaySound("Stage/Blocked", Audio.UISFX);
             return;
         }
         // 마우스 오버 효과음 추가 23.08.14
-        GameManager.Sound.PlaySound("Stage/MouseOver");
+        GameManager.Sound.PlaySound("Stage/MouseOver", Audio.UISFX);
         if (platform.IsClickable)
         {
             platform.ShowSetTrapButton();

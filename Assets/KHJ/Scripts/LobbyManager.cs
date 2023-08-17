@@ -139,7 +139,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     public void PlayUIButtonClickSound()
     {
-        GameManager.Sound.PlaySound("MainLobbyRoom/MouseClick");
+        GameManager.Sound.PlaySound("MainLobbyRoom/MouseClick", Audio.UISFX);
     }
 
 }

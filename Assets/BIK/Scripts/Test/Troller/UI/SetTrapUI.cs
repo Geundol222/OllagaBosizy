@@ -28,7 +28,7 @@ public class SetTrapUI : InGameUI, IPointerClickHandler
     {
         // 디버프 부여 함수호출
         // 함정설치 효과음 추가 23.08.14
-        GameManager.Sound.PlaySound("Stage/JobsDone",Audio.SFX,platform.transform.position,2f);
+        GameManager.Sound.PlaySound("Stage/JobsDone",Audio.UISFX,platform.transform.position,2f);
         platform.OnClickSetTrap();
         platform.ClearBothPlatform();
         ExecuteSetTrapButtonClosing();

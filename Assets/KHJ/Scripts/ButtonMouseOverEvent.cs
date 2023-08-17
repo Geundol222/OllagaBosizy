@@ -7,7 +7,7 @@ public class ButtonMouseOverEvent : MonoBehaviour, IPointerEnterHandler
 {
     public void OnPointerEnter(PointerEventData eventData)
     {
-        GameManager.Sound.PlaySound("MainLobbyRoom/MouseOver");
+        GameManager.Sound.PlaySound("MainLobbyRoom/MouseOver",Audio.UISFX);
     }
 
 }
