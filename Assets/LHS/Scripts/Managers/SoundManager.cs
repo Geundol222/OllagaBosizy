@@ -20,6 +20,7 @@ public class SoundManager : MonoBehaviourPun
     {
         InitSound();
         gameObject.AddComponent<PhotonView>();
+        photonView.ViewID = 998;
     }
 
     public void InitSound()
@@ -39,6 +40,14 @@ public class SoundManager : MonoBehaviourPun
     public bool IsMuted()
     {
         return isMuted;
+    }
+
+    public bool IsBGMPlayed()
+    {
+        if (bgmObj == null)
+            return false;
+
+        return true;
     }
 
     IEnumerator ClearRoutine()
@@ -86,8 +95,7 @@ public class SoundManager : MonoBehaviourPun
             yield return null;
         }
     }
-
-    
+        
     public void PlaySound(AudioClip audioClip, Audio type = Audio.SFX, Vector3 pos = new Vector3(), float volume = 1.0f, float pitch = 1.0f, bool loop = false)
     {
         StopCoroutine(FadeInRoutine());

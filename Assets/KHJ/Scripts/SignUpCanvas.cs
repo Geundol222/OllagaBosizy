@@ -63,6 +63,7 @@ public class SignUpCanvas : MonoBehaviour
         }
         catch (Exception e)
         {
+            Debug.Log(e.Message);
             return;
         }
     }
@@ -97,6 +98,7 @@ public class SignUpCanvas : MonoBehaviour
         }
         catch (Exception e)
         {
+            Debug.Log(e.Message);
             return;
         }
     }
@@ -139,6 +141,7 @@ public class SignUpCanvas : MonoBehaviour
         }
         catch (Exception e)
         {
+            Debug.Log(e.Message);
             return;
         }
     }

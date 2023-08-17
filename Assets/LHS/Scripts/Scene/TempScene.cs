@@ -32,7 +32,6 @@ public class TempScene : MonoBehaviour
         }
         
 
-        if (PhotonNetwork.IsMasterClient)
-            GameManager.Scene.LoadScene(Scene.GAME);
+        GameManager.Scene.LoadScene(Scene.GAME);
     }
 }
