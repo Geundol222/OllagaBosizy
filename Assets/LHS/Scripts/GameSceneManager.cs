@@ -237,7 +237,7 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
         infoText.enabled = true;
         infoText.text = "Time's UP!";
         gameSceneFadeUI.TimeOut();
-        GameManager.Sound.PlaySound("inGame/TimesUP");
+        GameManager.Sound.PlaySound("inGame/TimesUP",Audio.UISFX);
         yield return new WaitForSecondsRealtime(1f);
 
         if (round.GetRound() == Round.ROUND1)

@@ -3,14 +3,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public enum Audio { BGM, SFX, Size }
+ 
+public enum Audio { BGM, SFX, UISFX, Size }
 
 public class SoundManager : MonoBehaviourPun
 {
     GameObject bgmObj;
     AudioSource bgmSource;
     GameObject loopSFX;
+    GameObject loopUISFX;
     AudioSource addSource;
     List<AudioSource> sfxSources;
     Dictionary<string, AudioClip> audioDic;
@@ -119,7 +120,7 @@ public class SoundManager : MonoBehaviourPun
             bgmObj.name = bgmSource.clip.name;
             bgmSource.Play();
         }
-        else
+        else if(type == Audio.SFX)
         {
             if (loop)
             {
@@ -139,6 +140,40 @@ public class SoundManager : MonoBehaviourPun
             else
             {
                 GameObject addObj = GameManager.Resource.Instantiate<GameObject>("Prefabs/SFX", true);
+
+                addObj.transform.parent = transform;
+                addSource = addObj.GetComponent<AudioSource>();
+                addSource.transform.position = pos;
+                addSource.transform.parent = transform;
+                addSource.volume = volume;
+                addSource.pitch = pitch;
+                addSource.clip = audioClip;
+                addSource.loop = loop;
+                addObj.name = addSource.clip.name;
+                sfxSources.Add(addSource);
+
+                StartCoroutine(SFXPlayRoutine(addObj, audioClip));
+            }
+        } else
+        {
+            if (loop)
+            {
+                loopUISFX = GameManager.Resource.Instantiate<GameObject>("Prefabs/UISFX");
+                addSource = loopUISFX.GetComponent<AudioSource>();
+                addSource.transform.position = pos;
+                addSource.transform.parent = transform;
+                addSource.volume = volume;
+                addSource.pitch = pitch;
+                addSource.clip = audioClip;
+                addSource.loop = loop;
+                loopUISFX.name = addSource.clip.name;
+                sfxSources.Add(addSource);
+
+                addSource.Play();
+            }
+            else
+            {
+                GameObject addObj = GameManager.Resource.Instantiate<GameObject>("Prefabs/UISFX", true);
 
                 addObj.transform.parent = transform;
                 addSource = addObj.GetComponent<AudioSource>();

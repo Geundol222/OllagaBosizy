@@ -92,11 +92,11 @@ public class RoundStartUI : GameSceneUI
 
     public void PlaySlideSound()
     {
-        GameManager.Sound.PlaySound("inGame/RoundStartSlide");
+        GameManager.Sound.PlaySound("inGame/RoundStartSlide", Audio.UISFX);
     }
 
     public void PlayRoundStartSound()
     {
-        GameManager.Sound.PlaySound("inGame/RoundStart");
+        GameManager.Sound.PlaySound("inGame/RoundStart", Audio.UISFX);
     }
 }
