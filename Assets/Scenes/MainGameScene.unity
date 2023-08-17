@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.11182602, g: 0.10737334, b: 0.30719724, a: 1}
+  m_IndirectSpecularColor: {r: 0.11178141, g: 0.107318774, b: 0.3071141, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -13429,7 +13429,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: cd5f6f6e1d0cb294da1edbeeb3ac52e6, type: 2}
   m_sharedMaterial: {fileID: 1103727571897282459, guid: cd5f6f6e1d0cb294da1edbeeb3ac52e6,
@@ -13988,7 +13988,6 @@ MonoBehaviour:
   round: {fileID: 819227729}
   gameSceneFadeUI: {fileID: 547497446}
   UIcanvas: {fileID: 4701893712876069394}
-  infoUIAnimator: {fileID: 547497445}
 --- !u!4 &8201432330447733027
 Transform:
   m_ObjectHideFlags: 0

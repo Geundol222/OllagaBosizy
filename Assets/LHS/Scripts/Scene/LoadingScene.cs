@@ -29,8 +29,7 @@ public class LoadingScene : MonoBehaviour
             yield return null;
         }
 
-        if (PhotonNetwork.IsMasterClient)
-            GameManager.Scene.LoadScene(Scene.GAME);
+        GameManager.Scene.LoadScene(Scene.GAME);
         yield return new WaitForSecondsRealtime(0.1f);
     }
 }

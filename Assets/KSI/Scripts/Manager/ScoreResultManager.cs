@@ -33,7 +33,6 @@ public class ScoreResultManager : MonoBehaviourPunCallbacks
 
 		PhotonNetwork.LocalPlayer.CustomProperties.Clear();
 		PhotonNetwork.LeaveRoom();
-		
 		GameManager.Scene.LoadScene(Scene.LOBBY);
 	}
 

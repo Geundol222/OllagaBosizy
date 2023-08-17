@@ -3,8 +3,6 @@ using UnityEngine;
 
 public enum Round { NONE, ROUND1, ROUND2 }
 
-public enum Climber { None, Goblin, Ghost, Boy, Girl }
-
 public class RoundManager : MonoBehaviourPun
 {
     public void SetRound(Round round)
@@ -27,10 +25,10 @@ public class RoundManager : MonoBehaviourPun
     {
         Debug.Log("Round2");
 
+        PhotonNetwork.LocalPlayer.SetLoad(false);
+
         if (PhotonNetwork.IsMasterClient)
             PhotonNetwork.CurrentRoom.SetCurrentRound(Round.ROUND2);
-
-        PhotonNetwork.LocalPlayer.SetLoad(false);
 
         GameManager.Scene.LoadScene(Scene.TEMP);
     }

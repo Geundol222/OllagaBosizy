@@ -45,7 +45,8 @@ public class LoginCanvas : MonoBehaviour
         }
         catch (Exception e)
         {
-            return; ;
+            Debug.Log(e.Message);
+            return;
         }
     }
 
@@ -94,6 +95,7 @@ public class LoginCanvas : MonoBehaviour
         }
         catch (Exception e)
         {
+            Debug.Log(e.Message);
             return;
         }
     }

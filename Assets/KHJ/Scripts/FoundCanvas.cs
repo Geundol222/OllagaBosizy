@@ -57,6 +57,7 @@ public class FoundCanvas : MonoBehaviour
         }
         catch (Exception e)
         {
+            Debug.Log(e.Message);
             return;
         }
     }
@@ -95,6 +96,7 @@ public class FoundCanvas : MonoBehaviour
         }
         catch (Exception e)
         {
+            Debug.Log(e.Message);
             return;
         }
     }

@@ -15,4 +15,9 @@ public class GameSceneFadeUI : MonoBehaviour
     {
         anim.Play("FadeOutGame");
     }
+
+    public void TimeOut()
+    {
+        anim.Play("TimesUP");
+    }
 }

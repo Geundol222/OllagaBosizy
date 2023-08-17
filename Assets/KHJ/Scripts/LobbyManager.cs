@@ -17,10 +17,10 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     //처음 시작할 때 상태에 따라 다른 canvas가 열리도록 실행
     public void Start()
-    {        
+    {
+        GameManager.Sound.PlaySound("MainLobbyRoom/bgm", Audio.BGM);
         if (PhotonNetwork.IsConnected)
         {
-            GameManager.Sound.PlaySound("MainLobbyRoom/bgm", Audio.BGM);
             if (PhotonNetwork.InRoom)
             {
                 OnJoinedRoom();
@@ -79,6 +79,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     //룸에서 나갈 때 실행되는 함수
     public override void OnLeftRoom()
     {
+        PhotonNetwork.AutomaticallySyncScene = false;
         PhotonNetwork.LocalPlayer.SetReady(false);
         PhotonNetwork.JoinLobby();
     }
@@ -112,6 +113,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     //로비에 들어갈 때 실행되는 함수
     public override void OnJoinedLobby()
     {
+        PhotonNetwork.AutomaticallySyncScene = false;
         SetActivePanel(Panel.Menu);
     }
 

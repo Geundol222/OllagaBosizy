@@ -17,15 +17,20 @@ public class SceneManager : MonoBehaviour
 
     IEnumerator LoadingRoutine(Scene scene)
     {
-        yield return new WaitForSeconds(1f);
         GameManager.Sound.Clear();
+        yield return new WaitUntil(() => { return GameManager.Sound.IsMuted(); });
 
-        PhotonNetwork.LoadLevel((int)scene);
+        if (PhotonNetwork.IsMasterClient)
+            PhotonNetwork.LoadLevel((int)scene);
 
         while (PhotonNetwork.LevelLoadingProgress < 1f)
         {
             yield return null;
         }
+
+        GameManager.Sound.FadeInAudio();
+        yield return new WaitWhile(() => { return GameManager.Sound.IsMuted(); });
+
         yield break;
     }
 }

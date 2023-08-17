@@ -99,11 +99,6 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
                 if (PhotonNetwork.IsMasterClient)
                     PhotonNetwork.CurrentRoom.SetLoadTime(PhotonNetwork.ServerTimestamp);
             }
-            else
-            {
-                Debug.Log($"Wait Players {PlayerLoadCount()} / {PhotonNetwork.PlayerList.Length}");
-                infoText.text = $"Wait Players {PlayerLoadCount()} / {PhotonNetwork.PlayerList.Length}";
-            }
         }
     }
 
@@ -130,7 +125,6 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
         while (countDownTimer > (PhotonNetwork.ServerTimestamp - loadTime) / 1000f)
         {
             int remainTime = (int)(countDownTimer - (PhotonNetwork.ServerTimestamp - loadTime) / 1000f);
-            infoText.text = $"All Player Loaded,\nStart CountDown : {remainTime + 1}";
             yield return new WaitForEndOfFrame();
         }
         infoText.text = "Game Start!";
@@ -242,7 +236,7 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
         Time.timeScale = 0.01f;
         infoText.enabled = true;
         infoText.text = "Time's UP!";
-        infoUIAnimator.SetTrigger("TimesUP");
+        gameSceneFadeUI.TimeOut();
         GameManager.Sound.PlaySound("inGame/TimesUP");
         yield return new WaitForSecondsRealtime(1f);
 

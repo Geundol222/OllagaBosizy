@@ -4,6 +4,8 @@ using Photon.Realtime;
 
 public enum PlayerTeam { None, Troller, Climber }
 
+public enum Climber { None, Goblin, Ghost, Boy, Girl }
+
 public class TeamManager : MonoBehaviourPun
 {
     private int climberCount;               //등반자 인원수를 새기 위해 만듦
@@ -70,18 +72,18 @@ public class TeamManager : MonoBehaviourPun
 
         if (PhotonNetwork.IsMasterClient)
         {
-            for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+            foreach (Player player in PhotonNetwork.PlayerList)
             {
-                if (PhotonNetwork.PlayerList[i].GetPlayerTeam() == PlayerTeam.Climber)
+                if (player.GetPlayerTeam() == PlayerTeam.Climber)
                 {
-                    photonView.RPC("SetClimber", RpcTarget.AllBuffered, PhotonNetwork.PlayerList[i], climberCount++);
+                    photonView.RPC("SetClimber", RpcTarget.AllBuffered, player, climberCount++);
                 }
-                else if ((PhotonNetwork.PlayerList[i].GetPlayerTeam() == PlayerTeam.Troller))
+                else if ((player.GetPlayerTeam() == PlayerTeam.Troller))
                 {
-                    photonView.RPC("SetTroller", RpcTarget.AllBuffered, PhotonNetwork.PlayerList[i], trollerCount++);
+                    photonView.RPC("SetTroller", RpcTarget.AllBuffered, player, trollerCount++);
                 }
                 else
-                    PhotonNetwork.PlayerList[i].SetClimber(Climber.None);
+                    player.SetClimber(Climber.None);
             }
         }
     }
