@@ -4,6 +4,7 @@ using Photon.Realtime;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnitySceneManager = UnityEngine.SceneManagement.SceneManager;
 
 public class ScoreResultManager : MonoBehaviourPunCallbacks
 {
@@ -31,13 +32,28 @@ public class ScoreResultManager : MonoBehaviourPunCallbacks
 	{
 		yield return new WaitForSeconds(10f);
 
-		PhotonNetwork.LocalPlayer.CustomProperties.Clear();
+        GameManager.Sound.Clear();
+        yield return new WaitUntil(() => { return GameManager.Sound.IsMuted(); });
+
+        PhotonNetwork.LocalPlayer.CustomProperties.Clear();
 		PhotonNetwork.LeaveRoom();
-		GameManager.Scene.LoadScene(Scene.LOBBY);
 	}
 
-	// 플레이어의 점수를 업데이트하고 승패를 확인
-	private void UpdateScore()
+    public override void OnLeftRoom()
+    {
+        StartCoroutine(LoadSceneRoutine());
+    }
+
+	IEnumerator LoadSceneRoutine()
+	{
+        UnitySceneManager.LoadSceneAsync((int)Scene.LOBBY);
+
+        GameManager.Sound.FadeInAudio();
+        yield return new WaitWhile(() => { return GameManager.Sound.IsMuted(); });
+    }
+
+    // 플레이어의 점수를 업데이트하고 승패를 확인
+    private void UpdateScore()
 	{
 		if (PhotonNetwork.IsMasterClient)
 		{
@@ -51,6 +67,8 @@ public class ScoreResultManager : MonoBehaviourPunCallbacks
 				{
 					teamAScore += player.GetScore();
 				}
+				else
+					Debug.Log($"{player.NickName}은 자유에요");
 			}
 
 			photonView.RPC("DeclareWinner", RpcTarget.All, (teamAScore / 2), (teamBScore / 2));
@@ -63,18 +81,18 @@ public class ScoreResultManager : MonoBehaviourPunCallbacks
 	{
 		if (aScore > bScore)
 		{
-			resultTextTeamA.text = "WIN !";
-			resultTextTeamB.text = "LOSE !";
+			resultTextTeamA.text = "WIN ! ";
+			resultTextTeamB.text = "LOSE ! ";
 		}
 		else if (bScore > aScore)
 		{
-			resultTextTeamB.text = "WIN !";
-			resultTextTeamA.text = "LOSE !";
+			resultTextTeamB.text = "WIN ! ";
+			resultTextTeamA.text = "LOSE ! ";
 		}
 		else if (aScore == bScore)
 		{
-            resultTextTeamB.text = "DRAW !";
-            resultTextTeamA.text = "DRAW !";
+            resultTextTeamB.text = "DRAW ! ";
+            resultTextTeamA.text = "DRAW ! ";
         }
 
 		UpdateScoreText(aScore, bScore);
@@ -82,7 +100,7 @@ public class ScoreResultManager : MonoBehaviourPunCallbacks
 
 	private void UpdateScoreText(int aScore, int bScore)
 	{
-		teamAScoreText.text = $"Team A : {aScore}";
-		teamBScoreText.text = $"Team B : {bScore}";
+		teamAScoreText.text = $"Team A : {aScore}%";
+		teamBScoreText.text = $"Team B : {bScore}%";
 	}
 }

@@ -19,13 +19,6 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
     [SerializeField] GameObject UICanvas;
     [SerializeField] RoundManager round;
     [SerializeField] GameSceneFadeUI gameSceneFadeUI;
-    [SerializeField] Canvas UIcanvas;
-    [SerializeField] Animator infoUIAnimator;
-
-    string load = PhotonNetwork.LocalPlayer.GetLoad().ToString();
-    string ready = PhotonNetwork.LocalPlayer.GetReady().ToString();
-    string team = PhotonNetwork.LocalPlayer.GetPlayerTeam().ToString();
-    string climber = PhotonNetwork.LocalPlayer.GetClimber().ToString();
 
     private PlayerController playerController;
 
@@ -230,14 +223,14 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
 
     IEnumerator RoundEndRoutine()
     {
-        if (GameManager.Team.GetTeam() == PlayerTeam.Climber)
-            playerController.SetPlayerScore();
+        playerController?.SetPlayerScore();
+            
 
         Time.timeScale = 0.01f;
         infoText.enabled = true;
         infoText.text = "Time's UP!";
         gameSceneFadeUI.TimeOut();
-        GameManager.Sound.PlaySound("inGame/TimesUP",Audio.UISFX);
+        GameManager.Sound.PlaySound("inGame/TimesUP", Audio.UISFX);
         yield return new WaitForSecondsRealtime(1f);
 
         if (round.GetRound() == Round.ROUND1)

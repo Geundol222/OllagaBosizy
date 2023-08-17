@@ -149,7 +149,17 @@ public class PlayerController : MonoBehaviourPun
 
 	public void SetPlayerScore()
 	{
-		PhotonNetwork.LocalPlayer.SetScore(scoreSlider.BestScore);
+		if (photonView.IsMine)
+		{
+            PhotonNetwork.LocalPlayer.SetScore(scoreSlider.BestScore);
+        }
+/*		if (PhotonNetwork.LocalPlayer.GetPlayerTeam() == PlayerTeam.Climber)
+		{
+			PhotonNetwork.LocalPlayer.SetScore(scoreSlider.BestScore);
+		}*/
+		else
+			return;
+        
 		Debug.Log($"Player Score : {scoreSlider.BestScore}");
 	}
 }
