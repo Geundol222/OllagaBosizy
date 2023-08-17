@@ -14,8 +14,6 @@ public class MenuCanvas : MonoBehaviour
     [SerializeField] TMP_Text maxPlayerText;
     public Animator createRoomAnim;
     private Animator anim;
-    //[SerializeField] GameObject peopleScrollView;
-    //[SerializeField] Animator peopleAnimator;
     bool IsCreateRoom;
     bool IsCreateRoomPanalOpen;
 
@@ -64,27 +62,16 @@ public class MenuCanvas : MonoBehaviour
         }
         IsCreateRoom = true;
         string roomName = roomNameInputField.text;
+        Debug.Log(roomName);
         if (roomName == "")
             roomName = $"Room {Random.Range(1000, 10000)}";
 
         int maxPlayer = 4;
-        /*if (maxPlayerText.text == "1 vs 1")
-            maxPlayer = 2;
-        else if (maxPlayerText.text == "2 vs 2")
-            maxPlayer = 4;
-        else if (maxPlayerText.text == "3 vs 3")
-            maxPlayer = 6;
-        else if (maxPlayerText.text == "4 vs 4")
-            maxPlayer = 8;
-        else
-        {
-            Debug.Log("인원을 선택해 주세요");
-            return;
-        }*/
 
         maxPlayer = Mathf.Clamp(maxPlayer, 2, 8);
 
         RoomOptions options = new RoomOptions { MaxPlayers = maxPlayer };
+        Debug.Log(roomName);
         PhotonNetwork.CreateRoom(roomName, options);
     }
 
@@ -135,52 +122,10 @@ public class MenuCanvas : MonoBehaviour
         }
     }
 
-    /*public void ChooseOne()
-    {
-        maxPlayerText.text = "1 vs 1";
-    }
-    public void ChooseTwo()
-    {
-        maxPlayerText.text = "2 vs 2";
-    }
-    public void ChooseThree()
-    {
-        maxPlayerText.text = "3 vs 3";
-    }
-    public void ChooseFour()
-    {
-        maxPlayerText.text = "4 vs 4";
-    }
-    public void OpenPeopleChooseScroll()
-    {
-        peopleScrollView.SetActive(true);
-        peopleAnimator.SetTrigger("IsOpen");
-    }
-    public void ClosePeopleChooseScroll()
-    {
-        StartCoroutine(ClosePeopleView());
-    }
-
-    IEnumerator ClosePeopleView()
-    {
-        while (true)
-        {
-            peopleAnimator.SetTrigger("IsClose");
-            yield return new WaitForSeconds(0.4f);
-            peopleScrollView.SetActive(false);
-            yield break;
-        }
-    }
-    public void CCCCC()
-    {
-        Debug.Log(maxPlayerText.text);
-    }*/
-
     IEnumerator CloseCreateRoomMenuRoutine()
     {
         createRoomAnim.SetTrigger("IsClose");
         yield return new WaitForSeconds(0.5f);
-        roomNameInputField.text = "";
         createRoomPanel.SetActive(false);
         yield break;
     }

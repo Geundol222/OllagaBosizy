@@ -51,8 +51,6 @@ public class TeamManager : MonoBehaviourPun
     //유저의 팀을 바꿔주는 함수
     public bool SwitchTeam(PlayerTeam team)
     {
-        PhotonNetwork.LocalPlayer.CustomProperties.Remove("Team");
-
         if (PhotonNetwork.LocalPlayer.SwitchTeam((byte)team))
         {
             PhotonNetwork.LocalPlayer.SetPlayerTeam(team);

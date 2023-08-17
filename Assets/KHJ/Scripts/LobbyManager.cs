@@ -31,7 +31,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
                 OnJoinedLobby();
                 return;
             }
-            OnConnectedToMaster();
+            else
+                OnConnectedToMaster();
         }
         else
             OnDisconnected(DisconnectCause.None);

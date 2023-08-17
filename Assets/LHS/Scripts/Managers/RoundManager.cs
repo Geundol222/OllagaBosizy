@@ -69,7 +69,5 @@ public class RoundManager : MonoBehaviourPun
 
             GameManager.Team.TeamSplit();
         }
-        else
-            PhotonNetwork.LocalPlayer.CustomProperties.Remove("Team");
     }
 }
