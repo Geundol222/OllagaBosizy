@@ -27,10 +27,6 @@ public class ScoreCountView : MonoBehaviourPunCallbacks, IPunObservable
 
 		// 초기화 시에 bestScore 값을 플레이어 Properties에 설정
 		bestScore = 0;
-		if (PhotonNetwork.IsConnectedAndReady)
-		{
-			PhotonNetwork.LocalPlayer.SetScore(bestScore);
-		}
 	}
 
 	IEnumerator NetworkConnectCheckRoutine()
@@ -81,7 +77,6 @@ public class ScoreCountView : MonoBehaviourPunCallbacks, IPunObservable
 		{
 			bestScore = score;
 			scoreSlider.value = bestScore;
-			PhotonNetwork.LocalPlayer.SetScore(bestScore);
 		}
 	}
 

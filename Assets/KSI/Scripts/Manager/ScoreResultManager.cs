@@ -46,6 +46,9 @@ public class ScoreResultManager : MonoBehaviourPunCallbacks
 
 	IEnumerator LoadSceneRoutine()
 	{
+		if (PhotonNetwork.IsConnectedAndReady)
+			PhotonNetwork.JoinLobby();
+
         UnitySceneManager.LoadSceneAsync((int)Scene.LOBBY);
 
         GameManager.Sound.FadeInAudio();

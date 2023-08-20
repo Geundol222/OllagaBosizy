@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.11155796, g: 0.10710037, b: 0.30689597, a: 1}
+  m_IndirectSpecularColor: {r: 0.11178141, g: 0.107318774, b: 0.3071141, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -9230,7 +9230,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1305975883}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -13.02, y: -3.3, z: 0}
+  m_LocalPosition: {x: 4.3, y: 166.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9250,7 +9250,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.047816038, y: 0.11817932}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -9261,7 +9261,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2, y: 1.5}
+  m_Size: {x: 1.8406138, y: 1.2263184}
   m_EdgeRadius: 0
 --- !u!114 &1305975886
 MonoBehaviour:
@@ -13979,7 +13979,7 @@ MonoBehaviour:
   infoText: {fileID: 2133235828}
   timerText: {fileID: 4701893713771292279}
   countDownTimer: 5
-  gameCountDown: 15
+  gameCountDown: 180
   climberSpawnPoints:
   - {fileID: 23394144}
   - {fileID: 505437726}
