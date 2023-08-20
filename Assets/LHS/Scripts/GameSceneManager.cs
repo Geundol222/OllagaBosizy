@@ -204,14 +204,12 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
         timerText.text = "TIME OUT";
         timerText.color = Color.red;
 
-        StartCoroutine(RoundChangeRoutine());
+        RoundEndRoutine();
     }
 
     IEnumerator RoundChangeRoutine()
     {
-        StartCoroutine(RoundEndRoutine());
-
-        yield return new WaitForSecondsRealtime(5f);
+        yield return new WaitForSecondsRealtime(3f);
 
         gameSceneFadeUI.FadeOut();
         Time.timeScale = 1f;
@@ -221,29 +219,17 @@ public class GameSceneManager : MonoBehaviourPunCallbacks
         yield break;
     }
 
-    IEnumerator RoundEndRoutine()
+    private void RoundEndRoutine()
     {
         playerController?.SetPlayerScore();
             
-
         Time.timeScale = 0.01f;
         infoText.enabled = true;
         infoText.text = "Time's UP!";
         gameSceneFadeUI.TimeOut();
         GameManager.Sound.PlaySound("inGame/TimesUP", Audio.UISFX);
-        yield return new WaitForSecondsRealtime(1f);
 
-        if (round.GetRound() == Round.ROUND1)
-        {
-            //infoText.text = "Let's Go To Next Round";
-            //GameManager.Sound.PlaySound("inGame/RoundStartSlide");
-        }
-        else if (round.GetRound() == Round.ROUND2)
-        {
-            // TODO : 점수판 출력
-        }
-
-        yield break;
+        StartCoroutine(RoundChangeRoutine());
     }
 
     public void PlayerStepEndPoint()
