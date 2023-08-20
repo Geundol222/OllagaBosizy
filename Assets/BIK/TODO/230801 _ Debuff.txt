@@ -1,0 +1,5 @@
+- TrollerController의 Debuff Queue 에 랜덤한 디버프 4개 Enqueue 
+- Set Trap 버튼 클릭 시 Dequeue 로 Queue의 디버프를 Platform 부여 그와 동시에 Queue에 랜덤한 Debuff Enqueue
+- 각 Debuff 별로 플랫폼과 플레이어의 속성 및 수치 변화가 필요
+TODO 플레이어 수치 변화에 대해서 수인씨와 이야기해봐야함
+TODO2 플랫폼의 상태이상 -> 원상복구 를 위해 플레이어가 현재 밟은 Platform과 이전에 밟았던 Platform에 참조를 하고 있어할듯.. (플레이어 쪽에서 현재 플랫폼이 교체되는 경우 이전 플랫폼의 디버프 초기화 함수를 호출해주는 프로세스를 생각 중)
