@@ -38,7 +38,7 @@ public class LoginCanvas : MonoBehaviour
     {
         try
         {
-            string serverInfo = "Server=3.34.182.2; Database=user_data; Uid=root; PWD=dhffkrkwh; Port=3306; CharSet=utf8;";
+            string serverInfo = "Server=3.38.166.198; Database=user_data; Uid=root; PWD=1234; Port=3306; CharSet=utf8;";
             con = new MySqlConnection(serverInfo);
             con.Open();
             isConnected = true;

@@ -41,7 +41,8 @@ public class FoundCanvas : MonoBehaviour
                 {
                     string readID = reader["ID"].ToString();
                     answer.gameObject.SetActive(true);
-                    string text = ("당신의 아이디는 '{0}' 입니다.", readID).ToString();
+                    string printText = "당신의 아이디는 " + readID + "입니다.";
+                    string text = (printText).ToString();
                     answer.SetText(text);
                     if (!reader.IsClosed)
                         reader.Close();
@@ -80,7 +81,8 @@ public class FoundCanvas : MonoBehaviour
                 {
                     string readPass = reader["PWD"].ToString();
                     answer.gameObject.SetActive(true);
-                    string text = ("당신의 비밀번호는 '{0}' 입니다.", readPass).ToString();
+                    string printText = "당신의 비밀번호는 " + readPass + "입니다.";
+                    string text = (printText).ToString();
                     answer.SetText(text);
                     if (!reader.IsClosed)
                         reader.Close();
